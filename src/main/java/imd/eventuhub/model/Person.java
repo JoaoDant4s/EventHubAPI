@@ -17,8 +17,8 @@ public abstract class Person {
     @Column(length = 14)
     private String cpf;
 
-    @Temporal(TemporalType.DATE)
-    private Date birthDate;
+    @Column(length=15)
+    private String birthDate;
 
     @Column(length = 3)
     private String age;
@@ -29,6 +29,12 @@ public abstract class Person {
     public Person(String name, String cpf) {
         this.name = name;
         this.cpf = cpf;
+    }
+
+    public Person(String name, String cpf, String birthDate) {
+        this.name = name;
+        this.cpf = cpf;
+        this.birthDate = birthDate;
     }
 
     public Integer getId() {
@@ -55,11 +61,11 @@ public abstract class Person {
         this.cpf = cpf;
     }
 
-    public Date getBirthDate() {
+    public String getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
     }
 

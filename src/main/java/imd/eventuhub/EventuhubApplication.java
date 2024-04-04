@@ -4,10 +4,7 @@ import imd.eventuhub.model.Attraction;
 import imd.eventuhub.model.Participant;
 import imd.eventuhub.model.Person;
 import imd.eventuhub.repository.IPersonRepository;
-import imd.eventuhub.service.IPersonService;
-import imd.eventuhub.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,14 +22,14 @@ public class EventuhubApplication {
 		return args -> {
 
 			/*
-			 * Cadastrando cursos
+			 * Cadastrando pessoas
 			 */
 
 			Person pessoa1 = new Participant("Hudson", "999.999.999-01");
 			Person pessoa2 = new Participant("João", "999.999.999-02");
 			Person pessoa3 = new Participant("Nathalia", "999.999.999-03");
 			Person pessoa4 = new Participant("Matheus", "999.999.999-04");
-			Attraction pessoa5 = new Attraction("Fulano", "999.999.999-05");
+			Person pessoa5 = new Attraction("Fulano", "999.999.999-05");
 
 			personRepository.save(pessoa1);
 			personRepository.save(pessoa2);

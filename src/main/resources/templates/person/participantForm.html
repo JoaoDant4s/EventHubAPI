@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de participante</title>
+</head>
+<body>
+<a th:href="@{/person/personList}">Voltar</a><br/><br/>
+Formulário de participantes
+<form th:action="${method} == 'save' ? @{/person/addParticipant} : @{/person/updateParticipant}" th:object="${participant}" method="post">
+    <input type="hidden" th:field="*{id}" th:value="${participant.id} ? ${participant.id} : ''" />
+    <p>nome:</p>
+    <input type="text" th:field="*{name}" th:value="${participant.name} ? ${participant.name} : ''" name="name"/>
+    <p>cpf:</p>
+    <input type="text" th:field="*{cpf}" th:value="${participant.cpf} ? ${participant.cpf} : ''" name="cpf"/>
+    <p>data de nascimento:</p>
+    <input type="date" th:field="*{birthDate}" th:value="${participant.birthDate} ? ${participant.birthDate} : ''" name="birthDate"/><br/>
+
+    <button type="submit">Enviar</button>
+</form>
+</body>
+</html>

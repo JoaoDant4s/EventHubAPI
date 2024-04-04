@@ -7,24 +7,54 @@
 </head>
 <body>
     <a th:href="@{/}">Voltar</a><br/>
-    <a><button>Cadastrar pessoa</button></a><br/><br/>
-    Lista de participantes
+    <a th:href="@{/person/participantForm}"><button>Cadastrar Participante</button></a><br/><br/>
+    <a th:href="@{/person/attractionForm}"><button>Cadastrar Atração</button></a><br><br>
+
+    <h3>Lista de Participantes</h3>
     <table>
         <thead>
             <tr>
                 <th>Nome</th>
                 <th>Cpf</th>
+                <th>Data de Nascimento</th>
                 <th colspan="2">Ações</th>
             </tr>
         </thead>
         <tbody>
-            <tr th:each="person : ${personList}">
-                <td th:text="${person.name}"></td>
-                <td th:text="${person.cpf}"></td>
-                <td><a>Editar</a></td>
-                <td><a>Apagar</a></td>
+            <tr th:each="participant : ${participantList}">
+                <td th:text="${participant.name}"></td>
+                <td th:text="${participant.cpf}"></td>
+                <td th:text="${participant.birthDate}"></td>
+                <td><a th:href="@{/person/updateParticipant/{id}(id=${participant.id})}">Editar</a></td>
+                <td><a th:href="@{/person/deleteParticipant/{id}(id=${participant.id})}">Apagar</a></td>
             </tr>
         </tbody>
     </table>
+    <h3>Lista de Atrações</h3>
+    <table>
+        <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Cpf</th>
+            <th>Data de Nascimento</th>
+            <th>Contato</th>
+            <th>Descrição</th>
+            <th colspan="2">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="attraction : ${attractionList}">
+            <td th:text="${attraction.name}"></td>
+            <td th:text="${attraction.cpf}"></td>
+            <td th:text="${attraction.birthDate}"></td>
+            <td th:text="${attraction.contact}"></td>
+            <td th:text="${attraction.description}"></td>
+            <td><a th:href="@{/person/updateAttraction/{id}(id=${attraction.id})}">Editar</a></td>
+            <td><a th:href="@{/person/deleteAttraction/{id}(id=${attraction.id})}">Apagar</a></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h3>Lista de Pessoas</h3>
 </body>
 </html>

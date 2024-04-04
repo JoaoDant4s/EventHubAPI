@@ -14,4 +14,7 @@ public class Participant extends Person{
     public Participant(String name, String cpf){
         super(name, cpf);
     }
+    public Participant(String name, String cpf, String birthDate){
+        super(name, cpf, birthDate);
+    }
 }

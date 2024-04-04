@@ -21,6 +21,9 @@ public class Attraction extends Person {
         super(name, cpf);
     }
 
+    public Attraction(String name, String cpf, String birthDate){
+        super(name, cpf, birthDate);
+    }
     public String getDescription() {
         return description;
     }

@@ -1,0 +1,10 @@
+:root {
+    --bgColor: #E6E6E6;
+    --navColor1: #4BEBB1;
+    --navColor2: #3965D6;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
