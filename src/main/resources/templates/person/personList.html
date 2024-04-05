@@ -22,11 +22,12 @@
         </thead>
         <tbody>
             <tr th:each="participant : ${participantList}">
-                <td th:text="${participant.name}"></td>
+                <td><a th:href="@{/person/participantProfile/{id}(id=${participant.id})}" th:text="${participant.name}"></a></td>
                 <td th:text="${participant.cpf}"></td>
                 <td th:text="${participant.birthDate}"></td>
                 <td><a th:href="@{/person/updateParticipant/{id}(id=${participant.id})}">Editar</a></td>
                 <td><a th:href="@{/person/deleteParticipant/{id}(id=${participant.id})}">Apagar</a></td>
+
             </tr>
         </tbody>
     </table>

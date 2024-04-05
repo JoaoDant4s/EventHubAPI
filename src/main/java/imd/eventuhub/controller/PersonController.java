@@ -139,4 +139,13 @@ public class PersonController {
         attractionService.delete(attraction.get());
         return new RedirectView("/person/personList");
     }
+
+    @RequestMapping("/participantProfile/{id}")
+    public String participantProfile(@PathVariable("id") Integer id, Model model){
+        Optional<Participant> participant = participantService.getById(id);
+        model.addAttribute("participant", participant.get());
+        model.addAttribute("ticketList", participant.get().getTicketList());
+        return "person/participantProfile";
+    }
+
 }

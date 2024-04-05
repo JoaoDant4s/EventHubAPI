@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>perfil da pessoa</title>
+</head>
+<body>
+    <a th:href="@{/person/personList}">Voltar</a><br/>
+
+    <h3>Participante</h3><br/>
+    <p th:text="${participant.name}"></p>
+    <p th:text="${participant.cpf}"></p>
+    <p th:text="${participant.birthDate}"></p>
+    <h3>Ingressos</h3>
+    <div th:each="ticket : ${ticketList}" style="width: 500px; border: 1px solid black; border-radius: 10px; margin-bottom: 20px;">
+        <p>Descrição: <span th:text="${ticket.description}"></span></p>
+        <p>Lote: <span th:text="${ticket.batch}"></span></p>
+        <p>Valor: <span th:text="${ticket.amount}"></span></p>
+    </div>
+</body>
+</html>
