@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de ingressos</title>
+</head>
+<body>
+    <a th:href="@{/}">Voltar</a><br/>
+    <a th:href="@{/ticket/ticketForm}"><button>Cadastrar ingresso</button></a><br/><br/>
+
+    <h3>Lista de ingressos</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome do evento</th>
+                <th>Descrição</th>
+                <th>Lote</th>
+                <th>Valor</th>
+                <th colspan="2">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="ticket : ${ticketList}">
+                <td></td>
+                <td th:text="${ticket.description}"></td>
+                <td th:text="${ticket.batch}"></td>
+                <td th:text="${ticket.amount}"></td>
+                <td><a th:href="@{/ticket/updateTicket/{id}(id=${ticket.id})}">Editar</a></td>
+                <td><a th:href="@{/ticket/deleteTicket/{id}(id=${ticket.id})}">Apagar</a></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

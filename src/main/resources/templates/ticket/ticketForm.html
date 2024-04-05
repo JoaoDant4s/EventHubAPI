@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de ingresso</title>
+</head>
+<body>
+<a th:href="@{/ticket/ticketList}">Voltar</a><br/><br/>
+Formulário de participantes
+<form th:action="${method} == 'save' ? @{/ticket/addTicket} : @{/ticket/updateTicket}" th:object="${ticket}" method="post">
+    <input type="hidden" th:field="*{id}" th:value="${ticket.id} ? ${ticket.id} : ''" />
+    <p>Descrição:</p>
+    <input type="text" th:field="*{description}" th:value="${ticket.description} ? ${ticket.description} : ''" name="description"/>
+    <p>Lote:</p>
+    <input type="text" th:field="*{batch}" th:value="${ticket.batch} ? ${ticket.batch} : ''" name="batch"/>
+    <p>Valor:</p>
+    <input type="number" th:field="*{amount}" th:value="${ticket.amount} ? ${ticket.amount} : ''" name="amount"/><br/>
+
+    <button type="submit">Enviar</button>
+</form>
+</body>
+</html>

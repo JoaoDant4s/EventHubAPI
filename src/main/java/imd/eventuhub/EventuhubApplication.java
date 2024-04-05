@@ -3,7 +3,9 @@ package imd.eventuhub;
 import imd.eventuhub.model.Attraction;
 import imd.eventuhub.model.Participant;
 import imd.eventuhub.model.Person;
+import imd.eventuhub.model.Ticket;
 import imd.eventuhub.repository.IPersonRepository;
+import imd.eventuhub.repository.ITicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -16,6 +18,8 @@ public class EventuhubApplication {
 
 	@Autowired
 	IPersonRepository personRepository;
+	@Autowired
+	ITicketRepository ticketRepository;
 
 	@Bean
 	public CommandLineRunner init(){
@@ -36,6 +40,19 @@ public class EventuhubApplication {
 			personRepository.save(pessoa3);
 			personRepository.save(pessoa4);
 			personRepository.save(pessoa5);
+
+			/*
+			 * Cadastrando ingressos
+			 */
+
+
+			Ticket ingresso1 = new Ticket("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.","1º Lote", 100.00f);
+			Ticket ingresso2 = new Ticket("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.","2º Lote", 120.00f);
+			Ticket ingresso3 = new Ticket("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.","3º Lote", 150.00f);
+
+			ticketRepository.save(ingresso1);
+			ticketRepository.save(ingresso2);
+			ticketRepository.save(ingresso3);
 		};
 	}
 
