@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>imd</groupId>
-	<artifactId>eventuhub</artifactId>
+	<artifactId>eventhub</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>eventuhub</name>
+	<name>eventhub</name>
 	<description>API gerenciadora de eventos</description>
 	<properties>
 		<java.version>17</java.version>
