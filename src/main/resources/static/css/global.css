@@ -1,10 +1,68 @@
 :root {
     --bgColor: #E6E6E6;
-    --navColor1: #4BEBB1;
-    --navColor2: #3965D6;
+    --main: #559EF5;
+    --sec: #4BEBB1;
+    --danger: #F55555;
+    --alert: #F5A555;
+    --success: #75F555;
+    --info: #559EF5;
+    --info2: #DE55F5;
+    --bw30: #4D4D4D;
+    --bw50: #808080;
+    --bw80: #CCCCCC;
+    --bw85: #D9D9D9;
+    --bw90: #E6E6E6;
+    --bw100: #FFFFFF;
+    --fontColor1: #4D4D4D;
+    --fontColor2: #808080;
+    --border: 5px;
+    --gradient: linear-gradient(90deg, #559EF5, #55F5CE);
+    --boxShadow: 0px 2px 2px #00000050;
+}
+
+html {
+  font-family: "Roboto", sans-serif;
+  color: var(--fontColor1);
 }
 
 body {
     margin: 0;
     padding: 0;
+    background-color: var(--bgColor);
+}
+
+a {
+    text-decoration: none;
+}
+
+.button {
+    background-color: var(--info);
+    background: var(--gradient);
+    border: none;
+    border-radius: var(--border);
+    color: var(--bw100);
+    padding: 10px 20px;
+    font-weight: 700;
+    box-shadow: var(--boxShadow);
+    cursor: pointer;
+}
+
+.button i {
+    margin-right: 10px;
+}
+
+.info {
+    background-color: var(--info);
+}
+
+.danger {
+    background-color: var(--danger);
+}
+
+.alert {
+    background-color: var(--alert);
+}
+
+.success {
+    background-color: var(--success);
 }

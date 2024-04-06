@@ -33,6 +33,9 @@ public class PersonController {
     public String personList(Model model){
         List<Participant> participantList = participantService.getList();
         List<Attraction> attractionList = attractionService.getList();
+        model.addAttribute("participantCount", participantList.size());
+        model.addAttribute("attractionCount", attractionList.size());
+        model.addAttribute("personCount", participantList.size()+attractionList.size());
         model.addAttribute("participantList", participantList);
         model.addAttribute("attractionList", attractionList);
         return "person/personList";

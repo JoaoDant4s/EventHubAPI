@@ -37,6 +37,7 @@ public class EventuhubApplication {
 			Participant pessoa3 = new Participant("Nathalia", "999.999.999-03");
 			Participant pessoa4 = new Participant("Matheus", "999.999.999-04");
 			Attraction pessoa5 = new Attraction("Fulano", "999.999.999-05");
+			Attraction pessoa6 = new Attraction("Ciclano", "999.999.999-06");
 
 
 			/*
@@ -71,6 +72,7 @@ public class EventuhubApplication {
 			personRepository.save(pessoa3);
 			personRepository.save(pessoa4);
 			personRepository.save(pessoa5);
+			personRepository.save(pessoa6);
 
 
 		};
