@@ -1,9 +1,6 @@
 package imd.eventuhub.service.Ticket;
 
-import imd.eventuhub.model.Participant;
-import imd.eventuhub.model.Person;
 import imd.eventuhub.model.Ticket;
-import imd.eventuhub.repository.IParticipantRepository;
 import imd.eventuhub.repository.ITicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
