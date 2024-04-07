@@ -15,7 +15,7 @@
     />
     <link rel="stylesheet" th:href="@{/css/global.css}" />
     <link rel="stylesheet" th:href="@{/css/containers.css}" />
-    <title>Lista de Eventos</title>
+    <title>Detalhes do evento</title>
   </head>
   <body>
     <nav class="navbar">
@@ -56,37 +56,14 @@
     </nav>
     <main class="mainContent">
       <section class="sec1">
-        <div class="titleBox">
-          <h3>Eventos</h3>
-          <a th:href="@{/event/eventForm}"
-            ><button class="button">
-              <i class="fa-solid fa-plus"></i>Cadastrar evento
-            </button></a
-          >
+        <div class="titleBox2">
+          <a th:href="@{/event/eventList}">
+            <i class="fa-solid fa-arrow-left fa-2x" style="color: var(--info); "></i>
+          </a>
+          <h1 th:text="${event.name}"></h1>
         </div>
-        <div th:each="event : ${eventList}">
-          <div class="eventCard">
-            <header class="headerCard"> 
-              <span th:text="${#temporals.format(event.initialDate, 'dd/MM HH') + 'h'}" class="whiteText"></span>
-              <div>
-                  <a th:href="@{/event/updateEvent/{id}(id=${event.id})}"><button class="tableButton alert"><i class="fa-solid fa-pen-to-square"></i></button></a>
-                  <a th:href="@{/event/deleteEvent/{id}(id=${event.id})}"
-                    ><button class="tableButton danger">
-                      <i class="fa-solid fa-trash"></i></button
-                  ></a>
-              </div>
-            </header>
-            <div class="contentCard">
-                <h2 th:text="${event.name}" class="whiteText"></h2>
-            </div>
-            <div class="footerCard">
-                <a th:href="@{/subEvent/subEventForm/{id}(id=${event.id})}"
-                ><button class="button2">
-                  Cadastrar sub-evento
-                </button></a
-              >
-            </div>
-          </div>
+        <div>
+          
         </div>
       </section>
     </main>

@@ -63,34 +63,37 @@
           <h1 th:text="${event.name}"></h1>
         </div>
         <form
-          th:action="${method} == 'save' ? @{/event/addEvent} : @{/event/updateEvent}"
-          th:object="${event}"
+          th:action="${method} == 'save' ? @{/subEvent/addSubEvent} : @{/subEvent/updateSubEvent}"
+          th:object="${subEvent}"
           method="post"
         >
           <input
             type="hidden"
             th:field="*{id}"
-            th:value="${event.id} ? ${event.id} : ''"
+            th:value="${subEvent.id} ? ${subEvent.id} : ''"
           />
-          <p>Nome do evento:</p>
+          <input
+            type="hidden"
+            th:field="*{event}"
+            th:value="${subEvent.event} ? ${subEvent.event} : ''"
+          />
+          <p>Nome:</p>
           <input
             type="text"
             th:field="*{name}"
-            th:value="${event.name} ? ${event.name} : ''"
+            th:value="${subEvent.name} ? ${subEvent.name} : ''"
             name="name"
-            disabled
           />
           <br />
-          <p>Descrição do evento:</p>
+          <p>Descrição:</p>
           <input
             type="text"
             th:field="*{description}"
-            th:value="${event.description} ? ${event.description} : ''"
+            th:value="${subEvent.description} ? ${subEvent.description} : ''"
             name="description"
-            disabled
           />
-          <p>Tipo do evento:</p>
-          <select th:field="*{type}" name="type" disabled>
+          <p>Tipo do Sub-Evento:</p>
+          <select th:field="*{type}" name="type">
             <option
               th:each="eventType : ${T(imd.eventhub.model.EventType).values()}"
               th:value="${eventType}"
@@ -98,41 +101,22 @@
             ></option>
           </select>
           <br />
-          <p>Data de início:</p>
+          <p>Dia e hora:</p>
           <input
             type="datetime-local"
-            th:field="*{initialDate}"
-            th:value="${event.initialDate} ? ${event.initialDate} : ''"
-            name="initialDate"
-            disabled
+            th:field="*{hours}"
+            th:value="${subEvent.hours} ? ${subEvent.hours} : ''"
+            name="hours"
           /><br />
-          <p>Data do fim:</p>
-          <input
-            type="datetime-local"
-            th:field="*{finalDate}"
-            th:value="${event.finalDate} ? ${event.finalDate} : ''"
-            name="finalDate"
-            disabled
-          /><br />
-          <p>Lotação máxima:</p>
-          <input
-            type="text"
-            th:field="*{maximumCapacity}"
-            th:value="${event.maximumCapacity} ? ${event.maximumCapacity} : ''"
-            name="maximumCapacity"
-            disabled
-          />
-          <br />
           <p>Local:</p>
           <input
             type="text"
-            th:field="*{address}"
-            th:value="${event.address} ? ${event.address} : ''"
-            name="address"
-            disabled
+            th:field="*{location}"
+            th:value="${subEvent.location} ? ${subEvent.location} : ''"
+            name="location"
           />
           <br />
-          <button type="submit" disabled>Enviar</button>
+          <button type="submit" >Enviar</button>
         </form>
       </section>
     </main>

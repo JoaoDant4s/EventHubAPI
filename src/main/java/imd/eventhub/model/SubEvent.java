@@ -12,6 +12,9 @@ public class SubEvent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(length = 150)
+    private String name;
+
     @Column
     @Enumerated(EnumType.STRING)
     private EventType type;
@@ -30,13 +33,16 @@ public class SubEvent {
     @JoinColumn(name = "event_id")
     private Event event;
     
-    public SubEvent() {
+    public SubEvent() {}
+
+    public SubEvent(Event event) {
+        this.event = event;
     }
 
-    public SubEvent(Integer id, EventType type, LocalDateTime hours, String description, String location, Event event) {
-		this.id = id;
+    public SubEvent(EventType type, LocalDateTime hours, String name ,String description, String location, Event event) {
 		this.type = type;
 		this.hours = hours;
+        this.name = name;
 		this.description = description;
 		this.location = location;
 		this.event = event;
@@ -100,5 +106,13 @@ public class SubEvent {
 
     public void setEvent(Event event) {
         this.event = event;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
