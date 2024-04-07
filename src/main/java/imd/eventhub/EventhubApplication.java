@@ -7,12 +7,16 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import imd.eventhub.model.Attraction;
+import imd.eventhub.model.Event;
+import imd.eventhub.model.EventType;
 import imd.eventhub.model.Participant;
-import imd.eventhub.model.Person;
 import imd.eventhub.model.Ticket;
+import imd.eventhub.repository.IEventRepository;
 import imd.eventhub.repository.IPersonRepository;
 import imd.eventhub.repository.ITicketRepository;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +28,8 @@ public class EventhubApplication {
 	IPersonRepository personRepository;
 	@Autowired
 	ITicketRepository ticketRepository;
+	@Autowired
+	IEventRepository eventRepository;
 
 	@Bean
 	public CommandLineRunner init(){
@@ -40,7 +46,12 @@ public class EventhubApplication {
 			Attraction pessoa5 = new Attraction("Fulano", "999.999.999-05");
 			Attraction pessoa6 = new Attraction("Ciclano", "999.999.999-06");
 
-
+			/*
+			 * Cadastrando ingressos
+			 */
+			 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+			 Event event1 = new Event("Edição 10 anos", "Spotted", LocalDateTime.parse("2024-08-10 20:00:00", formatter), LocalDateTime.parse("2024-08-11 05:00:00", formatter), EventType.Festival, 5000, "Arena das Dunas");
+			
 			/*
 			 * Cadastrando ingressos
 			 */
@@ -75,7 +86,7 @@ public class EventhubApplication {
 			personRepository.save(pessoa5);
 			personRepository.save(pessoa6);
 
-
+			eventRepository.save(event1);
 		};
 	}
 

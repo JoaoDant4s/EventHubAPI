@@ -4,19 +4,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "Event")
@@ -32,10 +22,12 @@ public class Event {
     private String name;
 
     @Column
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime initialDate;
 
     @Column
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime finalDate;
 
@@ -44,7 +36,7 @@ public class Event {
     private EventType type;
 
     @Column(length = 6)
-    private Integer lotacaoMaxima;
+    private Integer maximumCapacity;
 
     @Column(length = 100)
     private String address;
@@ -56,16 +48,15 @@ public class Event {
         this.subEvents = new ArrayList<>();
     }
 
-    public Event(Integer id, String description, String name, LocalDateTime initialDate, LocalDateTime finalDate, EventType type, Integer lotacaoMaxima, String address, List<SubEvent> subEvents) {
-        this.id = id;
+    public Event(String description, String name, LocalDateTime initialDate, LocalDateTime finalDate, EventType type, Integer maximumCapacity, String address) {
         this.description = description;
         this.name = name;
         this.initialDate = initialDate;
         this.finalDate = finalDate;
         this.type = type;
-        this.lotacaoMaxima = lotacaoMaxima;
+        this.maximumCapacity = maximumCapacity;
         this.address = address;
-        this.subEvents = subEvents;
+        this.subEvents = new ArrayList<>();
     }
 
     public Integer getId() {
@@ -92,8 +83,8 @@ public class Event {
         return type;
     }
 
-    public Integer getLotacaoMaxima() {
-        return lotacaoMaxima;
+    public Integer getMaximumCapacity() {
+        return maximumCapacity;
     }
 
     public void setId(Integer id) {
@@ -120,8 +111,8 @@ public class Event {
         this.type = type;
     }
 
-    public void setLotacaoMaxima(Integer lotacaoMaxima) {
-        this.lotacaoMaxima = lotacaoMaxima;
+    public void setMaximumCapacity(Integer maximumCapacity) {
+        this.maximumCapacity = maximumCapacity;
     }
 
     public void setAddress(String address) {

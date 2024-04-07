@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://kit.fontawesome.com/7fd798150d.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" th:href="@{/css/global.css}" />
+    <link rel="stylesheet" th:href="@{/css/containers.css}" />
+    <title>Lista de Eventos</title>
+  </head>
+  <body>
+    <nav class="navbar">
+      <ul>
+        <li>
+          <a th:href="@{/person/personList}"
+            ><div class="iconBox"><i class="fa-solid fa-user"></i></div>
+            <p>Pessoas</p></a
+          >
+        </li>
+        <li class="active">
+          <a th:href="@{/event/eventList}"
+            ><div class="iconBox">
+              <i class="fa-solid fa-map-location-dot"></i>
+            </div>
+            <p>Eventos</p></a
+          >
+        </li>
+        <li>
+          <a th:href="@{/ticket/ticketList}"
+            ><div class="iconBox"><i class="fa-solid fa-ticket"></i></div>
+            <p>Ingressos</p></a
+          >
+        </li>
+        <li>
+          <a
+            ><div class="iconBox"><i class="fa-solid fa-comment"></i></div>
+            <p>Feedback</p></a
+          >
+        </li>
+        <li>
+          <a
+            ><div class="iconBox"><i class="fa-solid fa-credit-card"></i></div>
+            <p>Pagamento</p></a
+          >
+        </li>
+      </ul>
+    </nav>
+    <main class="mainContent">
+      <section class="sec1">
+        <div class="titleBox">
+          <h3>Eventos</h3>
+          <a th:href="@{/event/eventForm}"
+            ><button class="button">
+              <i class="fa-solid fa-plus"></i>Cadastrar evento
+            </button></a
+          >
+        </div>
+        <div th:each="event : ${eventList}">
+          <div class="eventCard">
+            <header class="headerCard"> 
+              <span th:text="${#temporals.format(event.initialDate, 'dd/MM HH') + 'h'}" class="whiteText"></span>
+              <div>
+                  <a th:href="@{/event/updateEvent/{id}(id=${event.id})}"><button class="tableButton alert"><i class="fa-solid fa-pen-to-square"></i></button></a>
+                  <a th:href="@{/event/deleteEvent/{id}(id=${event.id})}"
+                    ><button class="tableButton danger">
+                      <i class="fa-solid fa-trash"></i></button
+                  ></a>
+              </div>
+            </header>
+            <div class="contentCard">
+                <h2 th:text="${event.name}" class="whiteText"></h2>
+            </div>
+            <div class="footerCard">
+                <a th:href="@{/event/eventForm}"
+                ><button class="button">
+                  Cadastrar sub-evento
+                </button></a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

@@ -37,14 +37,14 @@ public class EventService implements IEventService{
     }
 
     @Override
-    public List<Event> getList() throws Exception{
+    public List<Event> getList(){
         return eventRepository.findAll();
     }
     @Override 
     public Boolean isValid(Event event) throws Exception{
         if(event == null) throw new Exception("Evento nulo");
         if(event.getDescription().isEmpty()) throw new Exception("Descrição do evento vazia");
-        if(event.getLotacaoMaxima() <= 0) throw new Exception("Lotação máxima não pode ser menor que zero");
+        if(event.getMaximumCapacity() <= 0) throw new Exception("Lotação máxima não pode ser menor que zero");
         if(event.getName().isEmpty()) throw new Exception("Nome do evento vazio");
         if(event.getDescription().isEmpty()) throw new Exception("Descrição do evento vazia");
         if(event.getAddress().isEmpty()) throw new Exception("Endereço do evento vazio");

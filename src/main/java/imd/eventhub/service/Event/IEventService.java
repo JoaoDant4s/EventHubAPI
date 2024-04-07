@@ -13,5 +13,5 @@ public interface IEventService {
     public void save(Event event) throws Exception;
     public void delete(Event event) throws Exception;
     public Optional<Event> getByID(Integer id) throws Exception;
-    public List<Event> getList() throws Exception;
+    public List<Event> getList();
 }
