@@ -80,7 +80,7 @@ public class EventController {
         try {
             Optional<Event> event = eventService.getByID(id);
             if(!event.isPresent()) throw new Exception("Não existe nenhum evento com esse id");
-            eventService.delete(event.get());
+            eventService.deactivate(event.get());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

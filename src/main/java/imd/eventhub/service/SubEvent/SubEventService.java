@@ -24,14 +24,19 @@ public class SubEventService implements ISubEventService{
         if(isValid(subEvent)){
             Optional<Event> event = eventService.getByID(subEvent.getEvent().getId());
             if(!event.isPresent()) throw new Exception("O evento não existe");
+            event.get().addSubEvents(subEvent);
+            eventService.save(event.get());
             subEventRepository.save(subEvent);
         }
     }
 
     @Override
-    public void delete (SubEvent subEvent) throws Exception {
+    public void deactivate(SubEvent subEvent) throws Exception {
         if(isValid(subEvent)){
-            subEventRepository.delete(subEvent);
+            Optional<SubEvent> subEventToEdit = subEventRepository.findById(subEvent.getId());
+            if(!subEventToEdit.isPresent()) throw new Exception("O ID informado não é de nenhum SubEvento");
+            subEvent.setActive(false);
+            subEventRepository.save(subEvent);
         }
     }
 
@@ -50,7 +55,7 @@ public class SubEventService implements ISubEventService{
     public List<SubEvent> getListByEventid(Integer id) throws Exception {
         Optional<Event> event = eventService.getByID(id);
         if(!event.isPresent()) throw new Exception("Não existe nenhum evento com esse id");
-        return subEventRepository.getAllSubEventsByEvent(event.get());
+        return subEventRepository.getAllActiveSubEventsByEvent(event.get());
     }
 
     @Override

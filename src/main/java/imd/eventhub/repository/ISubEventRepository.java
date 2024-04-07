@@ -8,5 +8,5 @@ import imd.eventhub.model.Event;
 import imd.eventhub.model.SubEvent;
 
 public interface ISubEventRepository extends JpaRepository<SubEvent, Integer>{
-    List<SubEvent> getAllSubEventsByEvent(Event event);
+    List<SubEvent> getAllActiveSubEventsByEvent(Event event);
 }

@@ -74,6 +74,11 @@
           />
           <input
             type="hidden"
+            th:field="*{active}"
+            th:value="${subEvent.active} ? ${subEvent.active} : true"
+          />
+          <input
+            type="hidden"
             th:field="*{event}"
             th:value="${subEvent.event} ? ${subEvent.event} : ''"
           />

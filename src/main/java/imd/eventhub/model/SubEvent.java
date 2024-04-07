@@ -29,6 +29,9 @@ public class SubEvent {
     @Column(length = 150)
     private String location;
 
+    @Column
+    private Boolean active;
+
     @ManyToOne
     @JoinColumn(name = "event_id")
     private Event event;
@@ -41,6 +44,7 @@ public class SubEvent {
 
     public SubEvent(EventType type, LocalDateTime hours, String name ,String description, String location, Event event) {
 		this.type = type;
+        this.active = true;
 		this.hours = hours;
         this.name = name;
 		this.description = description;
@@ -114,5 +118,13 @@ public class SubEvent {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

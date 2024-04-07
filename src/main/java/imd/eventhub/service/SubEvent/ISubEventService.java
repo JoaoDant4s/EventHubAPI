@@ -11,7 +11,7 @@ import imd.eventhub.model.SubEvent;
 public interface ISubEventService {
     public Boolean isValid(SubEvent event) throws Exception;
     public void save(SubEvent event) throws Exception;
-    public void delete(SubEvent event) throws Exception;
+    public void deactivate(SubEvent event) throws Exception;
     public Optional<SubEvent> getByID(Integer id) throws Exception;
     public List<SubEvent> getList() throws Exception;
     public List<SubEvent> getListByEventid(Integer id) throws Exception;
