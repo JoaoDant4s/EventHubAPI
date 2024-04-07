@@ -42,7 +42,7 @@ public class Event {
     private String address;
 
     @Column
-    private Boolean active;
+    private Boolean active = true;
 
     @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
     private List<SubEvent> subEvents;
@@ -53,7 +53,6 @@ public class Event {
 
     public Event(String description, String name, LocalDateTime initialDate, LocalDateTime finalDate, EventType type, Integer maximumCapacity, String address) {
         this.description = description;
-        this.active = true;
         this.name = name;
         this.initialDate = initialDate;
         this.finalDate = finalDate;
