@@ -114,6 +114,20 @@ ul {
   justify-content: space-between;
 }
 
+.titleBox2 {
+  height: 40px;
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+}
+
+.titleBox2 h1 {
+  padding: 5px 0;
+  padding-left: 10px;
+  display: flex;
+  margin: 0;
+}
+
 .mainContent .sec1 .titleBox h3 {
   border-left: 8px solid var(--info);
   padding: 5px 0;
@@ -127,15 +141,16 @@ ul {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: #955D94;
+  background-color: #955d94;
   padding: 15px;
   border-radius: 10px;
   height: 150px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  margin-bottom: 20px;
 }
 
 .whiteText {
-    color: white;
+  color: white;
 }
 
 .headerCard {
@@ -144,16 +159,16 @@ ul {
   justify-content: space-between;
 }
 
-.contentCard{
+.contentCard {
   display: flex;
   width: 100%;
   justify-content: center;
 }
 
 .footerCard {
-    display: flex;
-    width: 100%;
-    justify-content: end;
+  display: flex;
+  width: 100%;
+  justify-content: end;
 }
 
 table {

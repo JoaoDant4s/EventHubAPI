@@ -47,10 +47,12 @@ public class EventhubApplication {
 			Attraction pessoa6 = new Attraction("Ciclano", "999.999.999-06");
 
 			/*
-			 * Cadastrando ingressos
+			 * Cadastrando eventos
 			 */
 			 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 			 Event event1 = new Event("Edição 10 anos", "Spotted", LocalDateTime.parse("2024-08-10 20:00:00", formatter), LocalDateTime.parse("2024-08-11 05:00:00", formatter), EventType.Festival, 5000, "Arena das Dunas");
+
+			 Event event2 = new Event("go rn", "GO-RN", LocalDateTime.parse("2024-06-30 12:00:00", formatter), LocalDateTime.parse("2024-07-02 12:00:00", formatter), EventType.Talk, 1000, "IMD");
 			
 			/*
 			 * Cadastrando ingressos
@@ -87,6 +89,7 @@ public class EventhubApplication {
 			personRepository.save(pessoa6);
 
 			eventRepository.save(event1);
+			eventRepository.save(event2);
 		};
 	}
 

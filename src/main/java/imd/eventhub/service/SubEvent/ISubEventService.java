@@ -14,4 +14,5 @@ public interface ISubEventService {
     public void delete(SubEvent event) throws Exception;
     public Optional<SubEvent> getByID(Integer id) throws Exception;
     public List<SubEvent> getList() throws Exception;
+    public List<SubEvent> getListByEventid(Integer id) throws Exception;
 }

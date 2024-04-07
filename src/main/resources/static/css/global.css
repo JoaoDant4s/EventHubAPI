@@ -47,6 +47,17 @@ a {
     cursor: pointer;
 }
 
+.button2 {
+    background-color: var(--info);
+    border: none;
+    border-radius: var(--border);
+    color: var(--bw100);
+    padding: 10px 20px;
+    font-weight: 700;
+    box-shadow: var(--boxShadow);
+    cursor: pointer;
+}
+
 .button i {
     margin-right: 10px;
 }

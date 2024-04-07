@@ -47,6 +47,13 @@ public class SubEventService implements ISubEventService{
     }
 
     @Override
+    public List<SubEvent> getListByEventid(Integer id) throws Exception {
+        Optional<Event> event = eventService.getByID(id);
+        if(!event.isPresent()) throw new Exception("Não existe nenhum evento com esse id");
+        return subEventRepository.getAllSubEventsByEvent(event.get());
+    }
+
+    @Override
     public Boolean isValid(SubEvent subEvent) throws Exception{
         if(subEvent == null) throw new Exception("SubEvento é nulo");
         if(subEvent.getLocation().isEmpty()) throw new Exception("Local do SubEvento está vazio");
