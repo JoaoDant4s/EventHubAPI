@@ -2,6 +2,8 @@ package imd.eventhub.model;
 
 import java.time.LocalDateTime;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -20,6 +22,7 @@ public class SubEvent {
     private EventType type;
 
     @Column
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime hours;
 

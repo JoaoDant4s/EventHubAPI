@@ -55,7 +55,7 @@ public class SubEventService implements ISubEventService{
     public List<SubEvent> getListByEventid(Integer id) throws Exception {
         Optional<Event> event = eventService.getByID(id);
         if(!event.isPresent()) throw new Exception("Não existe nenhum evento com esse id");
-        return subEventRepository.getAllActiveSubEventsByEvent(event.get());
+        return subEventRepository.getAllSubEventsByEventAndActive(event.get(), true);
     }
 
     @Override

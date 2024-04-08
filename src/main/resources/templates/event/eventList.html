@@ -65,25 +65,30 @@
           >
         </div>
         <div th:each="event : ${eventList}">
-          <div class="eventCard">
-            <header class="headerCard"> 
-              <span th:text="${#temporals.format(event.initialDate, 'dd/MM HH') + 'h'}" class="whiteText"></span>
+          <div class="eventCard" style="cursor: pointer;">
+            <header class="headerCard">
+              <span
+                th:text="${#temporals.format(event.initialDate, 'dd/MM HH') + 'h'}"
+                class="whiteText"
+              ></span>
               <div>
-                  <a th:href="@{/event/updateEvent/{id}(id=${event.id})}"><button class="tableButton alert"><i class="fa-solid fa-pen-to-square"></i></button></a>
-                  <a th:href="@{/event/deleteEvent/{id}(id=${event.id})}"
-                    ><button class="tableButton danger">
-                      <i class="fa-solid fa-trash"></i></button
-                  ></a>
+                <a th:href="@{/event/eventInfo/{id}(id=${event.id})}"><button class="tableButton info"><i class="fa-solid fa-eye"></i></button></a>
+                <a th:href="@{/event/updateEvent/{id}(id=${event.id})}"
+                  ><button class="tableButton alert">
+                    <i class="fa-solid fa-pen-to-square"></i></button
+                ></a>
+                <a th:href="@{/event/deleteEvent/{id}(id=${event.id})}"
+                  ><button class="tableButton danger">
+                    <i class="fa-solid fa-trash"></i></button
+                ></a>
               </div>
             </header>
             <div class="contentCard">
-                <h2 th:text="${event.name}" class="whiteText"></h2>
+              <h2 th:text="${event.name}" class="whiteText"></h2>
             </div>
             <div class="footerCard">
-                <a th:href="@{/subEvent/subEventForm/{id}(id=${event.id})}"
-                ><button class="button2">
-                  Cadastrar sub-evento
-                </button></a
+              <a th:href="@{/subEvent/subEventForm/{id}(id=${event.id})}"
+                ><button class="button2">Cadastrar sub-evento</button></a
               >
             </div>
           </div>

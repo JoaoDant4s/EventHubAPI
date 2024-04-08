@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import imd.eventhub.model.Event;
+import imd.eventhub.model.SubEvent;
 import imd.eventhub.service.Event.EventService;
+import imd.eventhub.service.SubEvent.SubEventService;
+
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -22,6 +25,9 @@ public class EventController {
     
     @Autowired
     EventService eventService;
+
+    @Autowired
+    SubEventService subEventService;
 
     @RequestMapping("/eventList")
     public String eventList(Model model){
@@ -87,5 +93,18 @@ public class EventController {
         return new RedirectView("/event/eventList");
     }
     
-    
+    @RequestMapping("/eventInfo/{id}")
+    public String showEventDetails(@PathVariable("id") Integer id, Model model) {
+        try {
+            Optional<Event> event = eventService.getByID(id);
+            if(!event.isPresent()) throw new Exception("Não existe nenhum evento com esse id");
+            List<SubEvent> subEvents = subEventService.getListByEventid(id);
+            event.get().setSubEvents(subEvents);
+            model.addAttribute("event", event.get());
+            return "/event/eventInfo";
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return "redirect:/event/eventList";
+        }
+    }
 }

@@ -10,9 +10,11 @@ import imd.eventhub.model.Attraction;
 import imd.eventhub.model.Event;
 import imd.eventhub.model.EventType;
 import imd.eventhub.model.Participant;
+import imd.eventhub.model.SubEvent;
 import imd.eventhub.model.Ticket;
 import imd.eventhub.repository.IEventRepository;
 import imd.eventhub.repository.IPersonRepository;
+import imd.eventhub.repository.ISubEventRepository;
 import imd.eventhub.repository.ITicketRepository;
 
 import java.time.LocalDateTime;
@@ -30,6 +32,8 @@ public class EventhubApplication {
 	ITicketRepository ticketRepository;
 	@Autowired
 	IEventRepository eventRepository;
+	@Autowired
+	ISubEventRepository subEventRepository;
 
 	@Bean
 	public CommandLineRunner init(){
@@ -54,6 +58,12 @@ public class EventhubApplication {
 
 			 Event event2 = new Event("go rn", "GO-RN", LocalDateTime.parse("2024-06-30 12:00:00", formatter), LocalDateTime.parse("2024-07-02 12:00:00", formatter), EventType.Talk, 1000, "IMD");
 			
+
+			 /*
+			 * Cadastrando ingressos
+			 */
+
+			 SubEvent subEvent1 = new SubEvent(EventType.Show, LocalDateTime.parse("2024-06-30 12:00:00", formatter), "Major RD", "10 anos", "Palco Trap", event1);
 			/*
 			 * Cadastrando ingressos
 			 */
@@ -90,6 +100,8 @@ public class EventhubApplication {
 
 			eventRepository.save(event1);
 			eventRepository.save(event2);
+
+			subEventRepository.save(subEvent1);
 		};
 	}
 
