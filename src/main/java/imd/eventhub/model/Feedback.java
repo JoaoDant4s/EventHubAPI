@@ -1,6 +1,9 @@
 package imd.eventhub.model;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Feedback")
@@ -17,7 +20,13 @@ public class Feedback {
     private Integer rating;
 
     @Column
-    private String dateTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime dateTime;
+
+    @ManyToOne
+    @JoinColumn(name = "participantId")
+    private Participant participant;
 
     public Feedback() {
     }
@@ -46,11 +55,19 @@ public class Feedback {
         this.rating = rating;
     }
 
-    public String getDateTime() {
+    public LocalDateTime getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(String dateTime) {
+    public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public Participant getParticipant() {
+        return participant;
+    }
+
+    public void setParticipant(Participant participant) {
+        this.participant = participant;
     }
 }

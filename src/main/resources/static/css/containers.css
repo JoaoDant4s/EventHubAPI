@@ -202,16 +202,28 @@ table tr td {
 }
 
 .tableButtonContainer {
+  height: 100%;
+  margin: 0px;
   display: flex;
-  gap: 5px;
   justify-content: end;
+  align-items: center;
+  gap: 5px;
 }
 
 .tableButton {
   width: 30px;
   height: 30px;
+  margin: 0px;
   border: none;
   border-radius: var(--border);
   color: var(--bw100);
   cursor: pointer;
+}
+
+.subEventCheckbox {
+  display: none;
+}
+
+.showSubEventCheckbox {
+  display: block;
 }

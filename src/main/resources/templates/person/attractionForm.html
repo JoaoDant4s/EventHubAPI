@@ -1,26 +1,84 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de participante</title>
-</head>
-<body>
-<a th:href="@{/person/personList}">Voltar</a><br/><br/>
-Formulário de participantes
-<form th:action="${method} == 'save' ? @{/person/addAttraction} : @{/person/updateAttraction}" th:object="${attraction}" method="post">
-    <input type="hidden" th:field="*{id}" th:value="${attraction.id} ? ${attraction.id} : ''" />
-    <p>nome:</p>
-    <input type="text" th:field="*{name}" th:value="${attraction.name} ? ${attraction.name} : ''" name="name"/>
-    <p>cpf:</p>
-    <input type="text" th:field="*{cpf}" th:value="${attraction.cpf} ? ${attraction.cpf} : ''" name="cpf"/>
-    <p>data de nascimento:</p>
-    <input type="date" th:field="*{birthDate}" th:value="${attraction.birthDate} ? ${attraction.birthDate} : ''" name="birthDate"/><br/>
-    <p>Contato:</p>
-    <input type="text" th:field="*{contact}" th:value="${attraction.contact} ? ${attraction.contact} : ''" name="contact"/><br/>
-    <p>Descrição:</p>
-    <textarea th:field="*{description}" th:value="${attraction.description} ? ${attraction.description} : ''" name="description"></textarea>
-    <button type="submit">Enviar</button>
-</form>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://kit.fontawesome.com/7fd798150d.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" th:href="@{/css/global.css}" />
+    <link rel="stylesheet" th:href="@{/css/containers.css}" />
+    <!--<link rel="stylesheet" th:href="@{/js/ticketFormScript.js}" />-->
+    <title>Formulário de atração</title>
+  </head>
+  <body id="ticketForm">
+    <nav class="navbar">
+      <ul>
+        <li class="active">
+          <a th:href="@{/person/personList}"
+            ><div class="iconBox"><i class="fa-solid fa-user"></i></div>
+            <p>Pessoas</p></a
+          >
+        </li>
+        <li>
+          <a th:href="@{/event/eventList}"
+            ><div class="iconBox">
+              <i class="fa-solid fa-map-location-dot"></i>
+            </div>
+            <p>Eventos</p></a
+          >
+        </li>
+        <li>
+          <a th:href="@{/ticket/ticketList}"
+            ><div class="iconBox"><i class="fa-solid fa-ticket"></i></div>
+            <p>Ingressos</p></a
+          >
+        </li>
+        <li>
+          <a th:href="@{/feedback/feedbackList}"
+            ><div class="iconBox"><i class="fa-solid fa-comment"></i></div>
+            <p>Feedback</p></a
+          >
+        </li>
+        <li>
+          <a
+            ><div class="iconBox"><i class="fa-solid fa-credit-card"></i></div>
+            <p>Pagamento</p></a
+          >
+        </li>
+      </ul>
+    </nav>
+    <main class="mainContent">
+      <section class="sec1">
+        <div class="titleBox2">
+          <a th:href="@{/person/personList}">
+            <i class="fa-solid fa-arrow-left fa-2x" style="color: var(--info); "></i>
+          </a>
+          <h1>Cadastro de atração</h1>
+        </div>
+
+        <form th:action="${method} == 'save' ? @{/person/addAttraction} : @{/person/updateAttraction}" th:object="${attraction}" method="post">
+          <input type="hidden" th:field="*{id}" th:value="${attraction.id} ? ${attraction.id} : ''" />
+          <p>nome:</p>
+          <input type="text" th:field="*{name}" th:value="${attraction.name} ? ${attraction.name} : ''" name="name"/>
+          <p>cpf:</p>
+          <input type="text" th:field="*{cpf}" th:value="${attraction.cpf} ? ${attraction.cpf} : ''" name="cpf"/>
+          <p>data de nascimento:</p>
+          <input type="date" th:field="*{birthDate}" th:value="${attraction.birthDate} ? ${attraction.birthDate} : ''" name="birthDate"/><br/>
+          <p>Contato:</p>
+          <input type="text" th:field="*{contact}" th:value="${attraction.contact} ? ${attraction.contact} : ''" name="contact"/><br/>
+          <p>Descrição:</p>
+          <textarea th:field="*{description}" th:value="${attraction.description} ? ${attraction.description} : ''" name="description"></textarea><br/><br/>
+          <button type="submit" class="button">Salvar</button>
+        </form>
+      </section>
+    </main>
+  </body>
 </html>

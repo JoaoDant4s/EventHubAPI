@@ -9,6 +9,11 @@ import java.util.List;
 @Table(name = "Participant")
 public class Participant extends Person{
 
+
+
+    @OneToMany(mappedBy = "participant", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE})
+    private List<Feedback> feedback;
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinTable(name="participantTicket",
             joinColumns=@JoinColumn(name="participantId"),

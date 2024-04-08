@@ -93,7 +93,8 @@ public class PersonController {
     @RequestMapping(value="/updateParticipant", method=RequestMethod.POST)
     public RedirectView updateParticipant(@ModelAttribute("participant") Participant participant, Model model){
         Optional<Person> participantWithSameCpf = personService.getByCpf(participant.getCpf());
-
+        Optional<Participant> getParticipant = participantService.getById(participant.getId());
+        participant.setTicketList(getParticipant.get().getTicketList());
 
         if(participantWithSameCpf.isPresent() && participant.getId() == participantWithSameCpf.get().getId()) {
             personService.save(participant);

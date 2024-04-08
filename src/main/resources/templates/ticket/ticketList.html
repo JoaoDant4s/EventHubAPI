@@ -67,16 +67,20 @@
         <table>
           <thead>
             <tr>
-              <th width="20%">Nome do evento</th>
+              <th width="20%">subeventos</th>
               <th>Descrição</th>
-              <th>Lote</th>
+              <th width="10%">Lote</th>
               <th>Valor</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             <tr th:each="ticket : ${ticketList}">
-              <td></td>
+              <td>
+                <ul th:each="subEvent : ${ticket.subEvent}">
+                  <li th:text="${subEvent.name}"></li>
+                </ul>
+              </td>
               <td th:text="${ticket.description}"></td>
               <td th:text="${ticket.batch}"></td>
               <td th:text="${ticket.amount}"></td>

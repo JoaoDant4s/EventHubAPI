@@ -16,6 +16,14 @@ public class Ticket {
     private String batch;
     @Column
     private float amount;
+    @ManyToOne
+    private Event event;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @JoinTable(name="SubEventTicket",
+            joinColumns=@JoinColumn(name="ticketId"),
+            inverseJoinColumns=@JoinColumn(name="subEventId"))
+    private List<SubEvent> subEvent;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinTable(name="participantTicket",
@@ -70,5 +78,13 @@ public class Ticket {
 
     public void setParticipantList(List<Participant> participantList) {
         this.participantList = participantList;
+    }
+
+    public List<SubEvent> getSubEvent() {
+        return subEvent;
+    }
+
+    public void setSubEvent(List<SubEvent> subEvent) {
+        this.subEvent = subEvent;
     }
 }

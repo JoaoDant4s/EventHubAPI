@@ -16,7 +16,7 @@
     <link rel="stylesheet" th:href="@{/css/global.css}" />
     <link rel="stylesheet" th:href="@{/css/containers.css}" />
     <!--<link rel="stylesheet" th:href="@{/js/ticketFormScript.js}" />-->
-    <title>Formulário de participante</title>
+    <title>Cadastro de feedback</title>
   </head>
   <body id="ticketForm">
     <nav class="navbar">
@@ -42,7 +42,7 @@
           >
         </li>
         <li>
-          <a th:href="@{/feedback/feedbackList}"
+          <a th:href="@{/ticket/ticketList}"
             ><div class="iconBox"><i class="fa-solid fa-comment"></i></div>
             <p>Feedback</p></a
           >
@@ -58,20 +58,16 @@
     <main class="mainContent">
       <section class="sec1">
         <div class="titleBox2">
-          <a th:href="@{/person/personList}">
+          <a th:href="@{/feedback/feedbackList}">
             <i class="fa-solid fa-arrow-left fa-2x" style="color: var(--info); "></i>
           </a>
-          <h1>Cadastro de participante</h1>
+          <h1>Cadastrar feedback</h1>
         </div>
-
-        <form th:action="${method} == 'save' ? @{/person/addParticipant} : @{/person/updateParticipant}" th:object="${participant}" method="post">
-          <input type="hidden" th:field="*{id}" th:value="${participant.id} ? ${participant.id} : ''" />
-          <p>nome:</p>
-          <input type="text" th:field="*{name}" th:value="${participant.name} ? ${participant.name} : ''" name="name"/>
-          <p>cpf:</p>
-          <input type="text" th:field="*{cpf}" th:value="${participant.cpf} ? ${participant.cpf} : ''" name="cpf"/>
-          <p>data de nascimento:</p>
-          <input type="date" th:field="*{birthDate}" th:value="${participant.birthDate} ? ${participant.birthDate} : ''" name="birthDate"/><br/><br/>
+        <form th:action="@{/feedback/addFeedback}" th:object="${feedback}" method="post">
+          <p>Comentário:</p>
+          <textarea th:field="*{comment}" name="comment" cols="30" rows="10"></textarea>
+          <p>Avaliação:</p>
+          <input type="range" min="0" max="5" th:field="*{rating}"/><br/><br/>
 
           <button type="submit" class="button">Salvar</button>
         </form>
