@@ -41,6 +41,9 @@ public class Event {
     @Column(length = 100)
     private String address;
 
+    @Column
+    private Boolean active = true;
+
     @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
     private List<SubEvent> subEvents;
 
@@ -129,6 +132,18 @@ public class Event {
 
     public void addSubEvents(SubEvent subEvent) {
         this.subEvents.add(subEvent);
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public void setSubEvents(List<SubEvent> subEvents) {
+        this.subEvents = subEvents;
     }
 
 }

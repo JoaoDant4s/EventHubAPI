@@ -29,6 +29,12 @@
           th:field="*{id}"
           th:value="${event.id} ? ${event.id} : ''"
         />
+        <input
+          type="hidden"
+          th:field="*{active}"
+          th:value="${event.active} ? ${event.active} : true"
+        />
+
         <p>Nome do evento:</p>
         <input
           type="text"

@@ -11,7 +11,7 @@ import imd.eventhub.model.Event;
 public interface IEventService {
     public Boolean isValid(Event event) throws Exception;
     public void save(Event event) throws Exception;
-    public void delete(Event event) throws Exception;
+    public void deactivate(Event event) throws Exception;
     public Optional<Event> getByID(Integer id) throws Exception;
     public List<Event> getList();
 }

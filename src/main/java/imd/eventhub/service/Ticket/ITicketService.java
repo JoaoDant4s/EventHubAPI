@@ -2,7 +2,6 @@ package imd.eventhub.service.Ticket;
 
 import org.springframework.stereotype.Service;
 
-import imd.eventhub.model.Person;
 import imd.eventhub.model.Ticket;
 
 import java.util.List;

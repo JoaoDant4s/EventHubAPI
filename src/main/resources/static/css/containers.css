@@ -114,18 +114,28 @@ ul {
   justify-content: space-between;
 }
 
+.contentCardBox{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.titleText{
+  border-left: 8px solid var(--info);
+  padding: 5px 0;
+  padding-left: 10px;
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  margin-bottom: 20px;
+}
+
 .titleBox2 {
   height: 40px;
   margin: 20px 0;
   display: flex;
   align-items: center;
-}
-
-.titleBox2 h1 {
-  padding: 5px 0;
-  padding-left: 10px;
-  display: flex;
-  margin: 0;
 }
 
 .mainContent .sec1 .titleBox h3 {
@@ -142,6 +152,18 @@ ul {
   flex-direction: column;
   justify-content: space-between;
   background-color: #955d94;
+  padding: 15px;
+  border-radius: 10px;
+  height: 150px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  margin-bottom: 20px;
+}
+
+.eventCard2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #559EF5;
   padding: 15px;
   border-radius: 10px;
   height: 150px;
@@ -220,6 +242,7 @@ table tr td {
   cursor: pointer;
 }
 
+<<<<<<< HEAD
 .subEventCheckbox {
   display: none;
 }
@@ -227,3 +250,52 @@ table tr td {
 .showSubEventCheckbox {
   display: block;
 }
+=======
+.credit-card {
+  width: 300px;
+  height: 200px;
+  background-color: #559EF5;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.chip {
+  width: 50px;
+  height: 35px;
+  background-color: #ccc;
+  border-radius: 5px;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+.card-number {
+  font-size: 16px;
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+
+.card-holder {
+  font-size: 16px;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+.card-expiration {
+  font-size: 14px;
+  position: absolute;
+  bottom: 60px;
+  right: 20px;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+>>>>>>> 07ed33f734f1f4d98961af190261cf6309adbee1

@@ -2,6 +2,8 @@ package imd.eventhub.model;
 
 import java.time.LocalDateTime;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -20,6 +22,7 @@ public class SubEvent {
     private EventType type;
 
     @Column
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime hours;
 
@@ -28,6 +31,9 @@ public class SubEvent {
 
     @Column(length = 150)
     private String location;
+
+    @Column
+    private Boolean active = true;
 
     @ManyToOne
     @JoinColumn(name = "event_id")
@@ -114,5 +120,13 @@ public class SubEvent {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

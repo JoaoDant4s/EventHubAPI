@@ -9,12 +9,16 @@ import org.springframework.stereotype.Component;
 
 import imd.eventhub.model.Event;
 import imd.eventhub.repository.IEventRepository;
+import imd.eventhub.service.SubEvent.ISubEventService;
 
 @Component
 public class EventService implements IEventService{
 
     @Autowired
     IEventRepository eventRepository;
+
+    @Autowired
+    ISubEventService subEventService;
 
     @Override
     public void save(Event event) throws Exception{
@@ -24,9 +28,20 @@ public class EventService implements IEventService{
     }
 
     @Override
-    public void delete(Event event) throws Exception {
+    public void deactivate(Event event) throws Exception {
         if(isValid(event)){
-            eventRepository.delete(event);
+            if(!event.getSubEvents().isEmpty()){
+                event.getSubEvents().forEach(subEvent -> {
+                    try {
+                        subEventService.deactivate(subEvent);
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());;
+                    }
+                });
+            }
+            event.setActive(false);
+            event.setSubEvents(null);
+            eventRepository.save(event);
         }
     }
 
@@ -38,7 +53,7 @@ public class EventService implements IEventService{
 
     @Override
     public List<Event> getList(){
-        return eventRepository.findAll();
+        return eventRepository.findAllEventsByActive(true);
     }
     @Override 
     public Boolean isValid(Event event) throws Exception{

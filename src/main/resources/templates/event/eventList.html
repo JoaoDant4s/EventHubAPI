@@ -20,38 +20,15 @@
   <body>
     <nav class="navbar">
       <ul>
-        <li>
-          <a th:href="@{/person/personList}"
-            ><div class="iconBox"><i class="fa-solid fa-user"></i></div>
-            <p>Pessoas</p></a
-          >
-        </li>
-        <li class="active">
-          <a th:href="@{/event/eventList}"
-            ><div class="iconBox">
-              <i class="fa-solid fa-map-location-dot"></i>
-            </div>
-            <p>Eventos</p></a
-          >
-        </li>
-        <li>
-          <a th:href="@{/ticket/ticketList}"
-            ><div class="iconBox"><i class="fa-solid fa-ticket"></i></div>
-            <p>Ingressos</p></a
-          >
-        </li>
-        <li>
-          <a
-            ><div class="iconBox"><i class="fa-solid fa-comment"></i></div>
-            <p>Feedback</p></a
-          >
-        </li>
-        <li>
-          <a
-            ><div class="iconBox"><i class="fa-solid fa-credit-card"></i></div>
-            <p>Pagamento</p></a
-          >
-        </li>
+        <li><a th:href="@{/person/personList}"><div class="iconBox"><i class="fa-solid fa-user"></i></div><p>Pessoas</p></a></li>
+        <li class="active"><a th:href="@{/event/eventList}"><div class="iconBox"><i class="fa-solid fa-map-location-dot"></i></div><p>Eventos</p></a></li>
+        <li><a th:href="@{/ticket/ticketList}"><div class="iconBox"><i class="fa-solid fa-ticket"></i></div><p>Ingressos</p></a></li>
+        <li><a th:href="@{/feedback/feedbackList}"><div class="iconBox"><i class="fa-solid fa-comment"></i></div><p>Feedback</p></a></li>
+        <li><a th:href="@{/creditCard/creditCardDetails}">
+          <div class="iconBox"><i class="fa-solid fa-credit-card"></i></div>
+          <p>Cartão de crédito</p>
+        </a></li>
+        <li><a><div class="iconBox"><i class="fa-solid fa-money-bill"></i></div><p>Pagamento</p></a></li>
       </ul>
     </nav>
     <main class="mainContent">
@@ -65,25 +42,30 @@
           >
         </div>
         <div th:each="event : ${eventList}">
-          <div class="eventCard">
-            <header class="headerCard"> 
-              <span th:text="${#temporals.format(event.initialDate, 'dd/MM HH') + 'h'}" class="whiteText"></span>
+          <div class="eventCard" style="cursor: pointer;">
+            <header class="headerCard">
+              <span
+                th:text="${#temporals.format(event.initialDate, 'dd/MM HH') + 'h'}"
+                class="whiteText"
+              ></span>
               <div>
-                  <a th:href="@{/event/updateEvent/{id}(id=${event.id})}"><button class="tableButton alert"><i class="fa-solid fa-pen-to-square"></i></button></a>
-                  <a th:href="@{/event/deleteEvent/{id}(id=${event.id})}"
-                    ><button class="tableButton danger">
-                      <i class="fa-solid fa-trash"></i></button
-                  ></a>
+                <a th:href="@{/event/eventInfo/{id}(id=${event.id})}"><button class="tableButton info"><i class="fa-solid fa-eye"></i></button></a>
+                <a th:href="@{/event/updateEvent/{id}(id=${event.id})}"
+                  ><button class="tableButton alert">
+                    <i class="fa-solid fa-pen-to-square"></i></button
+                ></a>
+                <a th:href="@{/event/deleteEvent/{id}(id=${event.id})}"
+                  ><button class="tableButton danger">
+                    <i class="fa-solid fa-trash"></i></button
+                ></a>
               </div>
             </header>
             <div class="contentCard">
-                <h2 th:text="${event.name}" class="whiteText"></h2>
+              <h2 th:text="${event.name}" class="whiteText"></h2>
             </div>
             <div class="footerCard">
-                <a th:href="@{/subEvent/subEventForm/{id}(id=${event.id})}"
-                ><button class="button2">
-                  Cadastrar sub-evento
-                </button></a
+              <a th:href="@{/subEvent/subEventForm/{id}(id=${event.id})}"
+                ><button class="button2">Cadastrar sub-evento</button></a
               >
             </div>
           </div>
