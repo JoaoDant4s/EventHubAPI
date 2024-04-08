@@ -237,3 +237,51 @@ table tr td {
   color: var(--bw100);
   cursor: pointer;
 }
+
+.credit-card {
+  width: 300px;
+  height: 200px;
+  background-color: #559EF5;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.chip {
+  width: 50px;
+  height: 35px;
+  background-color: #ccc;
+  border-radius: 5px;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+.card-number {
+  font-size: 16px;
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+
+.card-holder {
+  font-size: 16px;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+.card-expiration {
+  font-size: 14px;
+  position: absolute;
+  bottom: 60px;
+  right: 20px;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+

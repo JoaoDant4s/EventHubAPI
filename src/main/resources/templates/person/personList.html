@@ -18,7 +18,11 @@
             <li><a th:href="@{/event/eventList}"><div class="iconBox"><i class="fa-solid fa-map-location-dot"></i></div><p>Eventos</p></a></li>
             <li><a th:href="@{/ticket/ticketList}"><div class="iconBox"><i class="fa-solid fa-ticket"></i></div><p>Ingressos</p></a></li>
             <li><a><div class="iconBox"><i class="fa-solid fa-comment"></i></div><p>Feedback</p></a></li>
-            <li><a><div class="iconBox"><i class="fa-solid fa-credit-card"></i></div><p>Pagamento</p></a></li>
+            <li><a th:href="@{/creditCard/creditCardDetails}"
+                ><div class="iconBox"><i class="fa-solid fa-credit-card"></i></div>
+                <p>Cartão de crédito</p></a
+              ></li>
+            <li><a><div class="iconBox"><i class="fa-solid fa-money-bill"></i></div><p>Pagamento</p></a></li>
         </ul>
     </nav>
     <main class="mainContent">

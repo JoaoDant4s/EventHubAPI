@@ -1,8 +1,6 @@
 package imd.eventhub.model;
 
 import jakarta.persistence.*;
-
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -15,6 +13,10 @@ public class Participant extends Person{
             inverseJoinColumns=@JoinColumn(name="ticketId"))
     private List<Ticket> ticketList;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "credit_card_id")
+    private CreditCard creditCard;
+
     public Participant(){
         super();
     }
@@ -25,11 +27,22 @@ public class Participant extends Person{
         super(name, cpf, birthDate);
     }
 
+    public Participant(String name, String cpf, String birthDate, CreditCard creditCard){
+        super(name, cpf, birthDate);
+        this.creditCard = creditCard;
+    }
+
     public List<Ticket> getTicketList() {
         return ticketList;
     }
 
     public void setTicketList(List<Ticket> ticketList) {
         this.ticketList = ticketList;
+    }
+    public CreditCard getCreditCard() {
+        return creditCard;
+    }
+    public void setCreditCard(CreditCard creditCard) {
+        this.creditCard = creditCard;
     }
 }

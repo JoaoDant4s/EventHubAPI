@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,7 +15,7 @@
     />
     <link rel="stylesheet" th:href="@{/css/global.css}" />
     <link rel="stylesheet" th:href="@{/css/containers.css}" />
-    <title>Lista de pessoas</title>
+    <title>Criar Cartão de Crédito</title>
   </head>
   <body>
     <nav class="navbar">
@@ -34,7 +34,7 @@
             <p>Eventos</p></a
           >
         </li>
-        <li class="active">
+        <li>
           <a th:href="@{/ticket/ticketList}"
             ><div class="iconBox"><i class="fa-solid fa-ticket"></i></div>
             <p>Ingressos</p></a
@@ -46,7 +46,7 @@
             <p>Feedback</p></a
           >
         </li>
-        <li>
+        <li class="active">
           <a th:href="@{/creditCard/creditCardDetails}"
             ><div class="iconBox"><i class="fa-solid fa-credit-card"></i></div>
             <p>Cartão de crédito</p></a
@@ -63,42 +63,32 @@
     <main class="mainContent">
       <section class="sec1">
         <div class="titleBox">
-          <h3>Ingressos</h3>
-          <a th:href="@{/ticket/ticketForm}"
+          <h3>Cartão de crédito</h3>
+          <a th:href="@{/creditCard/creditCardForm}"
             ><button class="button">
-              <i class="fa-solid fa-plus"></i>Cadastrar ingresso
+              <i class="fa-solid fa-plus"></i>Criar
             </button></a
           >
         </div>
-        <table>
-          <thead>
-            <tr>
-              <th width="20%">Nome do evento</th>
-              <th>Descrição</th>
-              <th>Lote</th>
-              <th>Valor</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr th:each="ticket : ${ticketList}">
-              <td></td>
-              <td th:text="${ticket.description}"></td>
-              <td th:text="${ticket.batch}"></td>
-              <td th:text="${ticket.amount}"></td>
-              <td class="tableButtonContainer">
-                <a th:href="@{/ticket/updateTicket/{id}(id=${ticket.id})}"
-                  ><button class="tableButton alert">
-                    <i class="fa-solid fa-pen-to-square"></i></button
-                ></a>
-                <a th:href="@{/ticket/deleteTicket/{id}(id=${ticket.id})}"
-                  ><button class="tableButton danger">
-                    <i class="fa-solid fa-trash"></i></button
-                ></a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      </section>
+      <section class="container">
+        <th:block th:if="${creditCard != null}">
+          <div class="credit-card">
+            <div class="chip"></div>
+            <div class="card-number" th:text="${creditCard.cardNumber}"></div>
+            <div
+              class="card-holder"
+              th:text="${creditCard.cardHolderName}"
+            ></div>
+            <div
+              class="card-expiration"
+              th:text="${#temporals.format(creditCard.expiration, 'MM/yy')}"
+            ></div>
+          </div>
+        </th:block>
+        <th:block th:unless="${creditCard != null}">
+          <h2 style="margin-top: 30px">Nenhum cartão de crédito cadastrado.</h2>
+        </th:block>
       </section>
     </main>
   </body>

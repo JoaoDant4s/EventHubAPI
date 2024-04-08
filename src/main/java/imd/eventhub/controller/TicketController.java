@@ -9,9 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.view.RedirectView;
 
-import imd.eventhub.model.Attraction;
-import imd.eventhub.model.Participant;
-import imd.eventhub.model.Person;
 import imd.eventhub.model.Ticket;
 import imd.eventhub.service.Ticket.ITicketService;
 

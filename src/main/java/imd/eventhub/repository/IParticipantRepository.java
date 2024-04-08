@@ -1,6 +1,5 @@
 package imd.eventhub.repository;
 
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import imd.eventhub.model.Participant;

@@ -2,8 +2,6 @@ package imd.eventhub.model;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
-
 @MappedSuperclass
 public abstract class Person {
 
