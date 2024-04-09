@@ -25,7 +25,9 @@ public class CreditCardService implements ICreditCardService{
             Optional<CreditCard> creditCardCandidate = creditCardRepository.findCreditCardByParticipant(creditCard.getParticipant());
             if(creditCardCandidate.isPresent()) throw new Exception("Você já tem um cartão de crédito cadastrado");
             Optional<Participant> participant = participantService.getById(2);
+            System.out.println(participant.get().getName());
             creditCard.setParticipant(participant.get());
+            participant.get().setCreditCard(creditCard);
             creditCardRepository.save(creditCard);
         }
     }
@@ -33,6 +35,9 @@ public class CreditCardService implements ICreditCardService{
     @Override
     public void delete(CreditCard creditCard) throws Exception{
         if(isValid(creditCard)){
+            Optional<Participant> participant = participantService.getById(creditCard.getParticipant().getId());
+            participant.get().setCreditCard(null);
+            participantService.save(participant.get());
             creditCardRepository.delete(creditCard);
         }
     }

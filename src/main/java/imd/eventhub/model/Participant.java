@@ -18,7 +18,7 @@ public class Participant extends Person{
             inverseJoinColumns=@JoinColumn(name="ticketId"))
     private List<Ticket> ticketList;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "credit_card_id")
     private CreditCard creditCard;
 
