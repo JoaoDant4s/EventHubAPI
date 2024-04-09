@@ -34,14 +34,16 @@
             <table>
                 <thead>
                     <tr>
+                        <th width="20%">Participante</th>
                         <th width="40%">Comentário</th>
-                        <th width="20%">Avaliação</th>
-                        <th>Data</th>
+                        <th>Avaliação</th>
+                        <th width="20%">Data</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="feedback : ${feedbackList}">
+                        <td th:text="${feedback.event.name}+' - '+${feedback.participant.name}"></td>
                         <td th:text="${feedback.comment}"></td>
                         <td th:text="${feedback.rating}"></td>
                         <td th:text="${#temporals.format(feedback.dateTime, 'dd/MM/YYYY HH:mm') + 'h'}" ></td>

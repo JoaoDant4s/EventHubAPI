@@ -47,6 +47,9 @@ public class Event {
     @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
     private List<SubEvent> subEvents;
 
+    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
+    private List<Feedback> feedbackList;
+
     public Event(){
         this.subEvents = new ArrayList<>();
     }
@@ -146,4 +149,11 @@ public class Event {
         this.subEvents = subEvents;
     }
 
+    public List<Feedback> getFeedbackList() {
+        return feedbackList;
+    }
+
+    public void setFeedbackList(List<Feedback> feedbackList) {
+        this.feedbackList = feedbackList;
+    }
 }

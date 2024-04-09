@@ -1,12 +1,10 @@
 package imd.eventhub.controller;
 
+import imd.eventhub.service.Event.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import imd.eventhub.model.Attraction;
@@ -32,6 +30,8 @@ public class FeedbackController {
     @Autowired
     AttractionService attractionService;
     @Autowired
+    EventService eventService;
+    @Autowired
     FeedbackService feedbackService;
 
     @RequestMapping("/feedbackList")
@@ -43,6 +43,8 @@ public class FeedbackController {
     @RequestMapping("/feedbackForm")
     public String feedbackForm(Model model){
         model.addAttribute("feedback", new Feedback());
+        model.addAttribute("participantList", participantService.getList());
+        model.addAttribute("eventList", eventService.getList());
         return "feedback/feedbackForm";
     }
 
@@ -55,7 +57,9 @@ public class FeedbackController {
     }
 
     @RequestMapping(value="/addFeedback", method=RequestMethod.POST)
-    public RedirectView addFeedback(@ModelAttribute("feedback") Feedback feedback){
+    public RedirectView addFeedback(@ModelAttribute("feedback") Feedback feedback, @RequestParam("participant") Integer participantId, @RequestParam("event") Integer eventId) throws Exception {
+        feedback.setParticipant(participantService.getById(participantId).get());
+        feedback.setEvent(eventService.getByID(eventId).get());
         feedbackService.save(feedback);
         return new RedirectView("/feedback/feedbackList");
     }

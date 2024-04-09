@@ -28,6 +28,10 @@ public class Feedback {
     @JoinColumn(name = "participantId")
     private Participant participant;
 
+    @ManyToOne
+    @JoinColumn(name = "eventId")
+    private Event event;
+
     public Feedback() {
     }
 
@@ -69,5 +73,13 @@ public class Feedback {
 
     public void setParticipant(Participant participant) {
         this.participant = participant;
+    }
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
     }
 }

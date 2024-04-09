@@ -15,7 +15,6 @@
     />
     <link rel="stylesheet" th:href="@{/css/global.css}" />
     <link rel="stylesheet" th:href="@{/css/containers.css}" />
-    <!--<link rel="stylesheet" th:href="@{/js/ticketFormScript.js}" />-->
     <title>Cadastro de feedback</title>
   </head>
   <body id="ticketForm">
@@ -42,9 +41,17 @@
         </div>
         <form th:action="@{/feedback/addFeedback}" th:object="${feedback}" method="post">
           <p>Comentário:</p>
-          <textarea th:field="*{comment}" name="comment" cols="30" rows="10"></textarea>
+          <textarea th:field="*{comment}" name="comment" width="100%" cols="30" rows="10"></textarea>
           <p>Avaliação:</p>
           <input type="range" min="0" max="5" th:field="*{rating}"/><br/><br/>
+          <p>Participante:</p>
+          <select name="participant" id="participant">
+            <option th:each="participant : ${participantList}" th:value="${participant.id}" th:text="${participant.name}"></option>
+          </select>
+          <p>Evento:</p>
+          <select name="event" id="event">
+            <option th:each="event : ${eventList}" th:value="${event.id}" th:text="${event.name}"></option>
+          </select><br/><br/>
 
           <button type="submit" class="button">Salvar</button>
         </form>

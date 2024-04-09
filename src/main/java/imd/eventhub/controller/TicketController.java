@@ -46,7 +46,7 @@ public class TicketController {
     }
 
     @RequestMapping(value="/addTicket", method= RequestMethod.POST)
-    public RedirectView addTicket(@ModelAttribute("ticket") Ticket ticket, @RequestParam("subEventIdList") List<Integer> subEventIdList){
+    public RedirectView addTicket(@ModelAttribute("ticket") Ticket ticket, @RequestParam(name="subEventIdList", defaultValue = "") List<Integer> subEventIdList){
         List<SubEvent> subEventsList = new ArrayList<>();
         subEventIdList.forEach(id->{
             try {
@@ -70,16 +70,18 @@ public class TicketController {
     }
 
     @RequestMapping(value="/updateTicket", method=RequestMethod.POST)
-    public RedirectView updateTicket(@ModelAttribute("ticket") Ticket ticket, Model model, @RequestParam("subEventIdList") List<Integer> subEventIdList){
+    public RedirectView updateTicket(@ModelAttribute("ticket") Ticket ticket, Model model, @RequestParam(name="subEventIdList", defaultValue = "") List<Integer> subEventIdList){
         List<SubEvent> subEventsList = new ArrayList<>();
-        subEventIdList.forEach(id->{
-            try {
-                subEventsList.add(subEventService.getByID(id).get());
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-        });
-        ticket.setSubEvent(subEventsList);
+        if(!subEventIdList.isEmpty()){
+            subEventIdList.forEach(id->{
+                try {
+                    subEventsList.add(subEventService.getByID(id).get());
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            });
+            ticket.setSubEvent(subEventsList);
+        }
         ticketService.save(ticket);
         return new RedirectView("/ticket/ticketList");
     }

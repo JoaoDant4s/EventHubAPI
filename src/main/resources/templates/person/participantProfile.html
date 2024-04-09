@@ -48,7 +48,6 @@
           <p>Descrição: <span th:text="${ticket.description}"></span></p>
           <p>Lote: <span th:text="${ticket.batch}"></span></p>
           <p>Valor: <span th:text="${ticket.amount}"></span></p>
-          <a th:href="@{/feedback/feedbackForm/{participantId}/{ticketId}(participantId=${participant.id},ticketId=${ticket.id})}"><button>Adicionar comentário</button></a>
         </div>
       </section>
     </main>
