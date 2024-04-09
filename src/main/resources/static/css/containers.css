@@ -242,7 +242,6 @@ table tr td {
   cursor: pointer;
 }
 
-<<<<<<< HEAD
 .subEventCheckbox {
   display: none;
 }
@@ -250,7 +249,6 @@ table tr td {
 .showSubEventCheckbox {
   display: block;
 }
-=======
 .credit-card {
   width: 300px;
   height: 200px;
@@ -264,7 +262,7 @@ table tr td {
 .chip {
   width: 50px;
   height: 35px;
-  background-color: #ccc;
+  background-color: #d0a277;
   border-radius: 5px;
   position: absolute;
   top: 20px;
@@ -298,4 +296,14 @@ table tr td {
   justify-content: center;
 }
 
->>>>>>> 07ed33f734f1f4d98961af190261cf6309adbee1
+.delete-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+}
+
+.icon-button-del {
+  width: 35px;
+  height: 35px;
+}

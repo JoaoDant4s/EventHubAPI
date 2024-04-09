@@ -37,7 +37,7 @@
           <a th:href="@{/event/eventList}">
             <i class="fa-solid fa-arrow-left fa-2x" style="color: var(--info); "></i>
           </a>
-          <h1 th:text="${event.name}" style="padding-left: 15px;"></h1>
+          <h1 th:text="${subEvent.event.name}" style="padding-left: 15px;"></h1>
         </div>
         <form
           th:action="${method} == 'save' ? @{/subEvent/addSubEvent} : @{/subEvent/updateSubEvent}"
