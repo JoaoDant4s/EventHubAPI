@@ -22,6 +22,10 @@ public class Participant extends Person{
     @JoinColumn(name = "credit_card_id")
     private CreditCard creditCard;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Participant(){
         super();
     }

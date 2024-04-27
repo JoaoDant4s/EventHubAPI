@@ -10,6 +10,9 @@ public class Attraction extends Person {
     private String description;
     @Column(length = 20)
     private String contact;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Attraction() {
         super();

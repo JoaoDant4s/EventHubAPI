@@ -17,5 +17,4 @@ public interface IAttractionService {
     public Optional<Attraction> getById(Integer id);
     public Optional<Person> getByCpf(String cpf);
     public List<Attraction> getList();
-
 }

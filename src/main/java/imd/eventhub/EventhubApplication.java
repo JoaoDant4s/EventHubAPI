@@ -1,7 +1,7 @@
 package imd.eventhub;
 
 import imd.eventhub.model.*;
-import imd.eventhub.repository.ISubEventRepository;
+import imd.eventhub.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -14,10 +14,7 @@ import imd.eventhub.model.EventType;
 import imd.eventhub.model.Participant;
 import imd.eventhub.model.SubEvent;
 import imd.eventhub.model.Ticket;
-import imd.eventhub.repository.IEventRepository;
-import imd.eventhub.repository.IPersonRepository;
 import imd.eventhub.repository.ISubEventRepository;
-import imd.eventhub.repository.ITicketRepository;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -28,6 +25,10 @@ import java.util.List;
 public class EventhubApplication {
 
 
+	@Autowired
+	IUserRepository userRepository;
+	@Autowired
+	IParticipantRepository participantRepository;
 	@Autowired
 	IPersonRepository personRepository;
 	@Autowired
@@ -45,12 +46,19 @@ public class EventhubApplication {
 			 * Cadastrando pessoas
 			 */
 
-			Participant pessoa1 = new Participant("Hudson", "999.999.999-01");
-			Participant pessoa2 = new Participant("João", "999.999.999-02");
-			Participant pessoa3 = new Participant("Nathalia", "999.999.999-03");
-			Participant pessoa4 = new Participant("Matheus", "999.999.999-04");
-			Attraction pessoa5 = new Attraction("Fulano", "999.999.999-05");
-			Attraction pessoa6 = new Attraction("Ciclano", "999.999.999-06");
+			Participant person1 = new Participant("Hudson", "999.999.999-01");
+			Participant person2 = new Participant("João", "999.999.999-02");
+			Participant person3 = new Participant("Nathalia", "999.999.999-03");
+			Participant person4 = new Participant("Matheus", "999.999.999-04");
+			Participant person5 = new Participant("Fulano", "999.999.999-05");
+			Participant person6 = new Participant("Ciclano", "999.999.999-06");
+
+			User user1 = new User("Hudson", "999.999.999-01");
+			User user2 = new User("João", "999.999.999-02");
+			User user3 = new User("Nathalia", "999.999.999-03");
+			User user4 = new User("Matheus", "999.999.999-04");
+			User user5 = new User("Fulano", "999.999.999-05");
+			User user6 = new User("Ciclano", "999.999.999-06");
 
 			/*
 			 * Cadastrando eventos
@@ -93,7 +101,6 @@ public class EventhubApplication {
 			ticketList.add(ingresso1);
 			ticketList.add(ingresso2);
 
-			pessoa1.setTicketList(ticketList);
 
 
 
@@ -106,12 +113,19 @@ public class EventhubApplication {
 			ticketRepository.save(ingresso2);
 			ticketRepository.save(ingresso3);
 
-			personRepository.save(pessoa1);
-			personRepository.save(pessoa2);
-			personRepository.save(pessoa3);
-			personRepository.save(pessoa4);
-			personRepository.save(pessoa5);
-			personRepository.save(pessoa6);
+			participantRepository.save(person1);
+			participantRepository.save(person2);
+			participantRepository.save(person3);
+			participantRepository.save(person4);
+			participantRepository.save(person5);
+			participantRepository.save(person6);
+
+			userRepository.save(user1);
+			userRepository.save(user2);
+			userRepository.save(user3);
+			userRepository.save(user4);
+			userRepository.save(user5);
+			userRepository.save(user6);
 
 			eventRepository.save(event1);
 			eventRepository.save(event2);
