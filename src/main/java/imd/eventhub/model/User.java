@@ -1,6 +1,9 @@
 package imd.eventhub.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.cglib.core.Local;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -9,6 +12,8 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "User")
+@Getter
+@Setter
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +31,7 @@ public class User {
     private LocalDate birthDate;
 
     @Column(length = 3)
-    private String age;
+    private Integer age;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "participant_id")
@@ -44,66 +49,9 @@ public class User {
         this.cpf = cpf;
     }
 
-    public User(String name, String cpf, LocalDate birthDate) {
+    public User(String name, String cpf, String birthDate) {
         this.name = name;
         this.cpf = cpf;
-        this.birthDate = birthDate;
+        this.birthDate = LocalDate.parse(birthDate);
     }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public String getAge() {
-        return age;
-    }
-
-    public void setAge(String age) {
-        this.age = age;
-    }
-
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public Participant getParticipant() {
-        return participant;
-    }
-
-    public void setParticipant(Participant participant) {
-        this.participant = participant;
-    }
-
-    public Attraction getAttraction() {
-        return attraction;
-    }
-
-    public void setAttraction(Attraction attraction) {
-        this.attraction = attraction;
-    }
-
 }

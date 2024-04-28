@@ -10,5 +10,5 @@ import java.util.Optional;
 
 @Service
 public interface IUserService extends IBaseService<User> {
-
+    public Optional<User> getUserByCPF(String cpf);
 }

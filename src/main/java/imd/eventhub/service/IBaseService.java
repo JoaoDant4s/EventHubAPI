@@ -5,8 +5,8 @@ import java.util.Optional;
 
 public interface IBaseService<T> {
     public T save(T object);
-    public void delete(T object);
-    public void update(T object);
+    public void delete(Integer id);
+    public Optional<T> update(T object, Integer id);
     public Optional<T> getById(Integer id);
     public List<T> getList();
 }
