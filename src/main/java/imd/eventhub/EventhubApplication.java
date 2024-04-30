@@ -2,6 +2,7 @@ package imd.eventhub;
 
 import imd.eventhub.model.*;
 import imd.eventhub.repository.*;
+import imd.eventhub.restAPI.dto.SaveUserDTO;
 import imd.eventhub.service.User.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -31,8 +32,6 @@ public class EventhubApplication {
 	@Autowired
 	IParticipantRepository participantRepository;
 	@Autowired
-	IPersonRepository personRepository;
-	@Autowired
 	ITicketRepository ticketRepository;
 	@Autowired
 	IEventRepository eventRepository;
@@ -47,19 +46,12 @@ public class EventhubApplication {
 			 * Cadastrando pessoas
 			 */
 
-			Participant person1 = new Participant("Hudson", "999.999.999-01");
-			Participant person2 = new Participant("João", "999.999.999-02");
-			Participant person3 = new Participant("Nathalia", "999.999.999-03");
-			Participant person4 = new Participant("Matheus", "999.999.999-04");
-			Participant person5 = new Participant("Fulano", "999.999.999-05");
-			Participant person6 = new Participant("Ciclano", "999.999.999-06");
-
-			User user1 = new User("Hudson", "999.999.999-01", "2001-09-12");
-			User user2 = new User("João", "999.999.999-02", "2000-10-20");
-			User user3 = new User("Nathalia", "999.999.999-03", "2000-08-31");
-			User user4 = new User("Matheus", "999.999.999-04", "1996-02-10");
-			User user5 = new User("Fulano", "999.999.999-05", "1989-11-02");
-			User user6 = new User("Ciclano", "999.999.999-06", "1998-03-16");
+			SaveUserDTO user1 = new SaveUserDTO("Hudson", "999.999.999-01", "2001-09-12");
+			SaveUserDTO user2 = new SaveUserDTO("João", "999.999.999-02", "2000-10-20");
+			SaveUserDTO user3 = new SaveUserDTO("Nathalia", "999.999.999-03", "2000-08-31");
+			SaveUserDTO user4 = new SaveUserDTO("Matheus", "999.999.999-04", "1996-02-10");
+			SaveUserDTO user5 = new SaveUserDTO("Fulano", "999.999.999-05", "1989-11-02");
+			SaveUserDTO user6 = new SaveUserDTO("Ciclano", "999.999.999-06", "1998-03-16");
 
 			/*
 			 * Cadastrando eventos
@@ -113,13 +105,6 @@ public class EventhubApplication {
 			ticketRepository.save(ingresso1);
 			ticketRepository.save(ingresso2);
 			ticketRepository.save(ingresso3);
-
-			participantRepository.save(person1);
-			participantRepository.save(person2);
-			participantRepository.save(person3);
-			participantRepository.save(person4);
-			participantRepository.save(person5);
-			participantRepository.save(person6);
 
 			userService.save(user1);
 			userService.save(user2);

@@ -1,22 +1,19 @@
 package imd.eventhub.controller;
 
+import imd.eventhub.service.Attraction.AttractionService;
 import imd.eventhub.service.Event.EventService;
+import imd.eventhub.service.Participant.ParticipantService;
+import imd.eventhub.service.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
-import imd.eventhub.model.Attraction;
 import imd.eventhub.model.Feedback;
 import imd.eventhub.model.Participant;
-import imd.eventhub.model.Person;
 import imd.eventhub.service.Feedback.FeedbackService;
-import imd.eventhub.service.Person.AttractionService;
-import imd.eventhub.service.Person.ParticipantService;
-import imd.eventhub.service.Person.PersonService;
 
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -24,7 +21,7 @@ import java.util.Optional;
 public class FeedbackController {
 
     @Autowired
-    PersonService personService;
+    UserService personService;
     @Autowired
     ParticipantService participantService;
     @Autowired

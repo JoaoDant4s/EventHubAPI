@@ -4,6 +4,7 @@ import imd.eventhub.exception.CpfNotValidException;
 import imd.eventhub.exception.DateOutOfRangeException;
 import imd.eventhub.exception.NotFoundException;
 import imd.eventhub.model.User;
+import imd.eventhub.restAPI.dto.SaveUserDTO;
 import imd.eventhub.restAPI.infra.RestErrorMessage;
 import imd.eventhub.restAPI.infra.RestSuccessMessage;
 import imd.eventhub.service.User.IUserService;
@@ -37,7 +38,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> saveUser(@RequestBody User user){
+    public ResponseEntity<Object> saveUser(@RequestBody SaveUserDTO user){
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
         } catch(NotFoundException | CpfNotValidException | DateOutOfRangeException exception){
@@ -48,7 +49,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> UserUpdate(@PathVariable Integer id, @RequestBody User user){
+    public ResponseEntity<Object> UserUpdate(@PathVariable Integer id, @RequestBody SaveUserDTO user){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(userService.update(user, id));
         } catch (NotFoundException exception){

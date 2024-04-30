@@ -37,8 +37,8 @@ public class User {
     @JoinColumn(name = "participant_id")
     private Participant participant;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "attraction_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "attraction_id", referencedColumnName = "id")
     private Attraction attraction;
 
     public User() {

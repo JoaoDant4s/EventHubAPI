@@ -2,6 +2,7 @@ package imd.eventhub.controller;
 
 import java.util.Optional;
 
+import imd.eventhub.service.Participant.IParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +14,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import imd.eventhub.model.CreditCard;
 import imd.eventhub.model.Participant;
 import imd.eventhub.service.CreditCard.ICreditCardService;
-import imd.eventhub.service.Person.Interfaces.IParticipantService;
 
 
 @Controller

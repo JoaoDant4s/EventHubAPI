@@ -5,12 +5,11 @@ import java.util.List;
 
 @Entity
 @Table(name = "Participant")
-public class Participant extends Person{
+public class Participant {
 
-
-
-    @OneToMany(mappedBy = "participant", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE})
-    private List<Feedback> feedback;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinTable(name="participantTicket",
@@ -26,18 +25,8 @@ public class Participant extends Person{
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Participant(){
-        super();
-    }
-    public Participant(String name, String cpf){
-        super(name, cpf);
-    }
-    public Participant(String name, String cpf, String birthDate){
-        super(name, cpf, birthDate);
-    }
-
-    public Participant(String name, String cpf, String birthDate, CreditCard creditCard){
-        super(name, cpf, birthDate);
+    public Participant(){}
+    public Participant(CreditCard creditCard){
         this.creditCard = creditCard;
     }
 
@@ -53,5 +42,21 @@ public class Participant extends Person{
     }
     public void setCreditCard(CreditCard creditCard) {
         this.creditCard = creditCard;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

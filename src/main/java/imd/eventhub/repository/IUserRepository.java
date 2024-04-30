@@ -1,6 +1,5 @@
 package imd.eventhub.repository;
 
-import imd.eventhub.model.Person;
 import imd.eventhub.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

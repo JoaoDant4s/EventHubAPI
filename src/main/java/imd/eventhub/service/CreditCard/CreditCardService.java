@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import imd.eventhub.model.CreditCard;
 import imd.eventhub.model.Participant;
 import imd.eventhub.repository.ICreditCardRepository;
-import imd.eventhub.service.Person.Interfaces.IParticipantService;
+import imd.eventhub.service.Participant.IParticipantService;
 
 @Component
 public class CreditCardService implements ICreditCardService{
@@ -25,7 +25,7 @@ public class CreditCardService implements ICreditCardService{
             Optional<CreditCard> creditCardCandidate = creditCardRepository.findCreditCardByParticipant(creditCard.getParticipant());
             if(creditCardCandidate.isPresent()) throw new Exception("Você já tem um cartão de crédito cadastrado");
             Optional<Participant> participant = participantService.getById(2);
-            System.out.println(participant.get().getName());
+            System.out.println(participant.get().getUser());
             creditCard.setParticipant(participant.get());
             participant.get().setCreditCard(creditCard);
             creditCardRepository.save(creditCard);
