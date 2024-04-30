@@ -18,4 +18,5 @@ public interface IUserService {
     public void delete(Integer id);
     public Optional<User> getUserByCPF(String cpf);
     public void setUserAttraction(Integer userId, Integer attractionId);
+    public Optional<User> getUserByAttractionId(Integer attractionId);
 }

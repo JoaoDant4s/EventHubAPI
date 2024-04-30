@@ -26,6 +26,8 @@ public class AttractionService implements IAttractionService {
 
     @Autowired
     IUserService userService;
+    @Autowired
+    IUserRepository userRepository;
 
     @Override
     public Optional<Attraction> getById(Integer id){
@@ -85,6 +87,15 @@ public class AttractionService implements IAttractionService {
 
     @Override
     public void delete(Integer id) {
+        Optional<Attraction> attraction = getById(id);
+        if(attraction.isEmpty()){
+            throw new NotFoundException("Atração não encontrado");
+        }
 
+        Optional<User> user = userService.getUserByAttractionId(attraction.get().getId());
+        user.get().setAttraction(null);
+        userRepository.save(user.get());
+
+        attractionRepository.delete(attraction.get());
     }
 }

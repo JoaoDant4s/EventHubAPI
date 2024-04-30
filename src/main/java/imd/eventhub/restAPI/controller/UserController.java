@@ -49,7 +49,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> UserUpdate(@PathVariable Integer id, @RequestBody SaveUserDTO user){
+    public ResponseEntity<Object> userUpdate(@PathVariable Integer id, @RequestBody SaveUserDTO user){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(userService.update(user, id));
         } catch (NotFoundException exception){
@@ -62,7 +62,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> UserDelete(@PathVariable Integer id){
+    public ResponseEntity<Object> userDelete(@PathVariable Integer id){
         try {
             userService.delete(id);
             return ResponseEntity.status(HttpStatus.OK).body(new RestSuccessMessage(HttpStatus.OK, "Usuário apagado com sucesso!"));
@@ -70,6 +70,15 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RestErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage()));
         } catch(Exception exception){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RestErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage()));
+        }
+    }
+
+    @GetMapping("/getAttraction/{id}")
+    public ResponseEntity<Object> getUserByAttractionId(@PathVariable Integer id){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(userService.getUserByAttractionId(id).get());
+        } catch (NotFoundException exception){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RestErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage()));
         }
     }
 

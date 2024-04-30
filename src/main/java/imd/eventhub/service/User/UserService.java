@@ -140,6 +140,18 @@ public class UserService implements IUserService {
         userRepository.save(user.get());
     }
 
+    @Override
+    public Optional<User> getUserByAttractionId(Integer attractionId) {
+        Optional<User> user = userRepository.findByAttraction_id(attractionId);
+
+        if(user.isEmpty()) {
+            throw new NotFoundException("Usuário não encontrado");
+        }
+
+        return user;
+    }
+
+
     public static boolean checkCpfIsValid(String cpf){
 
         Pattern regex = Pattern.compile("[0-9]{3}\\.?[0-9]{3}\\.?[0-9]{3}\\-?[0-9]{2}");
