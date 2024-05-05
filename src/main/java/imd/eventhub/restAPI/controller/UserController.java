@@ -3,19 +3,15 @@ package imd.eventhub.restAPI.controller;
 import imd.eventhub.exception.CpfNotValidException;
 import imd.eventhub.exception.DateOutOfRangeException;
 import imd.eventhub.exception.NotFoundException;
-import imd.eventhub.model.User;
-import imd.eventhub.restAPI.dto.SaveUserDTO;
+import imd.eventhub.restAPI.dto.user.SaveUserDTO;
+import imd.eventhub.restAPI.dto.user.UpdateUserDTO;
 import imd.eventhub.restAPI.infra.RestErrorMessage;
 import imd.eventhub.restAPI.infra.RestSuccessMessage;
 import imd.eventhub.service.User.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/user")
@@ -48,10 +44,10 @@ public class UserController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Object> userUpdate(@PathVariable Integer id, @RequestBody SaveUserDTO user){
+    @PutMapping
+    public ResponseEntity<Object> userUpdate(@RequestBody UpdateUserDTO user){
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(userService.update(user, id));
+            return ResponseEntity.status(HttpStatus.OK).body(userService.update(user));
         } catch (NotFoundException exception){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RestErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage()));
         } catch(CpfNotValidException | DateOutOfRangeException exception){

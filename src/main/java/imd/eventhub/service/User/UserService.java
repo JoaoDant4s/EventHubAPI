@@ -7,7 +7,8 @@ import imd.eventhub.exception.NotFoundException;
 import imd.eventhub.model.Attraction;
 import imd.eventhub.model.User;
 import imd.eventhub.repository.IUserRepository;
-import imd.eventhub.restAPI.dto.SaveUserDTO;
+import imd.eventhub.restAPI.dto.user.SaveUserDTO;
+import imd.eventhub.restAPI.dto.user.UpdateUserDTO;
 import imd.eventhub.service.Attraction.IAttractionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -75,8 +76,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Optional<User> update(SaveUserDTO user, Integer id){
-        Optional<User> getUser = getById(id);
+    public Optional<User> update(UpdateUserDTO user){
+        Optional<User> getUser = getById(user.getId());
         Optional<User> userWithSameCPF = getUserByCPF(user.getCpf());
 
         if(getUser.isEmpty()){
@@ -156,5 +157,6 @@ public class UserService implements IUserService {
 
         Pattern regex = Pattern.compile("[0-9]{3}\\.?[0-9]{3}\\.?[0-9]{3}\\-?[0-9]{2}");
         return regex.matcher(cpf).find();
+
     }
 }

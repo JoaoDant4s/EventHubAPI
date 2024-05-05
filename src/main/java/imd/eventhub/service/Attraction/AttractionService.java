@@ -1,5 +1,6 @@
 package imd.eventhub.service.Attraction;
 
+import imd.eventhub.exception.ContactNotValidException;
 import imd.eventhub.exception.CpfNotValidException;
 import imd.eventhub.exception.DateOutOfRangeException;
 import imd.eventhub.exception.NotFoundException;
@@ -7,7 +8,10 @@ import imd.eventhub.model.Attraction;
 import imd.eventhub.model.User;
 import imd.eventhub.repository.IAttractionRepository;
 import imd.eventhub.repository.IUserRepository;
-import imd.eventhub.restAPI.dto.*;
+import imd.eventhub.restAPI.dto.attraction.SaveAttractionDTO;
+import imd.eventhub.restAPI.dto.attraction.SaveAttractionUserDTO;
+import imd.eventhub.restAPI.dto.attraction.UpdateAttractionDTO;
+import imd.eventhub.restAPI.dto.user.SaveUserDTO;
 import imd.eventhub.service.User.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,6 +19,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Component
 public class AttractionService implements IAttractionService {
@@ -48,6 +53,9 @@ public class AttractionService implements IAttractionService {
         if(attractionDTO.getContact() == null){
             throw new NotFoundException("campo 'contact' não foi encontrado");
         }
+        if(!checkContactIsValid(attractionDTO.getContact())){
+            throw new ContactNotValidException(String.format("O contato digitado ('%s') não segue o padrão (__) _____-____", attractionDTO.getContact()));
+        }
 
         Attraction attraction = new Attraction();
         attraction.setDescription(attractionDTO.getDescription());
@@ -78,9 +86,9 @@ public class AttractionService implements IAttractionService {
     }
 
     @Override
-    public Attraction update(SaveAttractionDTO attractionUserDTO, Integer id) {
+    public Attraction update(UpdateAttractionDTO attractionUserDTO) {
 
-        Optional<Attraction> attraction = getById(id);
+        Optional<Attraction> attraction = getById(attractionUserDTO.getId());
         if(attraction.isEmpty()){
             throw new NotFoundException("Atração não encontrada");
         }
@@ -91,6 +99,9 @@ public class AttractionService implements IAttractionService {
             }
             if(attraction.get().getContact() == null){
                 throw new NotFoundException("campo 'contact' não foi encontrado");
+            }
+            if(!checkContactIsValid(attraction.get().getContact())){
+                throw new ContactNotValidException(String.format("O contato digitado ('%s') não segue o padrão (__) _____-____", attraction.get().getContact()));
             }
         }
         attraction.get().setDescription(attractionUserDTO.getDescription());
@@ -113,5 +124,10 @@ public class AttractionService implements IAttractionService {
         }
 
         attractionRepository.delete(attraction.get());
+    }
+
+    public static boolean checkContactIsValid(String contact){
+        Pattern regex = Pattern.compile("[(][0-9]{2}[)][ ][0-9]{5}[-][0-9]{4}");
+        return regex.matcher(contact).find();
     }
 }

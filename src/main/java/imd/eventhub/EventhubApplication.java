@@ -1,8 +1,7 @@
 package imd.eventhub;
 
-import imd.eventhub.model.*;
 import imd.eventhub.repository.*;
-import imd.eventhub.restAPI.dto.SaveUserDTO;
+import imd.eventhub.restAPI.dto.user.SaveUserDTO;
 import imd.eventhub.service.User.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -10,10 +9,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import imd.eventhub.model.Attraction;
 import imd.eventhub.model.Event;
 import imd.eventhub.model.EventType;
-import imd.eventhub.model.Participant;
 import imd.eventhub.model.SubEvent;
 import imd.eventhub.model.Ticket;
 import imd.eventhub.repository.ISubEventRepository;

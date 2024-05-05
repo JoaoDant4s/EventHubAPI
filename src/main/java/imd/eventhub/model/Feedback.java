@@ -25,8 +25,8 @@ public class Feedback {
     private LocalDateTime dateTime;
 
     @ManyToOne
-    @JoinColumn(name = "participantId")
-    private Participant participant;
+    @JoinColumn(name = "userId")
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "eventId")
@@ -67,12 +67,12 @@ public class Feedback {
         this.dateTime = dateTime;
     }
 
-    public Participant getParticipant() {
-        return participant;
+    public User getUser() {
+        return user;
     }
 
-    public void setParticipant(Participant participant) {
-        this.participant = participant;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Event getEvent() {

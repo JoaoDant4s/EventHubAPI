@@ -2,8 +2,9 @@ package imd.eventhub.service.Attraction;
 
 import imd.eventhub.model.Attraction;
 import imd.eventhub.model.User;
-import imd.eventhub.restAPI.dto.SaveAttractionDTO;
-import imd.eventhub.restAPI.dto.SaveAttractionUserDTO;
+import imd.eventhub.restAPI.dto.attraction.SaveAttractionDTO;
+import imd.eventhub.restAPI.dto.attraction.SaveAttractionUserDTO;
+import imd.eventhub.restAPI.dto.attraction.UpdateAttractionDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public interface IAttractionService {
     public Attraction save(SaveAttractionDTO attractionDTO);
     public User save(SaveAttractionUserDTO object);
 
-    public Attraction update(SaveAttractionDTO attractionUserDTO, Integer id);
+    public Attraction update(UpdateAttractionDTO attractionUserDTO);
 
     public void delete(Integer id);
 }

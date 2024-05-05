@@ -1,18 +1,17 @@
-package imd.eventhub.restAPI.dto;
+package imd.eventhub.restAPI.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
-
 @Getter
 @Setter
 @AllArgsConstructor
-public class SaveAttractionUserDTO {
+public class UserDTO {
+    private Integer id;
     private String name;
     private String cpf;
     private String birthDate;
-    private String description;
-    private String contact;
+    private Integer age;
+    private Integer attractionId;
 }

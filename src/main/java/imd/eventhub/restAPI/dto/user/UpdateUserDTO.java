@@ -1,4 +1,4 @@
-package imd.eventhub.restAPI.dto;
+package imd.eventhub.restAPI.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,22 +6,22 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
-
 @Getter
 @Setter
-public class SaveUserDTO {
+public class UpdateUserDTO {
+    private Integer id;
     private String name;
     private String cpf;
     private LocalDate birthDate;
 
-    public SaveUserDTO(){}
+    public UpdateUserDTO(){}
 
-    public SaveUserDTO(String name, String cpf) {
+    public UpdateUserDTO(String name, String cpf) {
         this.name = name;
         this.cpf = cpf;
     }
 
-    public SaveUserDTO(String name, String cpf, String birthDate) {
+    public UpdateUserDTO(String name, String cpf, String birthDate) {
         this.name = name;
         this.cpf = cpf;
         this.birthDate = LocalDate.parse(birthDate);
