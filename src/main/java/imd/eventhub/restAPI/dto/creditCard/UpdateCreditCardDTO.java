@@ -9,10 +9,12 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @AllArgsConstructor
-public class SaveCreditCardDTO {
+public class UpdateCreditCardDTO {
+    private Integer id;
     private String cardNumber;
     private LocalDate expiration;
     private String cardHolderName;
+    private Integer participantId;
 
-    public SaveCreditCardDTO(){}
+    public UpdateCreditCardDTO(){}
 }

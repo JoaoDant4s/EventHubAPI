@@ -1,22 +1,24 @@
-package imd.eventhub.restAPI.dto.ticket;
+package imd.eventhub.restAPI.dto.participant;
 
-import imd.eventhub.model.Event;
+import imd.eventhub.model.CreditCard;
+import imd.eventhub.model.Ticket;
+import imd.eventhub.model.User;
+import imd.eventhub.restAPI.dto.ticket.TicketDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
-public class TicketDTO {
-    private Integer id;
-    private String description;
-    private String batch;
-    private float amount;
-    private Integer eventId;
+public class ParticipantDTO {
 
-    public TicketDTO(){}
+    private Integer id;
+    private CreditCard creditCard;
+    private Integer userId;
+
+    public ParticipantDTO(){}
 }

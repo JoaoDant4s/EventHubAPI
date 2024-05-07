@@ -1,24 +1,30 @@
 package imd.eventhub.restAPI.dto.participant;
 
 import imd.eventhub.model.CreditCard;
-import imd.eventhub.model.Ticket;
-import imd.eventhub.model.User;
-import imd.eventhub.restAPI.dto.ticket.TicketDTO;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @AllArgsConstructor
-public class ParticipantDTO {
+public class SaveParticipantDTO {
+    private String name;
+    private String cpf;
+    private LocalDate birthDate;
 
-    private Integer id;
-    private CreditCard creditCard;
-    private Integer userId;
+    public SaveParticipantDTO(){}
 
-    public ParticipantDTO(){}
+    public SaveParticipantDTO(String name, String cpf) {
+        this.name = name;
+        this.cpf = cpf;
+    }
+
+    public SaveParticipantDTO(String name, String cpf, String birthDate) {
+        this.name = name;
+        this.cpf = cpf;
+        this.birthDate = LocalDate.parse(birthDate);
+    }
 }

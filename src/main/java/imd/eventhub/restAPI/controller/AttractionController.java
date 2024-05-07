@@ -28,17 +28,6 @@ public class AttractionController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> saveAttraction(@RequestBody SaveAttractionDTO attractionDTO){
-        try{
-            return ResponseEntity.status(HttpStatus.CREATED).body(attractionService.save(attractionDTO));
-        } catch(NotFoundException exception){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RestErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage()));
-        } catch(Exception exception){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RestErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage()));
-        }
-    }
-
-    @PostMapping("/saveUser")
     public ResponseEntity<Object> saveUserAttraction(@RequestBody SaveAttractionUserDTO attractionDTO){
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(attractionService.save(attractionDTO));

@@ -11,6 +11,8 @@ import java.util.Optional;
 public interface IUserRepository extends JpaRepository<User,Integer> {
     Optional<User> findByCpf(String cpf);
     Optional<User> findByAttraction_id(Integer attractionId);
+    Optional<User> findByParticipant_id(Integer participantId);
     List<User> findByAttractionIsNotNull();
+    List<User> findByParticipantIsNotNull();
 
 }

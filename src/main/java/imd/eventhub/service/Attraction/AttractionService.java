@@ -12,6 +12,7 @@ import imd.eventhub.restAPI.dto.attraction.SaveAttractionDTO;
 import imd.eventhub.restAPI.dto.attraction.SaveAttractionUserDTO;
 import imd.eventhub.restAPI.dto.attraction.UpdateAttractionDTO;
 import imd.eventhub.restAPI.dto.user.SaveUserDTO;
+import imd.eventhub.restAPI.dto.user.UserDTO;
 import imd.eventhub.service.User.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Component
 public class AttractionService implements IAttractionService {
@@ -41,9 +43,13 @@ public class AttractionService implements IAttractionService {
     }
 
     @Override
-    public List<User> getList(){
-        return userRepository.findByAttractionIsNotNull();
+    public List<UserDTO> getList(){
+        return userRepository.findByAttractionIsNotNull().stream().map(user-> {
+            UserDTO userDTO = UserDTO.convertUserToUserDTO(user);
+            return userDTO;
+        }).collect(Collectors.toList());
     }
+
     @Override
     public Attraction save(SaveAttractionDTO attractionDTO){
 
@@ -64,15 +70,13 @@ public class AttractionService implements IAttractionService {
         return attractionRepository.save(attraction);
     }
     @Override
-    public User save(SaveAttractionUserDTO attractionUserDTO) throws NotFoundException, CpfNotValidException, DateOutOfRangeException {
+    public UserDTO save(SaveAttractionUserDTO attractionUserDTO) {
 
         SaveUserDTO userDTO = new SaveUserDTO();
         userDTO.setName(attractionUserDTO.getName());
         userDTO.setCpf(attractionUserDTO.getCpf());
-        userDTO.setBirthDate(LocalDate.parse(attractionUserDTO.getBirthDate()));
-        User savedUser;
-
-        savedUser = userService.save(userDTO);
+        userDTO.setBirthDate(attractionUserDTO.getBirthDate());
+        UserDTO savedUser = userService.save(userDTO);
 
         SaveAttractionDTO attraction = new SaveAttractionDTO();
         attraction.setDescription(attractionUserDTO.getDescription());
@@ -117,7 +121,7 @@ public class AttractionService implements IAttractionService {
             throw new NotFoundException("Atração não encontrada");
         }
 
-        Optional<User> user = userService.getUserByAttractionId(attraction.get().getId());
+        Optional<User> user = userRepository.findByAttraction_id(attraction.get().getId());
         if(user.isPresent()){
             user.get().setAttraction(null);
             userRepository.save(user.get());

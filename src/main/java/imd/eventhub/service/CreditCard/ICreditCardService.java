@@ -2,6 +2,9 @@ package imd.eventhub.service.CreditCard;
 
 import java.util.Optional;
 
+import imd.eventhub.restAPI.dto.creditCard.CreditCardDTO;
+import imd.eventhub.restAPI.dto.creditCard.SaveCreditCardDTO;
+import imd.eventhub.restAPI.dto.feedback.FeedbackDTO;
 import org.springframework.stereotype.Service;
 
 import imd.eventhub.model.CreditCard;
@@ -9,9 +12,9 @@ import imd.eventhub.model.Participant;
 
 @Service
 public interface ICreditCardService {
+    public Optional<CreditCardDTO> getById(Integer id);
     Boolean isValid(CreditCard creditCard) throws Exception;
-    void save(CreditCard creditCard) throws Exception;
-    void delete(CreditCard creditCard) throws Exception;
-    Optional<CreditCard> getByID(Integer id) throws Exception;
-    Optional<CreditCard> getByParticipant(Participant participant) throws Exception;
+    public CreditCardDTO save(SaveCreditCardDTO creditCard) throws Exception;
+    void delete(Integer id) throws Exception;
+    Optional<CreditCardDTO> getByParticipant(Participant participant) throws Exception;
 }

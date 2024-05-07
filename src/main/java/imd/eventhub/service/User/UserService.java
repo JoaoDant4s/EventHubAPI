@@ -5,11 +5,17 @@ import imd.eventhub.exception.CpfNotValidException;
 import imd.eventhub.exception.DateOutOfRangeException;
 import imd.eventhub.exception.NotFoundException;
 import imd.eventhub.model.Attraction;
+import imd.eventhub.model.Participant;
 import imd.eventhub.model.User;
+import imd.eventhub.repository.IParticipantRepository;
 import imd.eventhub.repository.IUserRepository;
+import imd.eventhub.restAPI.dto.feedback.FeedbackDTO;
 import imd.eventhub.restAPI.dto.user.SaveUserDTO;
 import imd.eventhub.restAPI.dto.user.UpdateUserDTO;
+import imd.eventhub.restAPI.dto.user.UserDTO;
 import imd.eventhub.service.Attraction.IAttractionService;
+import imd.eventhub.service.Participant.IParticipantService;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +24,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Component
 public class UserService implements IUserService {
@@ -26,24 +33,32 @@ public class UserService implements IUserService {
     IUserRepository userRepository;
     @Autowired
     IAttractionService attractionService;
+    @Autowired
+    IParticipantRepository participantRepository;
 
     @Override
-    public List<User> getList(){
-        return userRepository.findAll();
+    public List<UserDTO> getList(){
+        return userRepository.findAll().stream().map(user-> {
+            UserDTO userDTO = UserDTO.convertUserToUserDTO(user);
+            return userDTO;
+        }).collect(Collectors.toList());
     }
 
     @Override
-    public Optional<User> getById(Integer id){
-        Optional<User> user = userRepository.findById(id);
-        if(user.isEmpty()){
+    public Optional<UserDTO> getById(Integer id){
+        Optional<UserDTO> showUser = userRepository.findById(id).stream().findAny().map(user-> {
+            UserDTO userDTO = UserDTO.convertUserToUserDTO(user);
+            return userDTO;
+        });
+        if(showUser.isEmpty()){
             throw new NotFoundException("Usuário não encontrado");
         }
-        return user;
+        return showUser;
     }
 
     @Override
-    public User save(SaveUserDTO userDTO) {
-        Optional<User> userWithSameCPF = getUserByCPF(userDTO.getCpf());
+    public UserDTO save(SaveUserDTO userDTO) {
+        Optional<UserDTO> userWithSameCPF = getUserByCPF(userDTO.getCpf());
 
         if(userDTO.getName() == null){
             throw new NotFoundException("campo 'name' não foi encontrado");
@@ -71,14 +86,16 @@ public class UserService implements IUserService {
         user.setAge((int) ChronoUnit.YEARS.between(user.getBirthDate(),LocalDate.now()));
         User savedUser = userRepository.save(user);
 
+        UserDTO showUser = UserDTO.convertUserToUserDTO(savedUser);
 
-        return savedUser;
+
+        return showUser;
     }
 
     @Override
-    public Optional<User> update(UpdateUserDTO user){
-        Optional<User> getUser = getById(user.getId());
-        Optional<User> userWithSameCPF = getUserByCPF(user.getCpf());
+    public UserDTO update(UpdateUserDTO user){
+        Optional<User> getUser = userRepository.findById(user.getId());
+        Optional<UserDTO> userWithSameCPF = getUserByCPF(user.getCpf());
 
         if(getUser.isEmpty()){
             throw new NotFoundException("Usuário não encontrado");
@@ -107,13 +124,17 @@ public class UserService implements IUserService {
             getUser.get().setName(user.getName()!=null || !user.getName().isEmpty() ? user.getName() : getUser.get().getName());
         }
 
-        userRepository.save(getUser.get());
-        return getUser;
+        User savedUser = userRepository.save(getUser.get());
+
+        UserDTO showUser = UserDTO.convertUserToUserDTO(savedUser);
+
+
+        return showUser;
     }
 
     @Override
     public void delete(Integer id){
-        Optional<User> user = getById(id);
+        Optional<User> user = userRepository.findById(id);
         if(user.isEmpty()){
             throw new NotFoundException("Usuário não encontrado");
         }
@@ -121,13 +142,16 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Optional<User> getUserByCPF(String cpf){
-        return userRepository.findByCpf(cpf);
+    public Optional<UserDTO> getUserByCPF(String cpf) {
+        return userRepository.findByCpf(cpf).stream().findAny().map(user -> {
+            UserDTO userDTO = UserDTO.convertUserToUserDTO(user);
+            return userDTO;
+        });
     }
 
     @Override
     public void setUserAttraction(Integer userId, Integer attractionId) {
-        Optional<User> user = getById(userId);
+        Optional<User> user = userRepository.findById(userId);
         Optional<Attraction> attraction = attractionService.getById(attractionId);
 
         if(user.isEmpty()) {
@@ -142,14 +166,32 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Optional<User> getUserByAttractionId(Integer attractionId) {
+    public void setUserParticipant(Integer userId, Integer participantId) {
+        Optional<User> user = userRepository.findById(userId);
+        Optional<Participant> participant = participantRepository.findById(participantId);
+
+        if(user.isEmpty()) {
+            throw new NotFoundException("Usuário não encontrado");
+        }
+        if(participant.isEmpty()) {
+            throw new NotFoundException("Atração não encontrada");
+        }
+
+        user.get().setParticipant(participant.get());
+        userRepository.save(user.get());
+    }
+
+    @Override
+    public Optional<UserDTO> getUserByAttractionId(Integer attractionId) {
         Optional<User> user = userRepository.findByAttraction_id(attractionId);
 
         if(user.isEmpty()) {
             throw new NotFoundException("Usuário não encontrado");
         }
 
-        return user;
+        Optional<UserDTO> userDTO = Optional.of(UserDTO.convertUserToUserDTO(user.get()));
+
+        return userDTO;
     }
 
 

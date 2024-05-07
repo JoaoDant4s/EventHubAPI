@@ -17,6 +17,8 @@ public class Attraction {
     private String description;
     @Column(length = 20)
     private String contact;
+    @OneToOne(mappedBy = "attraction")
+    private User user;
 
     public Attraction() {
     }

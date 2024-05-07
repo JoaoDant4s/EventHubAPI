@@ -1,7 +1,7 @@
 package imd.eventhub.exception;
 
-public class CardNumberException extends RuntimeException {
-    public CardNumberException(String msg) {
+public class CreditCardNotValidException extends RuntimeException {
+    public CreditCardNotValidException(String msg) {
         super(msg);
     }
 }
