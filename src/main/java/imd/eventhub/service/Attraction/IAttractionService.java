@@ -18,7 +18,7 @@ import java.util.Optional;
 public interface IAttractionService {
 
     public List<UserDTO> getList();
-    public Optional<Attraction> getById(Integer id);
+    public Optional<UserDTO> getById(Integer attractionId);
     public Attraction save(SaveAttractionDTO attractionDTO);
     public UserDTO save(SaveAttractionUserDTO object) throws NotFoundException, CpfNotValidException, DateOutOfRangeException;
 

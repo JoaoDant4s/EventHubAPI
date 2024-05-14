@@ -1,6 +1,7 @@
 package imd.eventhub.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,13 +19,14 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
+    @Column(length = 255)
+    private String email;
+    @Column(length = 255)
+    private String password;
     @Column(length = 100)
     private String name;
-
     @Column(length = 14)
     private String cpf;
-
     @Column
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
@@ -40,6 +42,12 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "attraction_id", referencedColumnName = "id")
     private Attraction attraction;
+
+    @Column
+    private boolean admin;
+
+    @Column
+    private boolean promoter;
 
     public User() {
     }

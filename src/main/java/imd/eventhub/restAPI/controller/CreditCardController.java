@@ -2,7 +2,9 @@ package imd.eventhub.restAPI.controller;
 
 import imd.eventhub.exception.*;
 import imd.eventhub.restAPI.dto.attraction.SaveAttractionUserDTO;
+import imd.eventhub.restAPI.dto.attraction.UpdateAttractionDTO;
 import imd.eventhub.restAPI.dto.creditCard.SaveCreditCardDTO;
+import imd.eventhub.restAPI.dto.creditCard.UpdateCreditCardDTO;
 import imd.eventhub.restAPI.infra.RestErrorMessage;
 import imd.eventhub.restAPI.infra.RestSuccessMessage;
 import imd.eventhub.service.CreditCard.ICreditCardService;
@@ -33,6 +35,18 @@ public class CreditCardController {
     public ResponseEntity<Object> saveCreditCard(@RequestBody SaveCreditCardDTO creditCardDTODTO){
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(creditCardService.save(creditCardDTODTO));
+        } catch(NotFoundException | CreditCardNotValidException exception){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RestErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage()));
+        } catch(Exception exception){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RestErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage()));
+        }
+    }
+
+
+    @PutMapping
+    public ResponseEntity<Object> creditCardUpdate(@RequestBody UpdateCreditCardDTO creditCardDTO){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(creditCardService.update(creditCardDTO));
         } catch(NotFoundException | CreditCardNotValidException exception){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RestErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage()));
         } catch(Exception exception){

@@ -62,6 +62,8 @@ public class ParticipantService implements IParticipantService{
         userDTO.setName(participantDTO.getName());
         userDTO.setCpf(participantDTO.getCpf());
         userDTO.setBirthDate(participantDTO.getBirthDate());
+        userDTO.setEmail(participantDTO.getEmail());
+        userDTO.setPassword(participantDTO.getPassword());
         UserDTO savedUser = userService.save(userDTO);
 
         Participant participant = new Participant();

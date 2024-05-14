@@ -13,6 +13,9 @@ public class SaveAttractionUserDTO {
     private String name;
     private String cpf;
     private LocalDate birthDate;
-    private String description;
-    private String contact;
+    private String email;
+    private String password;
+    private SaveAttractionDTO attraction;
+
+    public SaveAttractionUserDTO(){};
 }

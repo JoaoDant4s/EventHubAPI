@@ -8,6 +8,7 @@ import imd.eventhub.exception.NotFoundException;
 import imd.eventhub.repository.IParticipantRepository;
 import imd.eventhub.restAPI.dto.creditCard.CreditCardDTO;
 import imd.eventhub.restAPI.dto.creditCard.SaveCreditCardDTO;
+import imd.eventhub.restAPI.dto.creditCard.UpdateCreditCardDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -38,7 +39,7 @@ public class CreditCardService implements ICreditCardService{
         Optional<Participant> participant = participantRepository.findById(creditCardDTO.getParticipantId());
         if(participant.isEmpty()) throw new NotFoundException("Participante não encontrado");
         Optional<CreditCard> creditCardCandidate = creditCardRepository.findCreditCardByParticipant(participant.get());
-        if(creditCardCandidate.isPresent()) throw new CreditCardNotValidException("Você já tem um cartão de crédito cadastrado");
+        if(creditCardCandidate.isPresent()) throw new CreditCardNotValidException("usuário já possui um cartão de crédito cadastrado");
 
         CreditCard creditCard = new CreditCard();
         creditCard.setCardHolderName(creditCardDTO.getCardHolderName());
@@ -47,6 +48,25 @@ public class CreditCardService implements ICreditCardService{
         creditCard.setParticipant(participant.get());
 
         CreditCard savedCreditCard = creditCardRepository.save(creditCard);
+
+        CreditCardDTO showCreditCard = CreditCardDTO.convertCreditCardToCreditCardDTO(savedCreditCard);
+
+        return showCreditCard;
+    }
+    @Override
+    public CreditCardDTO update(UpdateCreditCardDTO creditCardDTO) throws Exception{
+        Optional<CreditCard> getCreditCard = creditCardRepository.findById(creditCardDTO.getId());
+        if (getCreditCard.get().getCardNumber() == null || getCreditCard.get().getCardNumber().isEmpty()) throw new NotFoundException("Número do cartão não pode estar vazio");
+        if (getCreditCard.get().getExpiration() == null) throw new NotFoundException("Data de validade não pode estar vazia");
+        if (getCreditCard.get().getCardHolderName() == null || getCreditCard.get().getCardHolderName().isEmpty()) throw new NotFoundException("Nome do titular não pode estar vazio");
+        if (!checkCardNumberIsValid(getCreditCard.get().getCardNumber())) throw new CreditCardNotValidException("O número do cartão de crédito precisar seguir a seguinte formatação: ____ ____ ____ ____");
+
+        getCreditCard.get().setCardHolderName(creditCardDTO.getCardHolderName());
+        getCreditCard.get().setCardNumber(creditCardDTO.getCardNumber());
+        getCreditCard.get().setExpiration(creditCardDTO.getExpiration());
+        getCreditCard.get().setParticipant(getCreditCard.get().getParticipant());
+
+        CreditCard savedCreditCard = creditCardRepository.save(getCreditCard.get());
 
         CreditCardDTO showCreditCard = CreditCardDTO.convertCreditCardToCreditCardDTO(savedCreditCard);
 

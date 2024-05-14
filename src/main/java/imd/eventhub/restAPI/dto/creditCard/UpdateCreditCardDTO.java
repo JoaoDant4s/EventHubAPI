@@ -14,7 +14,6 @@ public class UpdateCreditCardDTO {
     private String cardNumber;
     private LocalDate expiration;
     private String cardHolderName;
-    private Integer participantId;
 
     public UpdateCreditCardDTO(){}
 }

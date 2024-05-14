@@ -4,6 +4,7 @@ import imd.eventhub.model.User;
 import imd.eventhub.restAPI.dto.user.SaveUserDTO;
 import imd.eventhub.restAPI.dto.user.UpdateUserDTO;
 import imd.eventhub.restAPI.dto.user.UserDTO;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +19,8 @@ public interface IUserService {
     public UserDTO update(UpdateUserDTO userDTO);
     public void delete(Integer id);
     public Optional<UserDTO> getUserByCPF(String cpf);
+    public Optional<UserDTO> getUserByEmail(String cpf);
     public void setUserAttraction(Integer userId, Integer attractionId);
     public void setUserParticipant(Integer userId, Integer participantId);
-    public Optional<UserDTO> getUserByAttractionId(Integer attractionId);
+    public UserDetails authentication(User user);
 }

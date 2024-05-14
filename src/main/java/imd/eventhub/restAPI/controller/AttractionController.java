@@ -27,6 +27,15 @@ public class AttractionController {
         return ResponseEntity.status(HttpStatus.OK).body(attractionService.getList());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getUserByAttractionId(@PathVariable Integer id){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(attractionService.getById(id));
+        } catch (NotFoundException exception){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RestErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage()));
+        }
+    }
+
     @PostMapping
     public ResponseEntity<Object> saveUserAttraction(@RequestBody SaveAttractionUserDTO attractionDTO){
         try{

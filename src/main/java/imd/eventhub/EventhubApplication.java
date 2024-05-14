@@ -43,12 +43,12 @@ public class EventhubApplication {
 			 * Cadastrando pessoas
 			 */
 
-			SaveUserDTO user1 = new SaveUserDTO("Hudson", "999.999.999-01", "2001-09-12");
-			SaveUserDTO user2 = new SaveUserDTO("João", "999.999.999-02", "2000-10-20");
-			SaveUserDTO user3 = new SaveUserDTO("Nathalia", "999.999.999-03", "2000-08-31");
-			SaveUserDTO user4 = new SaveUserDTO("Matheus", "999.999.999-04", "1996-02-10");
-			SaveUserDTO user5 = new SaveUserDTO("Fulano", "999.999.999-05", "1989-11-02");
-			SaveUserDTO user6 = new SaveUserDTO("Ciclano", "999.999.999-06", "1998-03-16");
+			SaveUserDTO user1 = new SaveUserDTO("Hudson", "999.999.999-01", "2001-09-12","user1@gmail.com","123456789");
+			SaveUserDTO user2 = new SaveUserDTO("João", "999.999.999-02", "2000-10-20","user2@gmail.com","123456789");
+			SaveUserDTO user3 = new SaveUserDTO("Nathalia", "999.999.999-03", "2000-08-31","user3@gmail.com","123456789");
+			SaveUserDTO user4 = new SaveUserDTO("Matheus", "999.999.999-04", "1996-02-10","user4@gmail.com","123456789");
+			SaveUserDTO user5 = new SaveUserDTO("Fulano", "999.999.999-05", "1989-11-02","user5@gmail.com","123456789");
+			SaveUserDTO user6 = new SaveUserDTO("Ciclano", "999.999.999-06", "1998-03-16","user6@gmail.com","123456789");
 
 			/*
 			 * Cadastrando eventos

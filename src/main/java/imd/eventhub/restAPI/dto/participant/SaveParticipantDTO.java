@@ -14,6 +14,8 @@ public class SaveParticipantDTO {
     private String name;
     private String cpf;
     private LocalDate birthDate;
+    private String email;
+    private String password;
 
     public SaveParticipantDTO(){}
 
@@ -22,9 +24,11 @@ public class SaveParticipantDTO {
         this.cpf = cpf;
     }
 
-    public SaveParticipantDTO(String name, String cpf, String birthDate) {
+    public SaveParticipantDTO(String name, String cpf, String birthDate, String email, String password) {
         this.name = name;
         this.cpf = cpf;
         this.birthDate = LocalDate.parse(birthDate);
+        this.email = email;
+        this.password = password;
     }
 }

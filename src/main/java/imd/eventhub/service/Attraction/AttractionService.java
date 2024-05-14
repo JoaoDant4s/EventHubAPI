@@ -34,12 +34,16 @@ public class AttractionService implements IAttractionService {
     IUserRepository userRepository;
 
     @Override
-    public Optional<Attraction> getById(Integer id){
-        Optional<Attraction> attraction = attractionRepository.findById(id);
-        if(attraction.isEmpty()){
-            throw new NotFoundException("Atração não encontrada");
+    public Optional<UserDTO> getById(Integer attractionId){
+        Optional<User> user = userRepository.findByAttraction_id(attractionId);
+
+        if(user.isEmpty()) {
+            throw new NotFoundException("Usuário não encontrado");
         }
-        return attraction;
+
+        Optional<UserDTO> userDTO = Optional.of(UserDTO.convertUserToUserDTO(user.get()));
+
+        return userDTO;
     }
 
     @Override
@@ -76,12 +80,13 @@ public class AttractionService implements IAttractionService {
         userDTO.setName(attractionUserDTO.getName());
         userDTO.setCpf(attractionUserDTO.getCpf());
         userDTO.setBirthDate(attractionUserDTO.getBirthDate());
+        userDTO.setEmail(attractionUserDTO.getEmail());
+        userDTO.setPassword(attractionUserDTO.getPassword());
         UserDTO savedUser = userService.save(userDTO);
 
         SaveAttractionDTO attraction = new SaveAttractionDTO();
-        attraction.setDescription(attractionUserDTO.getDescription());
-        attraction.setContact(attractionUserDTO.getContact());
-
+        attraction.setDescription(attractionUserDTO.getAttraction().getDescription());
+        attraction.setContact(attractionUserDTO.getAttraction().getContact());
         Attraction savedAttraction = save(attraction);
 
         userService.setUserAttraction(savedUser.getId(), savedAttraction.getId());
@@ -92,7 +97,7 @@ public class AttractionService implements IAttractionService {
     @Override
     public Attraction update(UpdateAttractionDTO attractionUserDTO) {
 
-        Optional<Attraction> attraction = getById(attractionUserDTO.getId());
+        Optional<Attraction> attraction = attractionRepository.findById(attractionUserDTO.getId());
         if(attraction.isEmpty()){
             throw new NotFoundException("Atração não encontrada");
         }
@@ -116,7 +121,7 @@ public class AttractionService implements IAttractionService {
 
     @Override
     public void delete(Integer id) {
-        Optional<Attraction> attraction = getById(id);
+        Optional<Attraction> attraction = attractionRepository.findById(id);
         if(attraction.isEmpty()){
             throw new NotFoundException("Atração não encontrada");
         }

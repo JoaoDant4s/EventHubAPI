@@ -1,23 +1,23 @@
 package imd.eventhub.service.User;
 
 
-import imd.eventhub.exception.CpfNotValidException;
-import imd.eventhub.exception.DateOutOfRangeException;
-import imd.eventhub.exception.NotFoundException;
+import imd.eventhub.exception.*;
 import imd.eventhub.model.Attraction;
 import imd.eventhub.model.Participant;
 import imd.eventhub.model.User;
+import imd.eventhub.repository.IAttractionRepository;
 import imd.eventhub.repository.IParticipantRepository;
 import imd.eventhub.repository.IUserRepository;
-import imd.eventhub.restAPI.dto.feedback.FeedbackDTO;
 import imd.eventhub.restAPI.dto.user.SaveUserDTO;
 import imd.eventhub.restAPI.dto.user.UpdateUserDTO;
 import imd.eventhub.restAPI.dto.user.UserDTO;
 import imd.eventhub.service.Attraction.IAttractionService;
-import imd.eventhub.service.Participant.IParticipantService;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -27,14 +27,19 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Component
-public class UserService implements IUserService {
+public class UserService implements IUserService, UserDetailsService {
 
     @Autowired
     IUserRepository userRepository;
     @Autowired
+    IAttractionRepository attractionRepository;
+    @Autowired
     IAttractionService attractionService;
     @Autowired
     IParticipantRepository participantRepository;
+
+    @Autowired
+    public PasswordEncoder passwordEncoder;
 
     @Override
     public List<UserDTO> getList(){
@@ -59,12 +64,19 @@ public class UserService implements IUserService {
     @Override
     public UserDTO save(SaveUserDTO userDTO) {
         Optional<UserDTO> userWithSameCPF = getUserByCPF(userDTO.getCpf());
+        Optional<UserDTO> userWithSameEmail = getUserByEmail(userDTO.getEmail());
 
-        if(userDTO.getName() == null){
-            throw new NotFoundException("campo 'name' não foi encontrado");
+        if(userDTO.getEmail() == null){
+            throw new NotFoundException("campo 'email' não foi encontrado");
+        }
+        if(userDTO.getPassword() == null){
+            throw new NotFoundException("campo 'password' não foi encontrado");
         }
         if(userDTO.getCpf() == null){
             throw new NotFoundException("campo 'cpf' não foi encontrado");
+        }
+        if(userDTO.getName() == null){
+            throw new NotFoundException("campo 'name' não foi encontrado");
         }
         if(userDTO.getBirthDate() == null){
             throw new NotFoundException("campo 'birthDate' não foi encontrado");
@@ -75,6 +87,12 @@ public class UserService implements IUserService {
         if(userWithSameCPF.isPresent()){
             throw new CpfNotValidException("O CPF digitado já está associado a um outro usuário");
         }
+        if(userWithSameEmail.isPresent()){
+            throw new EmailNotValidException("O Email digitado já está associado a um outro usuário");
+        }
+        if(userDTO.getPassword().length() < 8){
+            throw new PasswordNotValidException("A senha precisa ter no mínimo 8 caracteres");
+        }
         if(userDTO.getBirthDate().isAfter(LocalDate.now())){
             throw new DateOutOfRangeException("A data informada é maior do que a data de hoje");
         }
@@ -82,12 +100,13 @@ public class UserService implements IUserService {
         User user = new User();
         user.setName(userDTO.getName());
         user.setCpf(userDTO.getCpf());
+        user.setEmail(userDTO.getEmail());
         user.setBirthDate(userDTO.getBirthDate());
         user.setAge((int) ChronoUnit.YEARS.between(user.getBirthDate(),LocalDate.now()));
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         User savedUser = userRepository.save(user);
 
         UserDTO showUser = UserDTO.convertUserToUserDTO(savedUser);
-
 
         return showUser;
     }
@@ -150,9 +169,17 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public Optional<UserDTO> getUserByEmail(String email) {
+        return userRepository.findByEmail(email).stream().findAny().map(user -> {
+            UserDTO userDTO = UserDTO.convertUserToUserDTO(user);
+            return userDTO;
+        });
+    }
+
+    @Override
     public void setUserAttraction(Integer userId, Integer attractionId) {
         Optional<User> user = userRepository.findById(userId);
-        Optional<Attraction> attraction = attractionService.getById(attractionId);
+        Optional<Attraction> attraction = attractionRepository.findById(attractionId);
 
         if(user.isEmpty()) {
             throw new NotFoundException("Usuário não encontrado");
@@ -181,24 +208,48 @@ public class UserService implements IUserService {
         userRepository.save(user.get());
     }
 
-    @Override
-    public Optional<UserDTO> getUserByAttractionId(Integer attractionId) {
-        Optional<User> user = userRepository.findByAttraction_id(attractionId);
-
-        if(user.isEmpty()) {
-            throw new NotFoundException("Usuário não encontrado");
-        }
-
-        Optional<UserDTO> userDTO = Optional.of(UserDTO.convertUserToUserDTO(user.get()));
-
-        return userDTO;
-    }
-
-
     public static boolean checkCpfIsValid(String cpf){
 
         Pattern regex = Pattern.compile("[0-9]{3}\\.?[0-9]{3}\\.?[0-9]{3}\\-?[0-9]{2}");
         return regex.matcher(cpf).find();
 
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+
+        Optional<User> user = userRepository.findByEmail(email);
+
+        if(user.isEmpty()){
+            throw new NotFoundException("Usuário não encontrado");
+        }
+
+        String[] roles = new String[] { "USER" };
+        if(user.get().getAttraction() != null){
+            roles = new String[] { "USER", "ATTRACTION" };
+        } else if(user.get().isAdmin()){
+            roles = new String[] { "USER", "ADMIN" };
+        } else if(user.get().isPromoter()){
+            roles = new String[] { "USER", "PROMOTER" };
+        }
+
+        // Cria e retorna o objeto UserDetails com os detalhes do usuário
+        return org.springframework.security.core.userdetails.User
+                .builder()
+                .username(user.get().getEmail())
+                .password(user.get().getPassword())
+                .roles(roles)
+                .build();
+
+    }
+
+    public UserDetails authentication(User user){
+        UserDetails userDetails = loadUserByUsername(user.getEmail());
+        boolean checkPassword = passwordEncoder.matches(user.getPassword(), userDetails.getPassword());
+        if(checkPassword){
+            return userDetails;
+        }
+
+        throw new PasswordNotValidException();
     }
 }

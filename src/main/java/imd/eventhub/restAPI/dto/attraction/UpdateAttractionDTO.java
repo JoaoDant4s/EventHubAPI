@@ -11,6 +11,7 @@ public class UpdateAttractionDTO {
     private Integer id;
     private String description;
     private String contact;
+
     public UpdateAttractionDTO(){}
 }
 
