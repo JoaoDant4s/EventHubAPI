@@ -1,43 +1,48 @@
 package imd.eventhub.model;
 
-import jakarta.persistence.*;
-
-import java.util.List;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Ticket")
+@Table(name = "ticket")
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(length = 255)
-    private String description;
-    @Column(length = 30)
-    private String batch;
-    @Column
-    private float amount;
-    @ManyToOne
-    private Event event;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
-    @JoinTable(name="SubEventTicket",
-            joinColumns=@JoinColumn(name="ticketId"),
-            inverseJoinColumns=@JoinColumn(name="subEventId"))
-    private List<SubEvent> subEvent;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "participant_id")
+    private Participant participant;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
-    @JoinTable(name="participantTicket",
-            joinColumns=@JoinColumn(name="ticketId"),
-            inverseJoinColumns=@JoinColumn(name="participantId"))
-    private List<Participant> participantList;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payment_id")
+    private Payment payment;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumns({
+            @JoinColumn(name = "name", referencedColumnName = "name"),
+            @JoinColumn(name = "batch", referencedColumnName = "batch"),
+            @JoinColumn(name = "event_id", referencedColumnName = "event_id")
+    })
+    private TicketType ticketType;
 
     public Ticket() {
     }
 
-    public Ticket(String description, String batch, float amount) {
-        this.description = description;
-        this.batch = batch;
-        this.amount = amount;
+    public Ticket(Integer id, Participant participant, Payment payment, TicketType ticketType) {
+        this.id = id;
+        this.participant = participant;
+        this.payment = payment;
+        this.ticketType = ticketType;
     }
 
     public Integer getId() {
@@ -48,43 +53,27 @@ public class Ticket {
         this.id = id;
     }
 
-    public String getDescription() {
-        return description;
+    public Participant getParticipant() {
+        return participant;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setParticipant(Participant participant) {
+        this.participant = participant;
     }
 
-    public float getAmount() {
-        return amount;
+    public Payment getPayment() {
+        return payment;
     }
 
-    public void setAmount(float amount) {
-        this.amount = amount;
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
 
-    public String getBatch() {
-        return batch;
+    public TicketType getTicketType() {
+        return ticketType;
     }
 
-    public void setBatch(String batch) {
-        this.batch = batch;
-    }
-
-    public List<Participant> getParticipantList() {
-        return participantList;
-    }
-
-    public void setParticipantList(List<Participant> participantList) {
-        this.participantList = participantList;
-    }
-
-    public List<SubEvent> getSubEvent() {
-        return subEvent;
-    }
-
-    public void setSubEvent(List<SubEvent> subEvent) {
-        this.subEvent = subEvent;
+    public void setTicketType(TicketType ticketType) {
+        this.ticketType = ticketType;
     }
 }

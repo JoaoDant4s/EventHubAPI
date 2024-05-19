@@ -24,6 +24,7 @@ public interface IParticipantService {
 
     public List<UserDTO> getList();
     public Optional<ParticipantDTO> getById(Integer id);
+    public Optional<Participant> getParticipantById(Integer id);
     public UserDTO save(SaveParticipantDTO participantDTO);
 
     public ParticipantDTO update(UpdateParticipantDTO attractionUserDTO);

@@ -55,6 +55,15 @@ public class ParticipantService implements IParticipantService{
         return participantDTO;
     }
 
+    public Optional<Participant> getParticipantById(Integer id){
+        Optional<Participant> participant = participantRepository.findById(id);
+
+        if(participant.isEmpty()){
+            throw new NotFoundException("participante não encontrado");
+        }
+        return participant;
+    }
+
     @Override
     public UserDTO save(SaveParticipantDTO participantDTO) {
 

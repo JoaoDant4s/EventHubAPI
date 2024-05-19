@@ -2,14 +2,19 @@ package imd.eventhub.service.Ticket;
 
 import org.springframework.stereotype.Service;
 
+import imd.eventhub.exception.DataAlreadyExistsException;
+import imd.eventhub.exception.InvalidParameterException;
+import imd.eventhub.exception.NotFoundException;
+import imd.eventhub.exception.NullParameterException;
 import imd.eventhub.model.Ticket;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public interface ITicketService {
-    public void save(Ticket person);
+    public Ticket save(Ticket ticket, List<LocalDate> days) throws NullParameterException, NotFoundException, InvalidParameterException, DataAlreadyExistsException;
     public void delete(Ticket person);
     public Optional<Ticket> getById(Integer id);
     public List<Ticket> getList();
