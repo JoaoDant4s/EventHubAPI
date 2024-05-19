@@ -34,7 +34,11 @@ public class EventhubApplication {
 	@Autowired
 	IUserRepository userRepository;
 	@Autowired
+	IUserService userService;
+	@Autowired
 	IParticipantRepository participantRepository;
+	@Autowired
+	IAttractionRepository attractionRepository;
 	@Autowired
 	ITicketRepository ticketRepository;
 	@Autowired
@@ -61,7 +65,44 @@ public class EventhubApplication {
 			User user4 = new User("João", "999.999.999-04", "2000-10-20", "user2@gmail.com", passwordEncoder.encode("123456789"), false, false);
 			User user5 = new User("Nathalia", "999.999.999-05", "2000-08-31", "user3@gmail.com", passwordEncoder.encode("123456789"), false, false);
 			User user6 = new User("Matheus", "999.999.999-06", "1996-02-10", "user4@gmail.com", passwordEncoder.encode("123456789"), false, false);
-			User user7 = new User("Fulano", "999.999.999-07", "1989-11-02", "user5@gmail.com", passwordEncoder.encode("123456789"), false, false);
+			User user7 = new User("Atração", "999.999.999-07", "1989-11-02", "user5@gmail.com", passwordEncoder.encode("123456789"), false, false);
+
+			userRepository.save(user1);
+			userRepository.save(user2);
+			userRepository.save(user3);
+			userRepository.save(user4);
+			userRepository.save(user5);
+			userRepository.save(user6);
+			userRepository.save(user7);
+
+			Participant participant1 = new Participant();
+			Participant participant2 = new Participant();
+			Participant participant3 = new Participant();
+			Participant participant4 = new Participant();
+			Participant participant5 = new Participant();
+			Participant participant6 = new Participant();
+			Participant participant7 = new Participant();
+
+			participantRepository.save(participant1);
+			participantRepository.save(participant2);
+			participantRepository.save(participant3);
+			participantRepository.save(participant4);
+			participantRepository.save(participant5);
+			participantRepository.save(participant6);
+			participantRepository.save(participant7);
+
+			Attraction attraction1 = new Attraction("Lorem ipsum","(84) 99898-4545");
+
+			attractionRepository.save(attraction1);
+
+			userService.setUserParticipant(1,1);
+			userService.setUserParticipant(2,2);
+			userService.setUserParticipant(3,3);
+			userService.setUserParticipant(4,4);
+			userService.setUserParticipant(5,5);
+			userService.setUserParticipant(6,6);
+			userService.setUserParticipant(7,7);
+			userService.setUserAttraction(7,1);
 
 			/*
 			 * Cadastrando eventos
@@ -133,14 +174,6 @@ public class EventhubApplication {
 			// ticketRepository.save(ingresso1);
 			// ticketRepository.save(ingresso2);
 			// ticketRepository.save(ingresso3);
-
-			userRepository.save(user1);
-			userRepository.save(user2);
-			userRepository.save(user3);
-			userRepository.save(user4);
-			userRepository.save(user5);
-			userRepository.save(user6);
-			userRepository.save(user7);
 
 			eventRepository.save(event1);
 			eventRepository.save(event2);

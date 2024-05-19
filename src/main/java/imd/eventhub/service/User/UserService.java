@@ -21,6 +21,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -225,12 +227,18 @@ public class UserService implements IUserService, UserDetailsService {
         }
 
         String[] roles = new String[] { "USER" };
+
         if(user.get().getAttraction() != null){
-            roles = new String[] { "USER", "ATTRACTION" };
-        } else if(user.get().isAdmin()){
-            roles = new String[] { "USER", "ADMIN" };
-        } else if(user.get().isPromoter()){
-            roles = new String[] { "USER", "PROMOTER" };
+            roles = Arrays.copyOf(roles, roles.length + 1);
+            roles[roles.length-1] = "ATTRACTION";
+        }
+        if(user.get().isAdmin()){
+            roles = Arrays.copyOf(roles, roles.length + 1);
+            roles[roles.length-1] = "ADMIN";
+        }
+        if(user.get().isPromoter()){
+            roles = Arrays.copyOf(roles, roles.length + 1);
+            roles[roles.length-1] = "PROMOTER";
         }
 
         // Cria e retorna o objeto UserDetails com os detalhes do usuário
