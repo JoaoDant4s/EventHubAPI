@@ -7,6 +7,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import imd.eventhub.exception.DateOutOfRangeException;
+import imd.eventhub.exception.InvalidParameterException;
+import imd.eventhub.exception.NullParameterException;
 import imd.eventhub.model.Event;
 import imd.eventhub.repository.IEventRepository;
 import imd.eventhub.service.SubEvent.ISubEventService;
@@ -21,10 +24,11 @@ public class EventService implements IEventService{
     ISubEventService subEventService;
 
     @Override
-    public void save(Event event) throws Exception{
+    public Event save(Event event) throws NullParameterException, InvalidParameterException, DateOutOfRangeException{
         if(isValid(event)){
-            eventRepository.save(event);
+            return eventRepository.save(event);
         }
+        return null;
     }
 
     @Override
@@ -46,8 +50,8 @@ public class EventService implements IEventService{
     }
 
     @Override
-    public Optional<Event> getByID(Integer id) throws Exception{
-        if(id == null) throw new Exception("O id passado é nulo");
+    public Optional<Event> getByID(Integer id) throws NullParameterException{
+        if(id == null) throw new NullParameterException("O id passado é nulo");
         return eventRepository.findById(id);
     }
 
@@ -56,17 +60,16 @@ public class EventService implements IEventService{
         return eventRepository.findAllEventsByActive(true);
     }
     @Override 
-    public Boolean isValid(Event event) throws Exception{
-        if(event == null) throw new Exception("Evento nulo");
-        if(event.getDescription().isEmpty()) throw new Exception("Descrição do evento vazia");
-        if(event.getMaximumCapacity() <= 0) throw new Exception("Lotação máxima não pode ser menor que zero");
-        if(event.getName().isEmpty()) throw new Exception("Nome do evento vazio");
-        if(event.getDescription().isEmpty()) throw new Exception("Descrição do evento vazia");
-        if(event.getAddress().isEmpty()) throw new Exception("Endereço do evento vazio");
+    public Boolean isValid(Event event) throws NullParameterException, InvalidParameterException, DateOutOfRangeException{
+        if(event == null) throw new NullParameterException("Evento nulo");
+        if(event.getDescription().isEmpty()) throw new NullParameterException("Descrição do evento vazia");
+        if(event.getMaximumCapacity() <= 0) throw new InvalidParameterException("Lotação máxima não pode ser menor que zero");
+        if(event.getName().isEmpty()) throw new NullParameterException("Nome do evento vazio");
+        if(event.getAddress().isEmpty()) throw new NullParameterException("Endereço do evento vazio");
         
         Duration duration = Duration.between(event.getInitialDate(), event.getFinalDate());
-        if(duration.isNegative()) throw new Exception("Data final vem antes do que a data inicial");
-        if(event.getType() == null) throw new Exception("Tipo do evento nulo");
+        if(duration.isNegative()) throw new DateOutOfRangeException("Data final vem antes do que a data inicial");
+        if(event.getType() == null) throw new NullParameterException("Tipo do evento nulo");
         return true;
     }
 }

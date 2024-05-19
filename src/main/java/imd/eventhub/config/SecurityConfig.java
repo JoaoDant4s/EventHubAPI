@@ -14,7 +14,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.OncePerRequestFilter;
 import imd.eventhub.security.JwtAuthFilter;
-import imd.eventhub.security.JwtService;
 
 
 @Configuration
@@ -58,11 +57,17 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST ,"/api/participant").permitAll()
                 .requestMatchers(HttpMethod.DELETE ,"/api/participant").hasRole("ADMIN")
 
+                //EVENT PERMISSIONS
+                // .requestMatchers("/api/event/").hasAnyRole("ADMIN", "PROMOTER")
+                // .requestMatchers("/api/event/list").permitAll()
+                .requestMatchers("/api/event/list").permitAll()
+                
                 //CREDIT CARD PERMISSIONS
                 .requestMatchers("/api/creditCard").hasAnyRole("USER", "ADMIN")
 
                 //FEEDBACK PERMISSIONS
                 .requestMatchers("/api/feedback").hasAnyRole("USER", "ADMIN")
+                .anyRequest().permitAll()
             )
             .sessionManagement((session) -> 
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
