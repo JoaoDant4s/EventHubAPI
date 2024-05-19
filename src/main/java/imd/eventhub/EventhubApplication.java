@@ -1,5 +1,6 @@
 package imd.eventhub;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -13,6 +14,16 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import imd.eventhub.model.Event;
+import imd.eventhub.model.EventType;
+import imd.eventhub.model.SubEvent;
+import imd.eventhub.model.TicketType;
+import imd.eventhub.model.TicketTypeId;
+import imd.eventhub.repository.IEventRepository;
+import imd.eventhub.repository.IParticipantRepository;
+import imd.eventhub.repository.ISubEventRepository;
+import imd.eventhub.repository.ITicketRepository;
+import imd.eventhub.repository.ITicketTypeRepository;
 import imd.eventhub.restAPI.dto.user.SaveUserDTO;
 import imd.eventhub.service.User.IUserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +41,8 @@ public class EventhubApplication {
 	IEventRepository eventRepository;
 	@Autowired
 	ISubEventRepository subEventRepository;
+	@Autowired
+	ITicketTypeRepository ticketTypeRepository;
 
 	@Autowired
 	public PasswordEncoder passwordEncoder;
@@ -59,7 +72,6 @@ public class EventhubApplication {
 
 			Event event2 = new Event("go rn", "GO-RN", LocalDateTime.parse("2024-06-30 12:00:00", formatter),
 					LocalDateTime.parse("2024-07-02 12:00:00", formatter), EventType.Talk, 1000, "IMD");
-
 			/*
 			 * Cadastrando subeventos
 			 */
@@ -97,27 +109,30 @@ public class EventhubApplication {
 			subEventList3.add(subEvent4);
 			subEventList3.add(subEvent5);
 
-			Ticket ingresso1 = new Ticket(
-					"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-					"1º Lote", 100.00f);
-			Ticket ingresso2 = new Ticket(
-					"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-					"2º Lote", 120.00f);
-			Ticket ingresso3 = new Ticket(
-					"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-					"3º Lote", 150.00f);
+			// Ticket ingresso1 = new Ticket(
+			// "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+			// tempor incididunt ut labore et dolore magna aliqua.",
+			// "1º Lote", 100.00f);
+			// Ticket ingresso2 = new Ticket(
+			// "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+			// tempor incididunt ut labore et dolore magna aliqua.",
+			// "2º Lote", 120.00f);
+			// Ticket ingresso3 = new Ticket(
+			// "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+			// tempor incididunt ut labore et dolore magna aliqua.",
+			// "3º Lote", 150.00f);
 
-			List<Ticket> ticketList = new ArrayList<>();
-			ticketList.add(ingresso1);
-			ticketList.add(ingresso2);
+			// List<Ticket> ticketList = new ArrayList<>();
+			// ticketList.add(ingresso1);
+			// ticketList.add(ingresso2);
 
-			/*
-			 * Persistindo os dados
-			 */
+			// /*
+			// * Persistindo os dados
+			// */
 
-			ticketRepository.save(ingresso1);
-			ticketRepository.save(ingresso2);
-			ticketRepository.save(ingresso3);
+			// ticketRepository.save(ingresso1);
+			// ticketRepository.save(ingresso2);
+			// ticketRepository.save(ingresso3);
 
 			userRepository.save(user1);
 			userRepository.save(user2);
@@ -135,6 +150,17 @@ public class EventhubApplication {
 			subEventRepository.save(subEvent3);
 			subEventRepository.save(subEvent4);
 			subEventRepository.save(subEvent5);
+
+			TicketType ticketType1 = new TicketType(new TicketTypeId("Meia Estudante", 1, event1.getId()),
+					BigDecimal.valueOf(50.00), "Necessario comprovante de meia entrada");
+			TicketType ticketType2 = new TicketType(new TicketTypeId("Inteira", 1, event1.getId()),
+					BigDecimal.valueOf(100.00), "Identidade");
+			TicketType ticketType3 = new TicketType(new TicketTypeId("Meia Estudante", 1, event2.getId()),
+					BigDecimal.valueOf(70.00), "Necessario comprovante de meia entrada");
+			// Salvando os TicketTypes
+			ticketTypeRepository.save(ticketType1);
+			ticketTypeRepository.save(ticketType2);
+			ticketTypeRepository.save(ticketType3);
 		};
 	}
 
