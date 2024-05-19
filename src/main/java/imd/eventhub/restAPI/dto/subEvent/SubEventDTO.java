@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import imd.eventhub.model.EventType;
+import imd.eventhub.restAPI.dto.event.EventDTO;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -35,5 +36,5 @@ public class SubEventDTO implements Serializable{
     @Size(max = 150)
     private String location;
     @NotNull
-    private Integer eventID;
+    private EventDTO eventDTO;
 }

@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,10 +27,6 @@ import imd.eventhub.restAPI.dto.subEvent.SubEventDTO;
 import imd.eventhub.service.Event.IEventService;
 import imd.eventhub.service.SubEvent.ISubEventService;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
-
 
 @RestController
 @RequestMapping("api/subEvent")
@@ -69,20 +67,21 @@ public class SubEventController {
 
     @GetMapping("/listAll")
     public List<SubEventDTO> listAllSubEvents() {
-        try{
+        try {
             return subEventService.getList()
-            .stream()
-            .map(this::toDto)
-            .collect(Collectors.toList());
-        } catch(NotFoundException e){
+                    .stream()
+                    .map(this::toDto)
+                    .collect(Collectors.toList());
+        } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
-    
+
     @PutMapping
     public SubEventDTO updateSubEvent(@Valid @RequestBody SubEventDTO subEventDTO) {
         try {
-            SubEvent subEvent = subEventService.getByID(subEventDTO.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não existe nenhum evento com esse id"));
+            SubEvent subEvent = subEventService.getByID(subEventDTO.getId()).orElseThrow(
+                    () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não existe nenhum evento com esse id"));
             subEvent = subEventService.save(mergeDto(subEvent, subEventDTO));
             return toDto(subEvent);
         } catch (NotFoundException e) {
@@ -94,17 +93,18 @@ public class SubEventController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteSubEvent(@PathVariable Integer id){
+    public void deleteSubEvent(@PathVariable Integer id) {
         try {
             Optional<SubEvent> subEvent = subEventService.getByID(id);
-            subEvent.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não existe nenhum sub-evento com esse id"));
+            subEvent.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Não existe nenhum sub-evento com esse id"));
             subEventService.deactivate(subEvent.get());
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
-    private SubEvent mergeDto(SubEvent subEvent, SubEventDTO dto){
+    private SubEvent mergeDto(SubEvent subEvent, SubEventDTO dto) {
         subEvent.setName(dto.getName());
         subEvent.setDescription(dto.getDescription());
         subEvent.setLocation(dto.getLocation());
@@ -122,7 +122,7 @@ public class SubEventController {
         subEvent.setId(dto.getId());
         subEvent.setHours(dto.getHours());
         subEvent.setType(dto.getType());
-        Optional<Event> event = eventService.getByID(dto.getEventID());
+        Optional<Event> event = eventService.getByID(dto.getEventDTO().getId());
         if (!event.isPresent())
             throw new NotFoundException("Não existe nenhum evento com esse id");
         subEvent.setEvent(event.get());
@@ -137,7 +137,7 @@ public class SubEventController {
         dto.setId(subEvent.getId());
         dto.setHours(subEvent.getHours());
         dto.setType(subEvent.getType());
-        dto.setEventID(subEvent.getEvent().getId());
+        dto.setEventDTO(EventController.toDto(subEvent.getEvent()));
         return dto;
     }
 }

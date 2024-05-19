@@ -6,7 +6,14 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -18,18 +25,10 @@ import imd.eventhub.restAPI.dto.event.EventDTO;
 import imd.eventhub.service.Event.IEventService;
 import jakarta.validation.Valid;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
-
 @RestController
 @RequestMapping("api/event")
 public class EventController {
-    
+
     @Autowired
     IEventService eventService;
 
@@ -40,7 +39,7 @@ public class EventController {
         try {
             event = eventService.save(event);
             return toDto(event);
-        } catch (NullParameterException |InvalidParameterException | DateOutOfRangeException e) {
+        } catch (NullParameterException | InvalidParameterException | DateOutOfRangeException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
@@ -48,19 +47,20 @@ public class EventController {
     @GetMapping("/list")
     public List<EventDTO> listEvents() {
         return eventService.getList()
-            .stream()
-            .map(this::toDto)
-            .collect(Collectors.toList());
+                .stream()
+                .map(EventController::toDto)
+                .collect(Collectors.toList());
     }
 
     @PutMapping
     public EventDTO updateEvent(@Valid @RequestBody EventDTO eventDTO) {
         try {
-            Event event = eventService.getByID(eventDTO.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não existe nenhum evento com esse id"));
+            Event event = eventService.getByID(eventDTO.getId()).orElseThrow(
+                    () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não existe nenhum evento com esse id"));
             try {
                 event = eventService.save(mergeDto(event, eventDTO));
                 return toDto(event);
-            } catch (NullParameterException |InvalidParameterException | DateOutOfRangeException e) {
+            } catch (NullParameterException | InvalidParameterException | DateOutOfRangeException e) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
             }
         } catch (Exception e) {
@@ -72,7 +72,8 @@ public class EventController {
     public EventDTO getEvent(@PathVariable Integer id) {
         try {
             Optional<Event> event = eventService.getByID(id);
-            event.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não existe nenhum evento com esse id"));
+            event.orElseThrow(
+                    () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não existe nenhum evento com esse id"));
 
             return toDto(event.get());
         } catch (Exception e) {
@@ -82,17 +83,18 @@ public class EventController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteEvent(@PathVariable Integer id){
+    public void deleteEvent(@PathVariable Integer id) {
         try {
             Optional<Event> event = eventService.getByID(id);
-            event.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não existe nenhum evento com esse id"));
+            event.orElseThrow(
+                    () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não existe nenhum evento com esse id"));
             eventService.deactivate(event.get());
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
-    private Event mergeDto(Event event, EventDTO dto){
+    private Event mergeDto(Event event, EventDTO dto) {
         event.setName(dto.getName());
         event.setDescription(dto.getDescription());
         event.setAddress(dto.getAddress());
@@ -103,8 +105,7 @@ public class EventController {
         event.setType(dto.getType());
         return event;
     }
-    
-    
+
     private Event fromDto(EventDTO dto) {
         Event event = new Event();
         event.setName(dto.getName());
@@ -118,7 +119,7 @@ public class EventController {
         return event;
     }
 
-    private EventDTO toDto(Event event) {
+    public static EventDTO toDto(Event event) {
         EventDTO dto = new EventDTO();
         dto.setName(event.getName());
         dto.setDescription(event.getDescription());
