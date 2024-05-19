@@ -41,21 +41,21 @@ public class SecurityConfig {
                 .requestMatchers("/").permitAll()
 
                 //USER PERMISSIONS
-                .requestMatchers("/api/user").hasAnyRole("USER", "ADMIN")
-                .requestMatchers(HttpMethod.DELETE ,"/api/user").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST ,"/api/user").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST ,"/api/user/auth").permitAll()
+                .requestMatchers(HttpMethod.DELETE ,"/api/user").hasRole("ADMIN")
+                .requestMatchers("/api/user").hasAnyRole("USER", "ADMIN")
 
                 //ATTRACTION PERMISSIONS
-                .requestMatchers("/api/attraction").hasAnyRole("ADMIN", "ATTRACTION", "PROMOTER")
                 .requestMatchers(HttpMethod.POST ,"/api/attraction").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE ,"/api/attraction").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT ,"/api/attraction").hasAnyRole("ADMIN", "ATTRACTION")
+                .requestMatchers("/api/attraction").hasAnyRole("ADMIN", "ATTRACTION", "PROMOTER")
 
                 //PARTICIPANT PERMISSIONS
-                .requestMatchers("/api/participant").hasAnyRole("USER", "ADMIN")
                 .requestMatchers(HttpMethod.POST ,"/api/participant").permitAll()
                 .requestMatchers(HttpMethod.DELETE ,"/api/participant").hasRole("ADMIN")
+                .requestMatchers("/api/participant").hasAnyRole("USER", "ADMIN")
 
                 //EVENT PERMISSIONS
                 // .requestMatchers("/api/event/").hasAnyRole("ADMIN", "PROMOTER")

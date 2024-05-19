@@ -62,4 +62,22 @@ public class User {
         this.cpf = cpf;
         this.birthDate = LocalDate.parse(birthDate);
     }
+
+    public User(String name, String cpf, String birthDate, String email, String password) {
+        this.name = name;
+        this.cpf = cpf;
+        this.birthDate = LocalDate.parse(birthDate);
+        this.email = email;
+        this.password = password;
+    }
+
+    public User(String name, String cpf, String birthDate, String email, String password, boolean admin, boolean promoter) {
+        this.name = name;
+        this.cpf = cpf;
+        this.birthDate = LocalDate.parse(birthDate);
+        this.email = email;
+        this.password = password;
+        this.admin = admin;
+        this.promoter = promoter;
+    }
 }

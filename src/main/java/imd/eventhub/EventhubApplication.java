@@ -5,28 +5,23 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import imd.eventhub.model.*;
+import imd.eventhub.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import imd.eventhub.model.Event;
-import imd.eventhub.model.EventType;
-import imd.eventhub.model.SubEvent;
-import imd.eventhub.model.Ticket;
-import imd.eventhub.repository.IEventRepository;
-import imd.eventhub.repository.IParticipantRepository;
-import imd.eventhub.repository.ISubEventRepository;
-import imd.eventhub.repository.ITicketRepository;
 import imd.eventhub.restAPI.dto.user.SaveUserDTO;
 import imd.eventhub.service.User.IUserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
 public class EventhubApplication {
 
 	@Autowired
-	IUserService userService;
+	IUserRepository userRepository;
 	@Autowired
 	IParticipantRepository participantRepository;
 	@Autowired
@@ -36,6 +31,9 @@ public class EventhubApplication {
 	@Autowired
 	ISubEventRepository subEventRepository;
 
+	@Autowired
+	public PasswordEncoder passwordEncoder;
+
 	@Bean
 	public CommandLineRunner init() {
 		return args -> {
@@ -44,17 +42,13 @@ public class EventhubApplication {
 			 * Cadastrando pessoas
 			 */
 
-			SaveUserDTO user1 = new SaveUserDTO("Hudson", "999.999.999-01", "2001-09-12", "user1@gmail.com",
-					"123456789");
-			SaveUserDTO user2 = new SaveUserDTO("João", "999.999.999-02", "2000-10-20", "user2@gmail.com", "123456789");
-			SaveUserDTO user3 = new SaveUserDTO("Nathalia", "999.999.999-03", "2000-08-31", "user3@gmail.com",
-					"123456789");
-			SaveUserDTO user4 = new SaveUserDTO("Matheus", "999.999.999-04", "1996-02-10", "user4@gmail.com",
-					"123456789");
-			SaveUserDTO user5 = new SaveUserDTO("Fulano", "999.999.999-05", "1989-11-02", "user5@gmail.com",
-					"123456789");
-			SaveUserDTO user6 = new SaveUserDTO("Ciclano", "999.999.999-06", "1998-03-16", "user6@gmail.com",
-					"123456789");
+			User user1 = new User("Admin", "999.999.999-01", "1990-02-23", "admin", passwordEncoder.encode("123456789"), true, false);
+			User user2 = new User("Promoter", "999.999.999-02", "1982-10-11", "promoter", passwordEncoder.encode("123456789"), false, true);
+			User user3 = new User("Hudson", "999.999.999-03", "2001-09-12", "user1@gmail.com", passwordEncoder.encode("123456789"), false, false);
+			User user4 = new User("João", "999.999.999-04", "2000-10-20", "user2@gmail.com", passwordEncoder.encode("123456789"), false, false);
+			User user5 = new User("Nathalia", "999.999.999-05", "2000-08-31", "user3@gmail.com", passwordEncoder.encode("123456789"), false, false);
+			User user6 = new User("Matheus", "999.999.999-06", "1996-02-10", "user4@gmail.com", passwordEncoder.encode("123456789"), false, false);
+			User user7 = new User("Fulano", "999.999.999-07", "1989-11-02", "user5@gmail.com", passwordEncoder.encode("123456789"), false, false);
 
 			/*
 			 * Cadastrando eventos
@@ -125,12 +119,13 @@ public class EventhubApplication {
 			ticketRepository.save(ingresso2);
 			ticketRepository.save(ingresso3);
 
-			userService.save(user1);
-			userService.save(user2);
-			userService.save(user3);
-			userService.save(user4);
-			userService.save(user5);
-			userService.save(user6);
+			userRepository.save(user1);
+			userRepository.save(user2);
+			userRepository.save(user3);
+			userRepository.save(user4);
+			userRepository.save(user5);
+			userRepository.save(user6);
+			userRepository.save(user7);
 
 			eventRepository.save(event1);
 			eventRepository.save(event2);
