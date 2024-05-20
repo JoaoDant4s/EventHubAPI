@@ -15,6 +15,7 @@ import imd.eventhub.exception.InvalidParameterException;
 import imd.eventhub.exception.NotFoundException;
 import imd.eventhub.exception.NullParameterException;
 import imd.eventhub.model.Event;
+import imd.eventhub.model.Payment;
 import imd.eventhub.model.Ticket;
 import imd.eventhub.model.TicketDays;
 import imd.eventhub.model.TicketDaysId;
@@ -46,9 +47,6 @@ public class TicketService implements ITicketService {
         if (days.isEmpty()) {
             throw new InvalidParameterException("Número de dias não pode ser 0");
         }
-
-        // BigDecimal totalPrice =
-        // ticket.getTicketType().getPrice().multiply(BigDecimal.valueOf(days.size()));
         Event event = eventService.getByID(ticket.getTicketType().getId().getEventID()).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não existe nenhum evento com esse id"));
         LocalDate initialDate = event.getInitialDate().toLocalDate();
@@ -84,5 +82,11 @@ public class TicketService implements ITicketService {
     @Override
     public List<Ticket> getList() {
         return ticketRepository.findAll();
+    }
+
+    @Override
+    public Ticket updateWithPayment(Ticket paidTicket, Payment registry) throws NullParameterException{
+        paidTicket.setPayment(registry);
+        return ticketRepository.save(paidTicket);
     }
 }

@@ -51,10 +51,10 @@ public class TicketController {
         }
     }
 
-    @GetMapping("/{id}")
-    public TicketDTO getTicket(@PathVariable Integer id) {
+    @GetMapping("/{ticketId}")
+    public TicketDTO getTicket(@PathVariable Integer ticketId) {
         try {
-            Ticket ticket = ticketService.getById(id).orElseThrow(() -> new NotFoundException("Ticket not found with id: " + id));
+            Ticket ticket = ticketService.getById(ticketId).orElseThrow(() -> new NotFoundException("Nenhum ticket encontrado"));
             return toDTO(ticket);
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());

@@ -6,27 +6,26 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import imd.eventhub.model.*;
-import imd.eventhub.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import imd.eventhub.model.Event;
 import imd.eventhub.model.EventType;
+import imd.eventhub.model.Participant;
 import imd.eventhub.model.SubEvent;
 import imd.eventhub.model.TicketType;
 import imd.eventhub.model.TicketTypeId;
+import imd.eventhub.model.User;
 import imd.eventhub.repository.IEventRepository;
 import imd.eventhub.repository.IParticipantRepository;
 import imd.eventhub.repository.ISubEventRepository;
 import imd.eventhub.repository.ITicketRepository;
 import imd.eventhub.repository.ITicketTypeRepository;
-import imd.eventhub.restAPI.dto.user.SaveUserDTO;
-import imd.eventhub.service.User.IUserService;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import imd.eventhub.repository.IUserRepository;
 
 @SpringBootApplication
 public class EventhubApplication {
