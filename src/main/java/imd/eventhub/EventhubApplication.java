@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import imd.eventhub.model.Attraction;
 import imd.eventhub.model.Event;
 import imd.eventhub.model.EventType;
 import imd.eventhub.model.Participant;
@@ -20,12 +21,14 @@ import imd.eventhub.model.SubEvent;
 import imd.eventhub.model.TicketType;
 import imd.eventhub.model.TicketTypeId;
 import imd.eventhub.model.User;
+import imd.eventhub.repository.IAttractionRepository;
 import imd.eventhub.repository.IEventRepository;
 import imd.eventhub.repository.IParticipantRepository;
 import imd.eventhub.repository.ISubEventRepository;
 import imd.eventhub.repository.ITicketRepository;
 import imd.eventhub.repository.ITicketTypeRepository;
 import imd.eventhub.repository.IUserRepository;
+import imd.eventhub.service.User.IUserService;
 
 @SpringBootApplication
 public class EventhubApplication {
