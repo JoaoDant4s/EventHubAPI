@@ -37,7 +37,7 @@ public class UserController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(userService.getById(id).get());
         } catch (NotFoundException exception){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RestErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RestErrorMessage(404, HttpStatus.NOT_FOUND, exception.getMessage()));
         }
     }
 
@@ -46,9 +46,9 @@ public class UserController {
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
         } catch(NotFoundException | CpfNotValidException | DateOutOfRangeException | EmailNotValidException | PasswordNotValidException exception){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RestErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RestErrorMessage(400, HttpStatus.BAD_REQUEST, exception.getMessage()));
         } catch(Exception exception){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RestErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RestErrorMessage(500, HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage()));
         }
     }
 
@@ -57,11 +57,11 @@ public class UserController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(userService.update(user));
         } catch (NotFoundException exception){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RestErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RestErrorMessage(404, HttpStatus.NOT_FOUND, exception.getMessage()));
         } catch(CpfNotValidException | DateOutOfRangeException exception){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RestErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RestErrorMessage(400, HttpStatus.BAD_REQUEST, exception.getMessage()));
         } catch(Exception exception){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RestErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RestErrorMessage(500, HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage()));
         }
     }
 
@@ -71,9 +71,9 @@ public class UserController {
             userService.delete(id);
             return ResponseEntity.status(HttpStatus.OK).body(new RestSuccessMessage(HttpStatus.OK, "Usuário apagado com sucesso!"));
         } catch (NotFoundException exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RestErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RestErrorMessage(404, HttpStatus.NOT_FOUND, exception.getMessage()));
         } catch(Exception exception){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RestErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RestErrorMessage(500, HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage()));
         }
     }
 
@@ -87,8 +87,8 @@ public class UserController {
             UserDetails authenticatedUser = userService.authentication(user);
             String token = jwtService.gerarToken(user);
             return ResponseEntity.status(HttpStatus.OK).body(new TokenDTO(user.getEmail(), token));
-        } catch (NotFoundException | PasswordNotValidException exception ){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new RestErrorMessage(HttpStatus.UNAUTHORIZED, exception.getMessage()));
+        } catch (PasswordNotValidException exception ){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new RestErrorMessage(401, HttpStatus.UNAUTHORIZED, exception.getMessage()));
         }
     }
 

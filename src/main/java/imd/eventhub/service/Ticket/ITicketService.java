@@ -19,6 +19,6 @@ public interface ITicketService {
     public Ticket save(Ticket ticket, List<LocalDate> days) throws NullParameterException, NotFoundException, InvalidParameterException, DataAlreadyExistsException;
     public Ticket updateWithPayment(Ticket ticket, Payment registry) throws NullParameterException;
     public void delete(Ticket person);
-    public Optional<Ticket> getById(Integer id);
+    public Optional<Ticket> getById(Integer id) throws NotFoundException;
     public List<Ticket> getList();
 }

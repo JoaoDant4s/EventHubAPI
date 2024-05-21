@@ -75,7 +75,7 @@ public class TicketService implements ITicketService {
     }
 
     @Override
-    public Optional<Ticket> getById(Integer id) {
+    public Optional<Ticket> getById(Integer id) throws NotFoundException {
         return ticketRepository.findById(id);
     }
 

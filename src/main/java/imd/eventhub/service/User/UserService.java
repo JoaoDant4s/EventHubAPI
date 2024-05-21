@@ -275,6 +275,6 @@ public class UserService implements IUserService, UserDetailsService {
             return userDetails;
         }
 
-        throw new PasswordNotValidException();
+        throw new PasswordNotValidException("Usuário ou senha incorretos");
     }
 }
