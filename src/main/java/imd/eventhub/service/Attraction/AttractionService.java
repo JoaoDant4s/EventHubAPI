@@ -10,8 +10,10 @@ import imd.eventhub.repository.IAttractionRepository;
 import imd.eventhub.repository.IUserRepository;
 import imd.eventhub.restAPI.dto.attraction.SaveAttractionDTO;
 import imd.eventhub.restAPI.dto.attraction.SaveAttractionUserDTO;
+import imd.eventhub.restAPI.dto.attraction.ShowAttractionUserDTO;
 import imd.eventhub.restAPI.dto.attraction.UpdateAttractionDTO;
 import imd.eventhub.restAPI.dto.user.SaveUserDTO;
+import imd.eventhub.restAPI.dto.user.UpdateUserDTO;
 import imd.eventhub.restAPI.dto.user.UserDTO;
 import imd.eventhub.service.User.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,12 +97,27 @@ public class AttractionService implements IAttractionService {
     }
 
     @Override
-    public Attraction update(UpdateAttractionDTO attractionUserDTO) {
+    public ShowAttractionUserDTO update(UpdateAttractionDTO attractionUserDTO) {
+        Optional<User> user = userRepository.findById(attractionUserDTO.getId());
 
-        Optional<Attraction> attraction = attractionRepository.findById(attractionUserDTO.getId());
+        if(user.isEmpty()){
+            throw new NotFoundException("Usuário não encontrado");
+        }
+
+        Optional<Attraction> attraction = attractionRepository.findById(user.get().getAttraction().getId());
+
         if(attraction.isEmpty()){
             throw new NotFoundException("Atração não encontrada");
         }
+        UpdateUserDTO userDTO = new UpdateUserDTO();
+        userDTO.setId(attractionUserDTO.getId());
+        userDTO.setEmail(attractionUserDTO.getEmail());
+        userDTO.setPassword(attractionUserDTO.getPassword());
+        userDTO.setName(attractionUserDTO.getName());
+        userDTO.setCpf(attractionUserDTO.getCpf());
+        userDTO.setBirthDate(attractionUserDTO.getBirthDate());
+
+        userService.update(userDTO);
 
         if(attraction.isPresent()){
             if(attraction.get().getDescription() == null){
@@ -109,14 +126,30 @@ public class AttractionService implements IAttractionService {
             if(attraction.get().getContact() == null){
                 throw new NotFoundException("campo 'contact' não foi encontrado");
             }
-            if(!checkContactIsValid(attraction.get().getContact())){
-                throw new ContactNotValidException(String.format("O contato digitado ('%s') não segue o padrão (__) _____-____", attraction.get().getContact()));
+            if(!checkContactIsValid(attractionUserDTO.getAttraction().getContact())){
+                throw new ContactNotValidException(String.format("O contato digitado ('%s') não segue o padrão (__) _____-____", attractionUserDTO.getAttraction().getContact()));
             }
         }
-        attraction.get().setDescription(attractionUserDTO.getDescription());
-        attraction.get().setContact(attractionUserDTO.getContact());
 
-        return attractionRepository.save(attraction.get());
+        attraction.get().setDescription(attractionUserDTO.getAttraction().getDescription());
+        attraction.get().setContact(attractionUserDTO.getAttraction().getContact());
+
+        SaveAttractionDTO attractionDto = new SaveAttractionDTO();
+        attractionDto.setDescription(attractionUserDTO.getAttraction().getDescription());
+        attractionDto.setContact(attractionUserDTO.getAttraction().getContact());
+
+        ShowAttractionUserDTO showAttractionDTO = new ShowAttractionUserDTO();
+        showAttractionDTO.setId(attractionUserDTO.getId());
+        showAttractionDTO.setEmail(attractionUserDTO.getEmail());
+        showAttractionDTO.setPassword(attractionUserDTO.getPassword());
+        showAttractionDTO.setName(attractionUserDTO.getName());
+        showAttractionDTO.setCpf(attractionUserDTO.getCpf());
+        showAttractionDTO.setBirthDate(attractionUserDTO.getBirthDate());
+        showAttractionDTO.setAttraction(attractionDto);
+
+        attractionRepository.save(attraction.get());
+
+        return showAttractionDTO;
     }
 
     @Override

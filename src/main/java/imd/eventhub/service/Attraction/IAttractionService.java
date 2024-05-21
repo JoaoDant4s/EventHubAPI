@@ -7,6 +7,7 @@ import imd.eventhub.model.Attraction;
 import imd.eventhub.model.User;
 import imd.eventhub.restAPI.dto.attraction.SaveAttractionDTO;
 import imd.eventhub.restAPI.dto.attraction.SaveAttractionUserDTO;
+import imd.eventhub.restAPI.dto.attraction.ShowAttractionUserDTO;
 import imd.eventhub.restAPI.dto.attraction.UpdateAttractionDTO;
 import imd.eventhub.restAPI.dto.user.UserDTO;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public interface IAttractionService {
     public Attraction save(SaveAttractionDTO attractionDTO);
     public UserDTO save(SaveAttractionUserDTO object) throws NotFoundException, CpfNotValidException, DateOutOfRangeException;
 
-    public Attraction update(UpdateAttractionDTO attractionUserDTO);
+    public ShowAttractionUserDTO update(UpdateAttractionDTO attractionUserDTO);
 
     public void delete(Integer id);
 }

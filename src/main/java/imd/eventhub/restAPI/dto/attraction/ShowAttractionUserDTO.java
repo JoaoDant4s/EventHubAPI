@@ -9,7 +9,8 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @AllArgsConstructor
-public class UpdateAttractionDTO {
+public class ShowAttractionUserDTO {
+
     private Integer id;
     private String email;
     private String password;
@@ -18,6 +19,5 @@ public class UpdateAttractionDTO {
     private LocalDate birthDate;
     private SaveAttractionDTO attraction;
 
-    public UpdateAttractionDTO(){}
+    public ShowAttractionUserDTO(){};
 }
-

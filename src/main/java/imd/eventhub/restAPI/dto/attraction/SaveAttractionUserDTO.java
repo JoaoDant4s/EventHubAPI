@@ -10,11 +10,11 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 public class SaveAttractionUserDTO {
+    private String email;
+    private String password;
     private String name;
     private String cpf;
     private LocalDate birthDate;
-    private String email;
-    private String password;
     private SaveAttractionDTO attraction;
 
     public SaveAttractionUserDTO(){};

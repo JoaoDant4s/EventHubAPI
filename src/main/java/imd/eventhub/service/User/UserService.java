@@ -83,17 +83,17 @@ public class UserService implements IUserService, UserDetailsService {
         if(userDTO.getBirthDate() == null){
             throw new NotFoundException("campo 'birthDate' não foi encontrado");
         }
-        if(!checkCpfIsValid(userDTO.getCpf())){
-            throw new CpfNotValidException(String.format("O CPF digitado ('%s') não segue o padrão 000.000.000-00", userDTO.getCpf()));
-        }
-        if(userWithSameCPF.isPresent()){
-            throw new CpfNotValidException("O CPF digitado já está associado a um outro usuário");
-        }
         if(userWithSameEmail.isPresent()){
             throw new EmailNotValidException("O Email digitado já está associado a um outro usuário");
         }
         if(userDTO.getPassword().length() < 8){
             throw new PasswordNotValidException("A senha precisa ter no mínimo 8 caracteres");
+        }
+        if(!checkCpfIsValid(userDTO.getCpf())){
+            throw new CpfNotValidException(String.format("O CPF digitado ('%s') não segue o padrão 000.000.000-00", userDTO.getCpf()));
+        }
+        if(userWithSameCPF.isPresent()){
+            throw new CpfNotValidException("O CPF digitado já está associado a um outro usuário");
         }
         if(userDTO.getBirthDate().isAfter(LocalDate.now())){
             throw new DateOutOfRangeException("A data informada é maior do que a data de hoje");
@@ -117,10 +117,27 @@ public class UserService implements IUserService, UserDetailsService {
     public UserDTO update(UpdateUserDTO user){
         Optional<User> getUser = userRepository.findById(user.getId());
         Optional<UserDTO> userWithSameCPF = getUserByCPF(user.getCpf());
+        Optional<UserDTO> userWithSameEmail = getUserByEmail(user.getEmail());
 
         if(getUser.isEmpty()){
             throw new NotFoundException("Usuário não encontrado");
         } else {
+            if(user.getEmail()!=null){
+                if(userWithSameEmail.isPresent() && !getUser.get().getEmail().equals(user.getEmail())){
+                    throw new EmailNotValidException("O Email digitado já está associado a um outro usuário");
+                }
+
+                getUser.get().setEmail(user.getEmail());
+            }
+
+            if(user.getPassword()!=null){
+                if(user.getPassword().length() < 8){
+                    throw new PasswordNotValidException("A senha precisa ter no mínimo 8 caracteres");
+                }
+
+                getUser.get().setPassword(passwordEncoder.encode(user.getPassword()));
+            }
+
             if(user.getCpf()!=null){
                 if(!checkCpfIsValid(user.getCpf())){
                     throw new CpfNotValidException(String.format("O CPF digitado ('%s') não segue o padrão 000.000.000-00", user.getCpf()));
@@ -138,7 +155,7 @@ public class UserService implements IUserService, UserDetailsService {
                 throw new DateOutOfRangeException("A data informada é maior do que a data de hoje");
             } else {
                 if(user.getBirthDate()!=null){
-                    getUser.get().getBirthDate();
+                    getUser.get().setBirthDate(user.getBirthDate());
                     getUser.get().setAge((int) ChronoUnit.YEARS.between(user.getBirthDate(),LocalDate.now()));
                 }
             }

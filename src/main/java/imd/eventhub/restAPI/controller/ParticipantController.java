@@ -8,6 +8,7 @@ import imd.eventhub.restAPI.dto.attraction.SaveAttractionDTO;
 import imd.eventhub.restAPI.dto.attraction.SaveAttractionUserDTO;
 import imd.eventhub.restAPI.dto.attraction.UpdateAttractionDTO;
 import imd.eventhub.restAPI.dto.participant.SaveParticipantDTO;
+import imd.eventhub.restAPI.dto.participant.UpdateParticipantDTO;
 import imd.eventhub.restAPI.infra.RestErrorMessage;
 import imd.eventhub.restAPI.infra.RestSuccessMessage;
 import imd.eventhub.service.Attraction.IAttractionService;
@@ -32,7 +33,7 @@ public class ParticipantController {
     @GetMapping("/{id}")
     public ResponseEntity<Object> getParticipantById(@PathVariable Integer id){
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(participantService.getById(id).get());
+            return ResponseEntity.status(HttpStatus.OK).body(participantService.getById(id));
         } catch (NotFoundException exception){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RestErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage()));
         }
@@ -43,6 +44,18 @@ public class ParticipantController {
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(participantService.save(participantDTO));
         } catch(NotFoundException | CpfNotValidException | DateOutOfRangeException exception){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RestErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage()));
+        } catch(Exception exception){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RestErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage()));
+        }
+    }
+    @PutMapping
+    public ResponseEntity<Object> participantUpdate(@RequestBody UpdateParticipantDTO participant){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(participantService.update(participant));
+        } catch (NotFoundException exception){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RestErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage()));
+        } catch(CpfNotValidException | DateOutOfRangeException exception){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RestErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage()));
         } catch(Exception exception){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RestErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage()));

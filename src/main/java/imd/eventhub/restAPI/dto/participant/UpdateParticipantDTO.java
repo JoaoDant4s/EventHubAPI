@@ -5,14 +5,19 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @AllArgsConstructor
 public class UpdateParticipantDTO {
 
     private Integer id;
-    private CreditCard creditCard;
-    private Integer userId;
+    private String email;
+    private String password;
+    private String name;
+    private String cpf;
+    private LocalDate birthDate;
 
     public UpdateParticipantDTO(){}
 }
