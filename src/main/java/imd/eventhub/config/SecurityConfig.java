@@ -2,10 +2,14 @@ package imd.eventhub.config;
 
 import imd.eventhub.security.JwtService;
 import imd.eventhub.service.User.UserService;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -18,6 +22,8 @@ import imd.eventhub.security.JwtAuthFilter;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(jsr250Enabled = true)
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     @Autowired
@@ -25,6 +31,8 @@ public class SecurityConfig {
 
     @Autowired
     private UserService userService;
+
+    
 
 
     @Bean
@@ -35,6 +43,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .headers(headers -> headers.frameOptions(frame -> frame.disable()))
             .authorizeHttpRequests((authorize) ->
             authorize
                 .requestMatchers("/v3/api-docs/**", "/swagger-resources/**", "/swagger-ui/**").permitAll()
@@ -69,9 +80,6 @@ public class SecurityConfig {
                 .requestMatchers("/api/feedback").hasAnyRole("USER", "ADMIN")
                 .anyRequest().permitAll()
             )
-            .sessionManagement((session) -> 
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            
             /*
              * No Java Spring Security, o método addFilterBefore() é usado para adicionar um filtro 
              * antes de um filtro específico na cadeia de filtros de segurança. 
@@ -85,10 +93,7 @@ public class SecurityConfig {
              */
             .addFilterBefore(
                 jwtFilter(), 
-                UsernamePasswordAuthenticationFilter.class)
-
-            //habilitado por padrão
-            .csrf(AbstractHttpConfigurer::disable);
+                UsernamePasswordAuthenticationFilter.class);
             //.httpBasic(Customizer.withDefaults()); //possibilita "logar" com o headers de autenticação
          //retorno da cadeia de filtros   
         return http.build();

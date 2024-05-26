@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -23,6 +24,7 @@ import imd.eventhub.exception.NotFoundException;
 import imd.eventhub.exception.NullParameterException;
 import imd.eventhub.model.Event;
 import imd.eventhub.model.SubEvent;
+import imd.eventhub.restAPI.dto.subEvent.SaveSubEventDTO;
 import imd.eventhub.restAPI.dto.subEvent.SubEventDTO;
 import imd.eventhub.service.Event.IEventService;
 import imd.eventhub.service.SubEvent.ISubEventService;
@@ -40,9 +42,9 @@ public class SubEventController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public SubEventDTO saveSubEvent(@Valid @RequestBody SubEventDTO subEventDTO) {
+    public SubEventDTO saveSubEvent(@Valid @RequestBody SaveSubEventDTO subEventDTO) {
         try {
-            SubEvent subEvent = subEventService.save(fromDto(subEventDTO));
+            SubEvent subEvent = subEventService.save(fromSaveDto(subEventDTO));
             return toDto(subEvent);
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -91,7 +93,7 @@ public class SubEventController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteSubEvent(@PathVariable Integer id) {
         try {
@@ -114,12 +116,11 @@ public class SubEventController {
         return subEvent;
     }
 
-    private SubEvent fromDto(SubEventDTO dto) throws NotFoundException, NullParameterException {
+    private SubEvent fromSaveDto(SaveSubEventDTO dto) throws NotFoundException, NullParameterException {
         SubEvent subEvent = new SubEvent();
         subEvent.setName(dto.getName());
         subEvent.setDescription(dto.getDescription());
         subEvent.setLocation(dto.getLocation());
-        subEvent.setId(dto.getId());
         subEvent.setHours(dto.getHours());
         subEvent.setType(dto.getType());
         Optional<Event> event = eventService.getByID(dto.getEventDTO().getId());

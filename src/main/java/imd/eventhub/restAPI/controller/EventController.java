@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -22,6 +23,7 @@ import imd.eventhub.exception.InvalidParameterException;
 import imd.eventhub.exception.NullParameterException;
 import imd.eventhub.model.Event;
 import imd.eventhub.restAPI.dto.event.EventDTO;
+import imd.eventhub.restAPI.dto.event.SaveEventDTO;
 import imd.eventhub.service.Event.IEventService;
 import jakarta.validation.Valid;
 
@@ -34,8 +36,8 @@ public class EventController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public EventDTO saveEvent(@Valid @RequestBody EventDTO eventDTO) {
-        Event event = fromDto(eventDTO);
+    public EventDTO saveEvent(@Valid @RequestBody SaveEventDTO eventDTO) {
+        Event event = fromSaveDto(eventDTO);
         try {
             event = eventService.save(event);
             return toDto(event);
@@ -81,7 +83,7 @@ public class EventController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteEvent(@PathVariable Integer id) {
         try {
@@ -105,19 +107,18 @@ public class EventController {
         event.setType(dto.getType());
         return event;
     }
-
-    private Event fromDto(EventDTO dto) {
+    private Event fromSaveDto(SaveEventDTO dto) {
         Event event = new Event();
         event.setName(dto.getName());
         event.setDescription(dto.getDescription());
         event.setAddress(dto.getAddress());
-        event.setId(dto.getId());
         event.setMaximumCapacity(dto.getMaximumCapacity());
         event.setInitialDate(dto.getInitialDate());
         event.setFinalDate(dto.getFinalDate());
         event.setType(dto.getType());
         return event;
     }
+
 
     public static EventDTO toDto(Event event) {
         EventDTO dto = new EventDTO();

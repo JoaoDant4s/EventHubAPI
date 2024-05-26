@@ -6,19 +6,15 @@ import imd.eventhub.exception.NoTicketDaysLinkedInTicketException;
 import imd.eventhub.exception.NotFoundException;
 import imd.eventhub.exception.NullParameterException;
 import imd.eventhub.model.Payment;
-import imd.eventhub.model.Ticket;
 import imd.eventhub.restAPI.dto.payment.SavePaymentDTO;
 import imd.eventhub.restAPI.dto.payment.PaymentDTO;
 import imd.eventhub.service.Payment.IPaymentService;
-import imd.eventhub.service.Ticket.ITicketService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.math.BigDecimal;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController

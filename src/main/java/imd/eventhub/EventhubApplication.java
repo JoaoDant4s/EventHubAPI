@@ -64,7 +64,7 @@ public class EventhubApplication {
 			User user1 = new User("Admin", "999.999.999-01", "1990-02-23", "admin", passwordEncoder.encode("123456789"), true, false);
 			User user2 = new User("Promoter", "999.999.999-02", "1982-10-11", "promoter", passwordEncoder.encode("123456789"), false, true);
 			User user3 = new User("Hudson", "999.999.999-03", "2001-09-12", "user1@gmail.com", passwordEncoder.encode("123456789"), false, false);
-			User user4 = new User("João", "999.999.999-04", "2000-10-20", "user2@gmail.com", passwordEncoder.encode("123456789"), false, false);
+			User user4 = new User("João", "999.999.999-04", "2000-10-20", "joao@gmail.com", passwordEncoder.encode("123"), false, false);
 			User user5 = new User("Nathalia", "999.999.999-05", "2000-08-31", "user3@gmail.com", passwordEncoder.encode("123456789"), false, false);
 			User user6 = new User("Matheus", "999.999.999-06", "1996-02-10", "user4@gmail.com", passwordEncoder.encode("123456789"), false, false);
 			User user7 = new User("Atração", "999.999.999-07", "1989-11-02", "user5@gmail.com", passwordEncoder.encode("123456789"), false, false);

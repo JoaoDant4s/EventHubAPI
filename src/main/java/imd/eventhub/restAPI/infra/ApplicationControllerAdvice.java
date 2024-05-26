@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -32,6 +33,11 @@ public class ApplicationControllerAdvice extends ResponseEntityExceptionHandler{
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public RestErrorMessage handleNotFoundException(NotFoundException ex){
         return new RestErrorMessage(404, HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(value = AccessDeniedException.class)
+    public RestErrorMessage accessDeniedExceptionHandler(Exception ex) {
+        return new RestErrorMessage(403, HttpStatus.FORBIDDEN, "Usuário não autenticado");
     }
 
     @Override
