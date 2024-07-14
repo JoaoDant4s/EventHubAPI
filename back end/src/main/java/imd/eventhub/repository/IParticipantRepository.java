@@ -8,5 +8,4 @@ import java.util.Optional;
 
 
 public interface IParticipantRepository extends JpaRepository<Participant,Integer> {
-
 }
