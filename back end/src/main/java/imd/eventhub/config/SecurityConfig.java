@@ -8,11 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -69,9 +67,12 @@ public class SecurityConfig {
                 .requestMatchers("/api/participant").hasAnyRole("USER", "ADMIN")
 
                 //EVENT PERMISSIONS
-                // .requestMatchers("/api/event/").hasAnyRole("ADMIN", "PROMOTER")
-                // .requestMatchers("/api/event/list").permitAll()
-                .requestMatchers("/api/event/list").permitAll()
+                //.requestMatchers("/api/event/").hasAnyRole("ADMIN", "PROMOTER")
+                .requestMatchers("/api/event/").permitAll()
+
+                //SUB EVENT PERMISSIONS
+                //.requestMatchers("/api/event/").hasAnyRole("ADMIN", "PROMOTER")
+                .requestMatchers("/api/subEvent/").permitAll()
                 
                 //CREDIT CARD PERMISSIONS
                 .requestMatchers("/api/creditCard").hasAnyRole("USER", "ADMIN")

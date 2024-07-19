@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 @Table(name = "User")
@@ -25,7 +26,7 @@ public class User {
     private String password;
     @Column(length = 100)
     private String name;
-    @Column(length = 14)
+    @Column(length = 18)
     private String cpf;
     @Column
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -75,6 +76,7 @@ public class User {
         this.name = name;
         this.cpf = cpf;
         this.birthDate = LocalDate.parse(birthDate);
+        this.age = (int) ChronoUnit.YEARS.between(LocalDate.parse(birthDate),LocalDate.now());
         this.email = email;
         this.password = password;
         this.admin = admin;

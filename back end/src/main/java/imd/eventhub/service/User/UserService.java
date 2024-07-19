@@ -12,6 +12,7 @@ import imd.eventhub.restAPI.dto.user.SaveUserDTO;
 import imd.eventhub.restAPI.dto.user.UpdateUserDTO;
 import imd.eventhub.restAPI.dto.user.UserDTO;
 import imd.eventhub.service.Attraction.IAttractionService;
+import imd.eventhub.service.User.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -46,7 +47,7 @@ public class UserService implements IUserService, UserDetailsService {
     @Override
     public List<UserDTO> getList(){
         return userRepository.findAll().stream().map(user-> {
-            UserDTO userDTO = UserDTO.convertUserToUserDTO(user);
+            UserDTO userDTO = UserDTO.toUserDTO(user);
             return userDTO;
         }).collect(Collectors.toList());
     }
@@ -54,119 +55,12 @@ public class UserService implements IUserService, UserDetailsService {
     @Override
     public Optional<UserDTO> getById(Integer id){
         Optional<UserDTO> showUser = userRepository.findById(id).stream().findAny().map(user-> {
-            UserDTO userDTO = UserDTO.convertUserToUserDTO(user);
+            UserDTO userDTO = UserDTO.toUserDTO(user);
             return userDTO;
         });
         if(showUser.isEmpty()){
             throw new NotFoundException("Usuário não encontrado");
         }
-        return showUser;
-    }
-
-    @Override
-    public UserDTO save(SaveUserDTO userDTO) {
-        Optional<UserDTO> userWithSameCPF = getUserByCPF(userDTO.getCpf());
-        Optional<UserDTO> userWithSameEmail = getUserByEmail(userDTO.getEmail());
-
-        if(userDTO.getEmail() == null){
-            throw new NotFoundException("campo 'email' não foi encontrado");
-        }
-        if(userDTO.getPassword() == null){
-            throw new NotFoundException("campo 'password' não foi encontrado");
-        }
-        if(userDTO.getCpf() == null){
-            throw new NotFoundException("campo 'cpf' não foi encontrado");
-        }
-        if(userDTO.getName() == null){
-            throw new NotFoundException("campo 'name' não foi encontrado");
-        }
-        if(userDTO.getBirthDate() == null){
-            throw new NotFoundException("campo 'birthDate' não foi encontrado");
-        }
-        if(userWithSameEmail.isPresent()){
-            throw new EmailNotValidException("O Email digitado já está associado a um outro usuário");
-        }
-        if(userDTO.getPassword().length() < 8){
-            throw new PasswordNotValidException("A senha precisa ter no mínimo 8 caracteres");
-        }
-        if(!checkCpfIsValid(userDTO.getCpf())){
-            throw new CpfNotValidException(String.format("O CPF digitado ('%s') não segue o padrão 000.000.000-00", userDTO.getCpf()));
-        }
-        if(userWithSameCPF.isPresent()){
-            throw new CpfNotValidException("O CPF digitado já está associado a um outro usuário");
-        }
-        if(userDTO.getBirthDate().isAfter(LocalDate.now())){
-            throw new DateOutOfRangeException("A data informada é maior do que a data de hoje");
-        }
-
-        User user = new User();
-        user.setName(userDTO.getName());
-        user.setCpf(userDTO.getCpf());
-        user.setEmail(userDTO.getEmail());
-        user.setBirthDate(userDTO.getBirthDate());
-        user.setAge((int) ChronoUnit.YEARS.between(user.getBirthDate(),LocalDate.now()));
-        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        User savedUser = userRepository.save(user);
-
-        UserDTO showUser = UserDTO.convertUserToUserDTO(savedUser);
-
-        return showUser;
-    }
-
-    @Override
-    public UserDTO update(UpdateUserDTO user){
-        Optional<User> getUser = userRepository.findById(user.getId());
-        Optional<UserDTO> userWithSameCPF = getUserByCPF(user.getCpf());
-        Optional<UserDTO> userWithSameEmail = getUserByEmail(user.getEmail());
-
-        if(getUser.isEmpty()){
-            throw new NotFoundException("Usuário não encontrado");
-        } else {
-            if(user.getEmail()!=null){
-                if(userWithSameEmail.isPresent() && !getUser.get().getEmail().equals(user.getEmail())){
-                    throw new EmailNotValidException("O Email digitado já está associado a um outro usuário");
-                }
-
-                getUser.get().setEmail(user.getEmail());
-            }
-
-            if(user.getPassword()!=null){
-                if(user.getPassword().length() < 8){
-                    throw new PasswordNotValidException("A senha precisa ter no mínimo 8 caracteres");
-                }
-
-                getUser.get().setPassword(passwordEncoder.encode(user.getPassword()));
-            }
-
-            if(user.getCpf()!=null){
-                if(!checkCpfIsValid(user.getCpf())){
-                    throw new CpfNotValidException(String.format("O CPF digitado ('%s') não segue o padrão 000.000.000-00", user.getCpf()));
-                }
-                if(userWithSameCPF.isPresent()){
-                    if(!userWithSameCPF.get().getCpf().equals(getUser.get().getCpf())){
-                        throw new CpfNotValidException("O CPF digitado já está associado a um outro usuário");
-                    }
-                }
-
-                getUser.get().setCpf(user.getCpf());
-            }
-
-            if(user.getBirthDate() != null && user.getBirthDate().isAfter(LocalDate.now())){
-                throw new DateOutOfRangeException("A data informada é maior do que a data de hoje");
-            } else {
-                if(user.getBirthDate()!=null){
-                    getUser.get().setBirthDate(user.getBirthDate());
-                    getUser.get().setAge((int) ChronoUnit.YEARS.between(user.getBirthDate(),LocalDate.now()));
-                }
-            }
-            getUser.get().setName(user.getName()!=null || !user.getName().isEmpty() ? user.getName() : getUser.get().getName());
-        }
-
-        User savedUser = userRepository.save(getUser.get());
-
-        UserDTO showUser = UserDTO.convertUserToUserDTO(savedUser);
-
-
         return showUser;
     }
 
@@ -182,7 +76,7 @@ public class UserService implements IUserService, UserDetailsService {
     @Override
     public Optional<UserDTO> getUserByCPF(String cpf) {
         return userRepository.findByCpf(cpf).stream().findAny().map(user -> {
-            UserDTO userDTO = UserDTO.convertUserToUserDTO(user);
+            UserDTO userDTO = UserDTO.toUserDTO(user);
             return userDTO;
         });
     }
@@ -190,7 +84,7 @@ public class UserService implements IUserService, UserDetailsService {
     @Override
     public Optional<UserDTO> getUserByEmail(String email) {
         return userRepository.findByEmail(email).stream().findAny().map(user -> {
-            UserDTO userDTO = UserDTO.convertUserToUserDTO(user);
+            UserDTO userDTO = UserDTO.toUserDTO(user);
             return userDTO;
         });
     }
@@ -227,6 +121,46 @@ public class UserService implements IUserService, UserDetailsService {
         userRepository.save(user.get());
     }
 
+    @Override
+    public boolean isValid(SaveUserDTO userDTO) throws NullParameterException, EmailNotValidException, PasswordNotValidException, CpfNotValidException, DateOutOfRangeException {
+        Optional<UserDTO> userWithSameCPF = getUserByCPF(userDTO.getCpf());
+        Optional<UserDTO> userWithSameEmail = getUserByEmail(userDTO.getEmail());
+
+        if(userDTO.getName() == null) throw new NullParameterException("O nome não foi encontrado");
+        if(userDTO.getEmail() == null)throw new NullParameterException("O email não foi encontrado");
+        if(userDTO.getCpf() == null) throw new NullParameterException("O CPF não foi encontrado");
+        if(userDTO.getBirthDate() == null) throw new NullParameterException("A data de nascimento não foi encontrada");
+        if(userDTO.getPassword() == null) throw new NullParameterException("A senha não foi encontrada");
+        if(userWithSameEmail.isPresent()) throw new EmailNotValidException("O Email digitado já está associado a um outro usuário");
+        if(userDTO.getPassword().length() < 8) throw new PasswordNotValidException("A senha precisa ter no mínimo 8 caracteres");
+        if(!userDTO.getPassword().equals(userDTO.getConfirmPassword())) throw new PasswordNotValidException("As senhas não são iguais");
+        if(!checkCpfIsValid(userDTO.getCpf())) throw new CpfNotValidException(String.format("O CPF digitado ('%s') não segue o padrão 000.000.000-00", userDTO.getCpf()));
+        if(userWithSameCPF.isPresent()) throw new CpfNotValidException("O CPF digitado já está associado a um outro usuário");
+        if(userDTO.getBirthDate().isAfter(LocalDate.now())) throw new DateOutOfRangeException("A data informada é maior do que a data de hoje");
+
+        return true;
+    }
+
+    @Override
+    public boolean updateIsValid(SaveUserDTO userDTO, Integer userId) throws NullParameterException, EmailNotValidException, PasswordNotValidException, CpfNotValidException, DateOutOfRangeException {
+        Optional<UserDTO> userWithSameCPF = getUserByCPF(userDTO.getCpf());
+        Optional<UserDTO> userWithSameEmail = getUserByEmail(userDTO.getEmail());
+        Optional<User> user = userRepository.findById(userId);
+
+        if(userDTO.getName() == null) throw new NullParameterException("O nome não foi encontrado");
+        if(userDTO.getEmail() == null)throw new NullParameterException("O email não foi encontrado");
+        if(userDTO.getCpf() == null) throw new NullParameterException("O CPF não foi encontrado");
+        if(userDTO.getBirthDate() == null) throw new NullParameterException("A data de nascimento não foi encontrada");
+        if(userDTO.getPassword() == null) throw new NullParameterException("A senha não foi encontrada");
+        if(userWithSameEmail.isPresent() && !user.get().getEmail().equals(userDTO.getEmail())) throw new EmailNotValidException("O Email digitado já está associado a um outro usuário");
+        if(userDTO.getPassword().length() < 8) throw new PasswordNotValidException("A senha precisa ter no mínimo 8 caracteres");
+        if(!userDTO.getPassword().equals(userDTO.getConfirmPassword())) throw new PasswordNotValidException("As senhas não são iguais");
+        if(!checkCpfIsValid(userDTO.getCpf())) throw new CpfNotValidException(String.format("O CPF digitado ('%s') não segue o padrão 000.000.000-00", userDTO.getCpf()));
+        if(userWithSameCPF.isPresent() && !user.get().getCpf().equals(userDTO.getCpf())) throw new CpfNotValidException("O CPF digitado já está associado a um outro usuário");
+        if(userDTO.getBirthDate().isAfter(LocalDate.now())) throw new DateOutOfRangeException("A data informada é maior do que a data de hoje");
+
+        return true;
+    }
     public static boolean checkCpfIsValid(String cpf){
 
         Pattern regex = Pattern.compile("[0-9]{3}\\.?[0-9]{3}\\.?[0-9]{3}\\-?[0-9]{2}");
@@ -243,19 +177,17 @@ public class UserService implements IUserService, UserDetailsService {
             throw new NotFoundException("Usuário não encontrado");
         }
 
-        String[] roles = new String[] { "USER" };
-
-        if(user.get().getAttraction() != null){
-            roles = Arrays.copyOf(roles, roles.length + 1);
-            roles[roles.length-1] = "ATTRACTION";
-        }
+        List<String> roles = new ArrayList<>();
         if(user.get().isAdmin()){
-            roles = Arrays.copyOf(roles, roles.length + 1);
-            roles[roles.length-1] = "ADMIN";
-        }
-        if(user.get().isPromoter()){
-            roles = Arrays.copyOf(roles, roles.length + 1);
-            roles[roles.length-1] = "PROMOTER";
+            roles.add("ADMIN");
+            roles.add("USER");
+        } else if(user.get().getAttraction() != null) {
+            roles.add("ATTRACTION");
+            roles.add("USER");
+        } else if(user.get().isPromoter()){
+            roles.add("PROMOTER");
+        } else {
+            roles.add("USER");
         }
 
         // Cria e retorna o objeto UserDetails com os detalhes do usuário
@@ -263,12 +195,12 @@ public class UserService implements IUserService, UserDetailsService {
                 .builder()
                 .username(user.get().getEmail())
                 .password(user.get().getPassword())
-                .roles(roles)
+                .roles(roles.toArray(new String[roles.size()-1]))
                 .build();
 
     }
 
-    public UserDetails authentication(User user){
+    public UserDetails authentication(User user) throws PasswordNotValidException {
         UserDetails userDetails = loadUserByUsername(user.getEmail());
         boolean checkPassword = passwordEncoder.matches(user.getPassword(), userDetails.getPassword());
         if(checkPassword){

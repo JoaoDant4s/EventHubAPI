@@ -1,9 +1,6 @@
 package imd.eventhub.service.Attraction;
 
-import imd.eventhub.exception.ContactNotValidException;
-import imd.eventhub.exception.CpfNotValidException;
-import imd.eventhub.exception.DateOutOfRangeException;
-import imd.eventhub.exception.NotFoundException;
+import imd.eventhub.exception.*;
 import imd.eventhub.model.Attraction;
 import imd.eventhub.model.User;
 import imd.eventhub.repository.IAttractionRepository;
@@ -17,9 +14,11 @@ import imd.eventhub.restAPI.dto.user.UpdateUserDTO;
 import imd.eventhub.restAPI.dto.user.UserDTO;
 import imd.eventhub.service.User.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -34,6 +33,8 @@ public class AttractionService implements IAttractionService {
     IUserService userService;
     @Autowired
     IUserRepository userRepository;
+    @Autowired
+    public PasswordEncoder passwordEncoder;
 
     @Override
     public Optional<UserDTO> getById(Integer attractionId){
@@ -43,7 +44,7 @@ public class AttractionService implements IAttractionService {
             throw new NotFoundException("Usuário não encontrado");
         }
 
-        Optional<UserDTO> userDTO = Optional.of(UserDTO.convertUserToUserDTO(user.get()));
+        Optional<UserDTO> userDTO = Optional.of(UserDTO.toUserDTO(user.get()));
 
         return userDTO;
     }
@@ -51,105 +52,94 @@ public class AttractionService implements IAttractionService {
     @Override
     public List<UserDTO> getList(){
         return userRepository.findByAttractionIsNotNull().stream().map(user-> {
-            UserDTO userDTO = UserDTO.convertUserToUserDTO(user);
+            UserDTO userDTO = UserDTO.toUserDTO(user);
             return userDTO;
         }).collect(Collectors.toList());
     }
 
     @Override
-    public Attraction save(SaveAttractionDTO attractionDTO){
+    public boolean isValid(SaveAttractionDTO attractionDTO) throws NullParameterException, ContactNotValidException {
 
-        if(attractionDTO.getDescription() == null){
-            throw new NotFoundException("campo 'description' não foi encontrado");
-        }
-        if(attractionDTO.getContact() == null){
-            throw new NotFoundException("campo 'contact' não foi encontrado");
-        }
-        if(!checkContactIsValid(attractionDTO.getContact())){
-            throw new ContactNotValidException(String.format("O contato digitado ('%s') não segue o padrão (__) _____-____", attractionDTO.getContact()));
-        }
+        if(attractionDTO.getDescription() == null) throw new NullParameterException("campo 'description' não foi encontrado");
+        if(attractionDTO.getContact() == null) throw new NullParameterException("campo 'contact' não foi encontrado");
+        if(!checkContactIsValid(attractionDTO.getContact())) throw new ContactNotValidException(String.format("O contato digitado ('%s') não segue o padrão (__) _____-____", attractionDTO.getContact()));
 
-        Attraction attraction = new Attraction();
-        attraction.setDescription(attractionDTO.getDescription());
-        attraction.setContact(attractionDTO.getContact());
-
-        return attractionRepository.save(attraction);
+        return true;
     }
     @Override
-    public UserDTO save(SaveAttractionUserDTO attractionUserDTO) {
+    public UserDTO save(SaveAttractionUserDTO attrDTO) throws NullParameterException, EmailNotValidException, PasswordNotValidException, CpfNotValidException, ContactNotValidException, DateOutOfRangeException {
 
-        SaveUserDTO userDTO = new SaveUserDTO();
-        userDTO.setName(attractionUserDTO.getName());
-        userDTO.setCpf(attractionUserDTO.getCpf());
-        userDTO.setBirthDate(attractionUserDTO.getBirthDate());
-        userDTO.setEmail(attractionUserDTO.getEmail());
-        userDTO.setPassword(attractionUserDTO.getPassword());
-        UserDTO savedUser = userService.save(userDTO);
+        boolean checkUser = userService.isValid(
+            new SaveUserDTO(
+                attrDTO.getName(),
+                attrDTO.getCpf(),
+                attrDTO.getBirthDate().toString(),
+                attrDTO.getEmail(),
+                attrDTO.getPassword(),
+                attrDTO.getConfirmPassword()
+            )
+        );
+        boolean checkAttraction = isValid(new SaveAttractionDTO(attrDTO.getAttraction().getDescription(), attrDTO.getAttraction().getContact()));
 
-        SaveAttractionDTO attraction = new SaveAttractionDTO();
-        attraction.setDescription(attractionUserDTO.getAttraction().getDescription());
-        attraction.setContact(attractionUserDTO.getAttraction().getContact());
-        Attraction savedAttraction = save(attraction);
 
-        userService.setUserAttraction(savedUser.getId(), savedAttraction.getId());
+        if(checkUser && checkAttraction) {
+            Attraction attraction = new Attraction();
+            attraction.setDescription(attrDTO.getAttraction().getDescription());
+            attraction.setContact(attrDTO.getAttraction().getContact());
+            Attraction savedAttraction = attractionRepository.save(attraction);
 
-        return savedUser;
+            User user = new User();
+            user.setName(attrDTO.getName());
+            user.setCpf(attrDTO.getCpf());
+            user.setEmail(attrDTO.getEmail());
+            user.setBirthDate(attrDTO.getBirthDate());
+            user.setAge((int) ChronoUnit.YEARS.between(user.getBirthDate(), LocalDate.now()));
+            user.setPassword(passwordEncoder.encode(attrDTO.getPassword()));
+            user.setAttraction(savedAttraction);
+            User savedUser = userRepository.save(user);
+
+            UserDTO showUser = UserDTO.toUserDTO(savedUser);
+            return showUser;
+        }
+
+        return null;
     }
 
     @Override
-    public ShowAttractionUserDTO update(UpdateAttractionDTO attractionUserDTO) {
-        Optional<User> user = userRepository.findById(attractionUserDTO.getId());
+    public UserDTO update(UpdateAttractionDTO attrDTO) throws  NullParameterException, EmailNotValidException, PasswordNotValidException, CpfNotValidException, ContactNotValidException, DateOutOfRangeException {
+        Optional<User> user = userRepository.findById(attrDTO.getId());
+        boolean checkUser = userService.updateIsValid(
+                new SaveUserDTO(
+                        attrDTO.getName(),
+                        attrDTO.getCpf(),
+                        attrDTO.getBirthDate().toString(),
+                        attrDTO.getEmail(),
+                        attrDTO.getPassword(),
+                        attrDTO.getConfirmPassword()
+                ), attrDTO.getId()
+        );
+        boolean checkAttraction = isValid(new SaveAttractionDTO(attrDTO.getAttraction().getDescription(), attrDTO.getAttraction().getContact()));
 
-        if(user.isEmpty()){
-            throw new NotFoundException("Usuário não encontrado");
+        if(checkUser && checkAttraction) {
+            Attraction attraction = new Attraction();
+            attraction.setDescription(attrDTO.getAttraction().getDescription());
+            attraction.setContact(attrDTO.getAttraction().getContact());
+            Attraction savedAttraction = attractionRepository.save(attraction);
+
+            user.get().setName(attrDTO.getName());
+            user.get().setCpf(attrDTO.getCpf());
+            user.get().setEmail(attrDTO.getEmail());
+            user.get().setBirthDate(attrDTO.getBirthDate());
+            user.get().setAge((int) ChronoUnit.YEARS.between(user.get().getBirthDate(), LocalDate.now()));
+            user.get().setPassword(passwordEncoder.encode(attrDTO.getPassword()));
+            user.get().setAttraction(savedAttraction);
+            User savedUser = userRepository.save(user.get());
+
+            UserDTO showUser = UserDTO.toUserDTO(savedUser);
+            return showUser;
         }
 
-        Optional<Attraction> attraction = attractionRepository.findById(user.get().getAttraction().getId());
-
-        if(attraction.isEmpty()){
-            throw new NotFoundException("Atração não encontrada");
-        }
-        UpdateUserDTO userDTO = new UpdateUserDTO();
-        userDTO.setId(attractionUserDTO.getId());
-        userDTO.setEmail(attractionUserDTO.getEmail());
-        userDTO.setPassword(attractionUserDTO.getPassword());
-        userDTO.setName(attractionUserDTO.getName());
-        userDTO.setCpf(attractionUserDTO.getCpf());
-        userDTO.setBirthDate(attractionUserDTO.getBirthDate());
-
-        userService.update(userDTO);
-
-        if(attraction.isPresent()){
-            if(attraction.get().getDescription() == null){
-                throw new NotFoundException("campo 'description' não foi encontrado");
-            }
-            if(attraction.get().getContact() == null){
-                throw new NotFoundException("campo 'contact' não foi encontrado");
-            }
-            if(!checkContactIsValid(attractionUserDTO.getAttraction().getContact())){
-                throw new ContactNotValidException(String.format("O contato digitado ('%s') não segue o padrão (__) _____-____", attractionUserDTO.getAttraction().getContact()));
-            }
-        }
-
-        attraction.get().setDescription(attractionUserDTO.getAttraction().getDescription());
-        attraction.get().setContact(attractionUserDTO.getAttraction().getContact());
-
-        SaveAttractionDTO attractionDto = new SaveAttractionDTO();
-        attractionDto.setDescription(attractionUserDTO.getAttraction().getDescription());
-        attractionDto.setContact(attractionUserDTO.getAttraction().getContact());
-
-        ShowAttractionUserDTO showAttractionDTO = new ShowAttractionUserDTO();
-        showAttractionDTO.setId(attractionUserDTO.getId());
-        showAttractionDTO.setEmail(attractionUserDTO.getEmail());
-        showAttractionDTO.setPassword(attractionUserDTO.getPassword());
-        showAttractionDTO.setName(attractionUserDTO.getName());
-        showAttractionDTO.setCpf(attractionUserDTO.getCpf());
-        showAttractionDTO.setBirthDate(attractionUserDTO.getBirthDate());
-        showAttractionDTO.setAttraction(attractionDto);
-
-        attractionRepository.save(attraction.get());
-
-        return showAttractionDTO;
+        return null;
     }
 
     @Override

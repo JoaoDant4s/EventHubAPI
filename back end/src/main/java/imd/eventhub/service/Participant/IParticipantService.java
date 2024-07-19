@@ -1,8 +1,6 @@
 package imd.eventhub.service.Participant;
 
-import imd.eventhub.exception.CpfNotValidException;
-import imd.eventhub.exception.DateOutOfRangeException;
-import imd.eventhub.exception.NotFoundException;
+import imd.eventhub.exception.*;
 import imd.eventhub.model.Attraction;
 import imd.eventhub.model.Participant;
 import imd.eventhub.model.User;
@@ -25,9 +23,9 @@ public interface IParticipantService {
     public List<UserDTO> getList();
     public UserDTO getById(Integer id);
     public Optional<Participant> getParticipantById(Integer id);
-    public UserDTO save(SaveParticipantDTO participantDTO);
+    public UserDTO save(SaveParticipantDTO participantDTO) throws NullParameterException, EmailNotValidException, PasswordNotValidException, CpfNotValidException, DateOutOfRangeException;
 
-    public UserDTO update(UpdateParticipantDTO attractionUserDTO);
+    public UserDTO update(UpdateParticipantDTO attractionUserDTO) throws EmailNotValidException, PasswordNotValidException, NullParameterException;
 
     public void delete(Integer id);
 }

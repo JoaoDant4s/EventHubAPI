@@ -69,7 +69,7 @@ public class FeedbackService implements IFeedbackService {
     }
 
     @Override
-    public FeedbackDTO save(SaveFeedbackDTO feedbackDTO){
+    public FeedbackDTO save(SaveFeedbackDTO feedbackDTO) throws RatingOutOfRangeException {
 
         Optional<User> user = userRepository.findById(feedbackDTO.getUserId());
         Optional<Event> event = eventRepository.findById(feedbackDTO.getEventId());
@@ -110,7 +110,7 @@ public class FeedbackService implements IFeedbackService {
     }
 
     @Override
-    public FeedbackDTO update(UpdateFeedbackDTO feedbackDTO) {
+    public FeedbackDTO update(UpdateFeedbackDTO feedbackDTO) throws RatingOutOfRangeException {
         Optional<Feedback> feedback = feedbackRepository.findById(feedbackDTO.getId());
 
         if(feedback.isEmpty()){

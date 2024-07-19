@@ -1,6 +1,7 @@
 package imd.eventhub.restAPI.dto.user;
 
 import imd.eventhub.model.User;
+import imd.eventhub.restAPI.dto.participant.ParticipantDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 public class UserDTO {
     private Integer id;
     private String name;
+    private String email;
     private String cpf;
     private LocalDate birthDate;
     private Integer age;
@@ -21,9 +23,10 @@ public class UserDTO {
 
     public UserDTO(){}
 
-    public static UserDTO convertUserToUserDTO(User user){
+    public static UserDTO toUserDTO(User user){
         UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());
+        userDTO.setEmail(user.getEmail());
         userDTO.setName(user.getName());
         userDTO.setCpf(user.getCpf());
         userDTO.setBirthDate(user.getBirthDate());

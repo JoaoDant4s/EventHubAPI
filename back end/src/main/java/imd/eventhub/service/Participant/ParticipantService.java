@@ -1,7 +1,6 @@
 package imd.eventhub.service.Participant;
 
-import imd.eventhub.exception.ContactNotValidException;
-import imd.eventhub.exception.NotFoundException;
+import imd.eventhub.exception.*;
 import imd.eventhub.model.Attraction;
 import imd.eventhub.model.Participant;
 import imd.eventhub.model.User;
@@ -18,9 +17,11 @@ import imd.eventhub.restAPI.dto.user.UpdateUserDTO;
 import imd.eventhub.restAPI.dto.user.UserDTO;
 import imd.eventhub.service.User.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,11 +36,13 @@ public class ParticipantService implements IParticipantService{
 
     @Autowired
     IUserService userService;
+    @Autowired
+    public PasswordEncoder passwordEncoder;
 
     @Override
     public List<UserDTO> getList() {
         return userRepository.findByParticipantIsNotNull().stream().map(user-> {
-            UserDTO userDTO = UserDTO.convertUserToUserDTO(user);
+            UserDTO userDTO = UserDTO.toUserDTO(user);
             return userDTO;
         }).collect(Collectors.toList());
     }
@@ -52,7 +55,7 @@ public class ParticipantService implements IParticipantService{
             throw new NotFoundException("participante não encontrado");
         }
 
-        UserDTO userDTO = UserDTO.convertUserToUserDTO(user.get());
+        UserDTO userDTO = UserDTO.toUserDTO(user.get());
 
         return userDTO;
     }
@@ -67,21 +70,71 @@ public class ParticipantService implements IParticipantService{
     }
 
     @Override
-    public UserDTO save(SaveParticipantDTO participantDTO) {
+    public UserDTO save(SaveParticipantDTO partDTO) throws NullParameterException, EmailNotValidException, PasswordNotValidException, CpfNotValidException, DateOutOfRangeException {
 
-        SaveUserDTO userDTO = new SaveUserDTO();
-        userDTO.setName(participantDTO.getName());
-        userDTO.setCpf(participantDTO.getCpf());
-        userDTO.setBirthDate(participantDTO.getBirthDate());
-        userDTO.setEmail(participantDTO.getEmail());
-        userDTO.setPassword(participantDTO.getPassword());
-        UserDTO savedUser = userService.save(userDTO);
 
-        Participant participant = new Participant();
-        Participant savedParticipant = participantRepository.save(participant);
-        savedUser.setParticipantId(savedParticipant.getId());
-        userService.setUserParticipant(savedUser.getId(), savedParticipant.getId());
-        return savedUser;
+        boolean checkUser = userService.isValid(
+                new SaveUserDTO(
+                        partDTO.getName(),
+                        partDTO.getCpf(),
+                        partDTO.getBirthDate().toString(),
+                        partDTO.getEmail(),
+                        partDTO.getPassword(),
+                        partDTO.getConfirmPassword()
+                )
+        );
+
+        if(checkUser){
+            Participant participant = new Participant();
+            Participant savedParticipant = participantRepository.save(participant);
+
+            User user = new User();
+            user.setName(partDTO.getName());
+            user.setCpf(partDTO.getCpf());
+            user.setEmail(partDTO.getEmail());
+            user.setBirthDate(partDTO.getBirthDate());
+            user.setAge((int) ChronoUnit.YEARS.between(user.getBirthDate(),LocalDate.now()));
+            user.setPassword(passwordEncoder.encode(partDTO.getPassword()));
+            user.setParticipant(savedParticipant);
+            User savedUser = userRepository.save(user);
+
+            UserDTO showUser = UserDTO.toUserDTO(savedUser);
+            return showUser;
+        }
+
+        return null;
+    }
+
+    @Override
+    public UserDTO update(UpdateParticipantDTO partDTO) throws NullParameterException, EmailNotValidException, PasswordNotValidException, CpfNotValidException, DateOutOfRangeException {
+
+        Optional<User> user = userRepository.findById(partDTO.getId());
+        boolean checkUser = userService.updateIsValid(
+                new SaveUserDTO(
+                        partDTO.getName(),
+                        partDTO.getCpf(),
+                        partDTO.getBirthDate().toString(),
+                        partDTO.getEmail(),
+                        partDTO.getPassword(),
+                        partDTO.getConfirmPassword()
+                ), partDTO.getId()
+        );
+
+
+        if(checkUser) {
+
+            user.get().setName(partDTO.getName());
+            user.get().setCpf(partDTO.getCpf());
+            user.get().setEmail(partDTO.getEmail());
+            user.get().setBirthDate(partDTO.getBirthDate());
+            user.get().setAge((int) ChronoUnit.YEARS.between(user.get().getBirthDate(), LocalDate.now()));
+            user.get().setPassword(passwordEncoder.encode(partDTO.getPassword()));
+            User savedUser = userRepository.save(user.get());
+
+            UserDTO showUser = UserDTO.toUserDTO(savedUser);
+            return showUser;
+        }
+        return null;
     }
 
     @Override
@@ -98,26 +151,6 @@ public class ParticipantService implements IParticipantService{
         }
 
         participantRepository.delete(participant.get());
-    }
-
-    @Override
-    public UserDTO update(UpdateParticipantDTO participantDTO) {
-
-        Optional<User> user = userRepository.findById(participantDTO.getId());
-
-        if(user.isEmpty()){
-            throw new NotFoundException("Usuário não encontrado");
-        }
-
-        UpdateUserDTO userDTO = new UpdateUserDTO();
-        userDTO.setId(participantDTO.getId());
-        userDTO.setEmail(participantDTO.getEmail());
-        userDTO.setPassword(participantDTO.getPassword());
-        userDTO.setName(participantDTO.getName());
-        userDTO.setCpf(participantDTO.getCpf());
-        userDTO.setBirthDate(participantDTO.getBirthDate());
-
-        return userService.update(userDTO);
     }
 
 

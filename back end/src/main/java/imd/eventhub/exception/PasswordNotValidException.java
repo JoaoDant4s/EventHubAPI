@@ -1,6 +1,6 @@
 package imd.eventhub.exception;
 
-public class PasswordNotValidException extends RuntimeException {
+public class PasswordNotValidException extends Exception {
     public PasswordNotValidException(String msg) {
         super(msg);
     }

@@ -13,6 +13,7 @@ public class UpdateAttractionDTO {
     private Integer id;
     private String email;
     private String password;
+    private String confirmPassword;
     private String name;
     private String cpf;
     private LocalDate birthDate;

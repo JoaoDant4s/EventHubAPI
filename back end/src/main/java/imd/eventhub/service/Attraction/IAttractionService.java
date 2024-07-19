@@ -1,8 +1,6 @@
 package imd.eventhub.service.Attraction;
 
-import imd.eventhub.exception.CpfNotValidException;
-import imd.eventhub.exception.DateOutOfRangeException;
-import imd.eventhub.exception.NotFoundException;
+import imd.eventhub.exception.*;
 import imd.eventhub.model.Attraction;
 import imd.eventhub.model.User;
 import imd.eventhub.restAPI.dto.attraction.SaveAttractionDTO;
@@ -20,10 +18,10 @@ public interface IAttractionService {
 
     public List<UserDTO> getList();
     public Optional<UserDTO> getById(Integer attractionId);
-    public Attraction save(SaveAttractionDTO attractionDTO);
-    public UserDTO save(SaveAttractionUserDTO object) throws NotFoundException, CpfNotValidException, DateOutOfRangeException;
+    public boolean isValid(SaveAttractionDTO attractionDTO) throws NullParameterException, ContactNotValidException;
+    public UserDTO save(SaveAttractionUserDTO object) throws NullParameterException, EmailNotValidException, PasswordNotValidException, CpfNotValidException, ContactNotValidException, DateOutOfRangeException;
 
-    public ShowAttractionUserDTO update(UpdateAttractionDTO attractionUserDTO);
+    public UserDTO update(UpdateAttractionDTO attractionUserDTO) throws  NullParameterException, EmailNotValidException, PasswordNotValidException, CpfNotValidException, ContactNotValidException, DateOutOfRangeException;
 
     public void delete(Integer id);
 }

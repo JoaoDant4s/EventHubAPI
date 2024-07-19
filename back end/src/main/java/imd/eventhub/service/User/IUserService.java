@@ -1,5 +1,6 @@
 package imd.eventhub.service.User;
 
+import imd.eventhub.exception.*;
 import imd.eventhub.model.User;
 import imd.eventhub.restAPI.dto.user.SaveUserDTO;
 import imd.eventhub.restAPI.dto.user.UpdateUserDTO;
@@ -15,12 +16,12 @@ public interface IUserService {
 
     public List<UserDTO> getList();
     public Optional<UserDTO> getById(Integer id);
-    public UserDTO save(SaveUserDTO userDTO);
-    public UserDTO update(UpdateUserDTO userDTO);
+    public boolean isValid(SaveUserDTO userDTO) throws NullParameterException, EmailNotValidException, PasswordNotValidException, CpfNotValidException, DateOutOfRangeException;
+    public boolean updateIsValid(SaveUserDTO userDTO, Integer userId) throws NullParameterException, EmailNotValidException, PasswordNotValidException, CpfNotValidException, DateOutOfRangeException;
     public void delete(Integer id);
     public Optional<UserDTO> getUserByCPF(String cpf);
     public Optional<UserDTO> getUserByEmail(String cpf);
     public void setUserAttraction(Integer userId, Integer attractionId);
     public void setUserParticipant(Integer userId, Integer participantId);
-    public UserDetails authentication(User user);
+    public UserDetails authentication(User user) throws PasswordNotValidException;
 }

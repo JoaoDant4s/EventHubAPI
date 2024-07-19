@@ -1,12 +1,10 @@
 package imd.eventhub.restAPI.controller;
 
-import imd.eventhub.exception.ContactNotValidException;
-import imd.eventhub.exception.CpfNotValidException;
-import imd.eventhub.exception.DateOutOfRangeException;
-import imd.eventhub.exception.NotFoundException;
-import imd.eventhub.restAPI.dto.attraction.SaveAttractionDTO;
+import imd.eventhub.exception.*;
+import imd.eventhub.model.User;
 import imd.eventhub.restAPI.dto.attraction.SaveAttractionUserDTO;
 import imd.eventhub.restAPI.dto.attraction.UpdateAttractionDTO;
+import imd.eventhub.restAPI.dto.user.UserDTO;
 import imd.eventhub.restAPI.infra.RestErrorMessage;
 import imd.eventhub.restAPI.infra.RestSuccessMessage;
 import imd.eventhub.service.Attraction.IAttractionService;
@@ -14,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/attraction")
@@ -23,41 +24,37 @@ public class AttractionController {
     IAttractionService attractionService;
 
     @GetMapping
-    public ResponseEntity<Object> getAttractionList(){
-        return ResponseEntity.status(HttpStatus.OK).body(attractionService.getList());
+    public List<UserDTO> getAttractionList(){
+        return attractionService.getList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getUserByAttractionId(@PathVariable Integer id){
+    public UserDTO getUserByAttractionId(@PathVariable Integer id){
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(attractionService.getById(id));
-        } catch (NotFoundException exception){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RestErrorMessage(404, HttpStatus.NOT_FOUND, exception.getMessage()));
+            return attractionService.getById(id).get();
+        } catch (NotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
     @PostMapping
-    public ResponseEntity<Object> saveUserAttraction(@RequestBody SaveAttractionUserDTO attractionDTO){
-        try{
-            return ResponseEntity.status(HttpStatus.CREATED).body(attractionService.save(attractionDTO));
-        } catch(NotFoundException | CpfNotValidException | ContactNotValidException | DateOutOfRangeException exception){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RestErrorMessage(400, HttpStatus.BAD_REQUEST, exception.getMessage()));
-        } catch(Exception exception){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RestErrorMessage(500, HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage()));
+    public UserDTO saveUserAttraction(@RequestBody SaveAttractionUserDTO attractionDTO){
+        try {
+            UserDTO userDTO = attractionService.save(attractionDTO);
+            return userDTO;
+        } catch (NullParameterException | EmailNotValidException | PasswordNotValidException | CpfNotValidException | ContactNotValidException | DateOutOfRangeException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
 
     @PutMapping
-    public ResponseEntity<Object> attractionUpdate(@RequestBody UpdateAttractionDTO attraction){
+    public UserDTO attractionUpdate(@RequestBody UpdateAttractionDTO attraction){
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(attractionService.update(attraction));
-        } catch (NotFoundException exception){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RestErrorMessage(400, HttpStatus.NOT_FOUND, exception.getMessage()));
-        } catch(CpfNotValidException | ContactNotValidException | DateOutOfRangeException exception){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RestErrorMessage(400, HttpStatus.BAD_REQUEST, exception.getMessage()));
-        } catch(Exception exception){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RestErrorMessage(500, HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage()));
+            UserDTO userDTO = attractionService.update(attraction);
+            return userDTO;
+        } catch (NullParameterException | EmailNotValidException | PasswordNotValidException | CpfNotValidException | ContactNotValidException | DateOutOfRangeException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
@@ -66,10 +63,8 @@ public class AttractionController {
         try {
             attractionService.delete(id);
             return ResponseEntity.status(HttpStatus.OK).body(new RestSuccessMessage(HttpStatus.OK, "Atração apagada com sucesso!"));
-        } catch (NotFoundException exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RestErrorMessage(404, HttpStatus.NOT_FOUND, exception.getMessage()));
-        } catch(Exception exception){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RestErrorMessage(500, HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage()));
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 }
