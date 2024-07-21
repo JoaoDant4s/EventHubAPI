@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Login from './assets/routes/home/Login.tsx'
 import Dashboard from './assets/routes/dashboard/Dashboard.tsx'
+import Register from './assets/routes/home/Register.tsx'
 interface PrivateRouteProps {
   redirect: string;
   children: React.ReactNode;
@@ -24,6 +25,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         </PrivateRoute>} />
         {/* PUBLIC ROUTES */}
         <Route path='/' element={<Login/>} />
+        <Route path='/register/' element={<Register/>} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,

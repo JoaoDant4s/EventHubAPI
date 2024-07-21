@@ -20,6 +20,7 @@ export default {
       },
       'font': {
         title: '#333333',
+        input: '#4D4D4D', 
         icon: '#4D4D4D',
         text: '#666666',
         placeholder: '#808080'
