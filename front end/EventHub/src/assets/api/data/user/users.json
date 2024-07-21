@@ -1,0 +1,10 @@
+[
+    {
+        "id": 1,
+        "nome": "user1",
+        "email": "user1@gmail.com",
+        "cpf": "999.999.999-99",
+        "birthDate": "2000/12/12",
+        "age": 24
+    }
+]
