@@ -12,6 +12,10 @@ export default {
     colors: {
       'transparency': colors.transparent,
       'slate': colors.slate,
+      'danger': colors.red,
+      'alert': colors.amber,
+      'success': colors.green,
+      'info': colors.sky,
       'bg': {
         index: '#DEECF3',
         input: '#E6E6E6',

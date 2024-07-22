@@ -33,7 +33,7 @@ import imd.eventhub.repository.IUserRepository;
 import imd.eventhub.service.User.IUserService;
 
 @SpringBootApplication
-public class EventhubApplication {
+public class  EventhubApplication {
 
 	@Autowired
 	IUserRepository userRepository;
@@ -204,5 +204,6 @@ public class EventhubApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(EventhubApplication.class, args);
 	}
+
 
 }

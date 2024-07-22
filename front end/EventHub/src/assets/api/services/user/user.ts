@@ -1,4 +1,5 @@
 import { axiosAPI } from '../../index';
+import { LoginDTO } from '.';
 
 let config:object = {
     headers: {
@@ -7,13 +8,8 @@ let config:object = {
     }
 }
 
-interface LoginDTO {
-    email:String
-    password:String
-}
-
 export async function login(loginDTO:LoginDTO) {
-    return axiosAPI.post('/auth/', loginDTO, config);
+    return axiosAPI.post('/user/auth', loginDTO, config);
 }
 
 export async function getUsers() {
