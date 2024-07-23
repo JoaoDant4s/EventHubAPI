@@ -14,8 +14,9 @@ export interface UserDto {
     email:String
     cpf:String
     birthDate:String
-    confirmPassword:String
-    password:String
+    age:Number
+    attractionId:Number
+    participantId:Number
 }
 
 export async function login(loginDTO:LoginDTO) {
@@ -27,14 +28,6 @@ export async function getUsers() {
 }
 
 export async function participantRegistration(participantRegistration:participantRegistrationDTO) {
-    const token = localStorage.getItem("token");
-    config = {
-        headers: {
-            'Accept': 'application/json;',
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-        }
-    }
     return axiosAPI.post('/participant', participantRegistration, config);
 }
 

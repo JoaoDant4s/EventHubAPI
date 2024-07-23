@@ -8,7 +8,6 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
     colors: {
       'transparency': colors.transparent,
       'slate': colors.slate,
@@ -41,6 +40,22 @@ export default {
   },
   fontFamily: {
     Roboto: ['Roboto']
+  },
+  extend: {
+    keyframes: {
+      openModal: {
+        '0%': { opacity: 0 },
+        '100%': { opacity: 1 },
+      },
+      closeModal: {
+        '0%': { opacity: 1 },
+        '100%': { opacity: 0 },
+      }
+    },
+    animation: {
+      openModal: 'openModal 0.5s ease-in-out forwards',
+      closeModal: 'closeModal 0.5s ease-in-out forwards',
+    },
   },
   plugins: [],
 }

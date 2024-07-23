@@ -6,19 +6,22 @@ import { faLock } from '@fortawesome/free-solid-svg-icons';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 import Button from '../../components/Button';
-import Alert from '../../components/Alert';
+import Alert, { getAlert, setAlert } from '../../components/Alert';
 import { Status } from '../../components/Alert';
-import { FormEvent, useState } from 'react';
-import { axiosAPI } from '../../api';
+import { FormEvent, useEffect, useState } from 'react';
 import { apiLogin, LoginDTO } from '../../api/services/user';
-import { AxiosResponse } from 'axios';
 
 export default function Login() {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState<String>("");
   const [password, setPassword] = useState<String>("");
+
+  //ALERT STATES
   const [message, setMessage] = useState<String>("");
+  const [status, setStatus] = useState<Status>("success");
+  const [visible, setVisible] = useState<boolean>(false);
+  const [title, setTitle] = useState<String>("Sucesso");
 
 
   interface authResponse {
@@ -47,11 +50,14 @@ export default function Login() {
     })
     .catch((e)=>{
       console.log(e.response.data);
-      setMessage(e.response.data.message);
+      setAlert(e.response.data.message, "alert", true);
+      getAlert(setMessage, setStatus, setVisible, setTitle);
     });
   }
   
-
+  useEffect(()=>{
+    getAlert(setMessage, setStatus, setVisible, setTitle);
+  }, [])
 
   return (
     <section className=" bg-bg-index w-full h-[100vh] flex justify-center items-center ">
@@ -73,9 +79,8 @@ export default function Login() {
             <Button color="transparency" onClick={()=>navigate("/register")}>Não possuo uma conta</Button>
           </div>
         </form>
-        
-        <Alert status={Status.Alert} icon={faCircleExclamation} title="Atenção!">
-            <p className='text-justify text-xs pl-6 mt-2 text-font-text'>{message}</p>
+        <Alert status={status} visible={visible} setVisible={setVisible} title={title.toString()}>
+            <p className='text-justify text-xs pl-4 mt-2 text-font-text'>{message}</p>
         </Alert>
       </main>
     </section>

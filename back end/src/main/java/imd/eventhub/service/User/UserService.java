@@ -83,10 +83,10 @@ public class UserService implements IUserService, UserDetailsService {
 
     @Override
     public Optional<UserDTO> getUserByEmail(String email) throws NotFoundException {
-        return Optional.ofNullable(userRepository.findByEmail(email).stream().findAny().map(user -> {
+        return userRepository.findByEmail(email).stream().findAny().map(user -> {
             UserDTO userDTO = UserDTO.toUserDTO(user);
             return userDTO;
-        }).orElseThrow(() -> new NotFoundException("Usuário não encontrado")));
+        });
     }
 
     @Override
@@ -174,7 +174,7 @@ public class UserService implements IUserService, UserDetailsService {
         Optional<User> user = userRepository.findByEmail(email);
 
         if(user.isEmpty()){
-            throw new NotFoundException("Usuário não encontrado");
+            throw new NotFoundException("Email ou senha incorreta");
         }
 
         List<String> roles = new ArrayList<>();
@@ -207,6 +207,6 @@ public class UserService implements IUserService, UserDetailsService {
             return userDetails;
         }
 
-        throw new PasswordNotValidException("Usuário ou senha incorretos");
+        throw new PasswordNotValidException("Email ou senha incorretos");
     }
 }

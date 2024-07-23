@@ -6,7 +6,7 @@ import { faUser, faEnvelope, faAddressCard, faCalendarDays, faLock, faArrowRight
 import Button from '../../components/Button';
 import { FormEvent, SetStateAction, useState } from 'react';
 import { apiParticipantRegistration, participantRegistrationDTO } from '../../api/services/user';
-import Alert, { Status } from '../../components/Alert';
+import Alert, { getAlert, setAlert, Status } from '../../components/Alert';
 import InputMask from 'react-input-mask';
 
 export default function Register() {
@@ -20,29 +20,41 @@ export default function Register() {
   const [password, setPassword] = useState<String>("");
   const [confirmPassword, setConfirmPassword] = useState<String>("");
 
+  //ALERT STATES
   const [message, setMessage] = useState<String>("");
+  const [status, setStatus] = useState<Status>("success");
+  const [visible, setVisible] = useState<boolean>(false);
+  const [title, setTitle] = useState<String>("Sucesso");
 
   const register = async (e:FormEvent)=>{
     e.preventDefault();
     
     const participant:participantRegistrationDTO = {
-      name: name,
       email: email,
+      password: password,
+      confirmPassword: confirmPassword,
+      name: name,
       cpf: cpf,
       birthDate: birthDate,
-      password: password,
-      confirmPassword: confirmPassword
     }
 
     const response = await apiParticipantRegistration(participant)
     .then((response)=>{
       const data = response?.data;
       console.log(data)
+      
+      setAlert("Participante cadastrado com sucesso!", "success", true);
       navigate("/");
     })
     .catch((e)=>{
       console.log(e.response.data);
-      setMessage(e.response.data.message);
+      if(e.response.data.detail == null){
+        setAlert("Algo inesperado aconteceu", "alert", true);
+      } else {
+        setAlert(e.response.data.detail, "success", true);
+      }
+      getAlert(setMessage, setStatus, setVisible, setTitle);
+
     });
   }
 
@@ -88,9 +100,10 @@ export default function Register() {
           </div>
         </form>
       </main>
-      <Alert status={Status.Alert} icon={faCircleExclamation} title="Atenção!">
-          <p className='text-justify text-xs pl-6 mt-2 text-font-text'>{message}</p>
-      </Alert>
+        
+        <Alert status="alert" visible={visible} setVisible={setVisible} title={title.toString()}>
+            <p className='text-justify text-xs pl-4 mt-2 text-font-text'>{message}</p>
+        </Alert>
     </section>
   )
 }

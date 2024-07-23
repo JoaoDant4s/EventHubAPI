@@ -1,42 +1,94 @@
-
-import { FontAwesomeIcon, FontAwesomeIconProps } from '@fortawesome/react-fontawesome'
-import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
-import { ComponentProps, useEffect, useState } from 'react';
+import { ComponentProps } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-export enum Status {
-    Success="success",
-    Info="info",
-    Alert="alert",
-    Danger="danger",
-}
 
-export type AlertProps = ComponentProps<'div'> & {
-    icon:IconDefinition
-    status:Status
-    title:String
+export type Status = "success" | "info" | "alert" | "danger" | String;
+
+type AlertProps = ComponentProps<'div'> & {
+    status?:Status;
+    title:String;
+    visible?:boolean;
+    setVisible?:React.Dispatch<React.SetStateAction<boolean>>
 } 
 
-export default function Alert({children, status = Status.Success, title, className, ...props}:AlertProps) {
-    const [active, setActive] = useState<boolean>(false)
+export const setAlert=(message:String, status:Status, visible:boolean)=>{
+    
+    localStorage.setItem("alertMessage", message.toString());
+    localStorage.setItem("alertStatus", status.toString());
+    localStorage.setItem("alertVisible",visible?"true":"false");
+    localStorage.setItem("alertTitle", getTitle(status));
+}
 
-    const closeAlert=()=>{
-        setActive(true)
+export const getAlert=(
+    setMessage:React.Dispatch<React.SetStateAction<String>>,
+    setStatus:React.Dispatch<React.SetStateAction<Status>>,
+    setVisible:React.Dispatch<React.SetStateAction<boolean>>,
+    setTitle:React.Dispatch<React.SetStateAction<String>>
+)=>{
+    
+    if(localStorage.getItem("alertMessage") != null) {
+        let localMessage = localStorage.getItem("alertMessage") || "";
+        setMessage(localMessage);
+        localStorage.removeItem("alertMessage");
+      }
+      if(localStorage.getItem("alertStatus") != null) {
+        let localStatus = localStorage.getItem("alertStatus") || "danger";
+        setStatus(localStatus);
+        localStorage.removeItem("alertStatus");
+      }
+      if(localStorage.getItem("alertVisible") === "true") {
+        let localVisible = true;
+        setVisible(localVisible);
+        localStorage.removeItem("alertVisible");
+      }
+      if(localStorage.getItem("alertTitle") === "Succeso") {
+        let localTitle = localStorage.getItem("alertTitle") || "";
+        setTitle(localTitle);
+        localStorage.removeItem("alertTitle");
+      }
+}
+
+const getTitle=(status:Status)=>{
+    if(status === "alert"){
+        return "Cuidado!"
+    } else if(status === "danger"){
+        return "Erro!"
+    } else if(status === "info"){
+        return "Informações!"
+    } else if(status === "success"){
+        return "Sucesso!"
+    } else {
+        return "Sucesso!"
+    }
+}
+
+export default function Alert({children, status = "success", visible = false, setVisible=()=>{}, className, ...props}:AlertProps) {
+
+    const closeAlert=(e:React.MouseEvent<HTMLDivElement, MouseEvent>)=>{
+        if(e.currentTarget.classList.contains("animate-openModal")){
+            e.currentTarget.classList.remove("animate-openModal")
+            e.currentTarget.classList.add("animate-closeModal")
+        } else if(e.currentTarget.classList.contains("animate-closeModal")) {
+            e.currentTarget.classList.remove("animate-closeModal")
+            e.currentTarget.classList.add("animate-openModal")
+        }
+        setTimeout(()=>{
+            setVisible(false);
+        }, 500)
     }
 
     return (
         <div
             className={
             twMerge(
-                ` ${status == Status.Success?' bg-success-50 border-success-500':''} ${status == Status.Alert?' bg-alert-50 border-alert-500':''} ${status == Status.Danger?'bg-danger-50 border-danger-500':''} ${status == Status.Info?' bg-info-50 border-info-500 ':''} border-l-8 w-[400px]  absolute box-border top-0 right-0 p-4 m-8 rounded-md shadow-md cursor-pointer select-none `,
+                ` ${status == "success"?' bg-success-50 border-success-500':''} ${status == "alert"?' bg-alert-50 border-alert-500':''} ${status == "danger"?'bg-danger-50 border-danger-500':''} ${status == "info"?' bg-info-50 border-info-500 ':''} border-l-8 w-[400px]  absolute box-border top-0 right-0 p-4 m-8 rounded-md shadow-md cursor-pointer select-none ${visible==true?'':'hidden opacity-0'} `,
                 className
             )}
-            onClick={()=>closeAlert}
+            onClick={(e)=>closeAlert(e)}
         >
             <div className=' flex flex-col'>
-                <div className={` flex items-center ${status == Status.Success?' text-success-700':''} ${status == Status.Alert?' text-alert-700':''} ${status == Status.Danger?'text-danger-700':''} ${status == Status.Info?' text-info-700 ':''} `}>
-                    <FontAwesomeIcon icon={props.icon} className=' text-sm absolute' />
-                    <h4 className=' pl-6 font-bold'>{title}</h4>
+                <div className={` flex items-center ${status == "success"?' text-success-700':''} ${status == "alert"?' text-alert-700':''} ${status == "danger"?'text-danger-700':''} ${status == "info"?' text-info-700 ':''} `}>
+                    <h4 className=' pl-4 font-bold'>{props.title}</h4>
                 </div>
                 {children}
             </div>

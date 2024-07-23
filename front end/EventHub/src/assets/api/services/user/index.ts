@@ -9,16 +9,16 @@ export interface LoginDTO {
 }
 
 export interface participantRegistrationDTO {
-  name:String
   email:String
-  cpf:String
-  birthDate:String
   password:String
   confirmPassword:String
+  name:String
+  cpf:String
+  birthDate:String
 }
 
 export const apiGetUsers = MOCK
-  ? mock.getUsers()
+  ? mock.getUsers
   : user.getUsers;
 
 export const apiLogin = MOCK
