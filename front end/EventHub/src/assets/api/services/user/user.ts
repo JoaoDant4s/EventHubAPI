@@ -8,6 +8,16 @@ let config:object = {
     }
 }
 
+export interface UserDto {
+    id:Number
+    name:String
+    email:String
+    cpf:String
+    birthDate:String
+    confirmPassword:String
+    password:String
+}
+
 export async function login(loginDTO:LoginDTO) {
     return axiosAPI.post('/user/auth', loginDTO, config);
 }
@@ -26,4 +36,16 @@ export async function participantRegistration(participantRegistration:participan
         }
     }
     return axiosAPI.post('/participant', participantRegistration, config);
+}
+
+export async function getByEmail(email:String) {
+    const token = localStorage.getItem("token");
+    config = {
+        headers: {
+            'Accept': 'application/json;',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        }
+    }
+    return axiosAPI.get('/user/getUserByEmail/'+email, config);
 }

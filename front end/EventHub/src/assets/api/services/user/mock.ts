@@ -12,3 +12,7 @@ export async function login(loginDTO:LoginDTO) {
 export async function participantRegistration(){
     return null
 }
+
+export async function getByEmail(email:String) {
+    return null;
+}

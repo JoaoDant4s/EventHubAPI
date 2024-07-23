@@ -1,10 +1,72 @@
 [
     {
         "id": 1,
-        "nome": "user1",
+        "name": "Admin",
+        "email": "admin",
+        "cpf": "999.999.999-01",
+        "birthDate": "1990-02-23",
+        "age": 34,
+        "attractionId": null,
+        "participantId": 1
+    },
+    {
+        "id": 2,
+        "name": "Promoter",
+        "email": "promoter",
+        "cpf": "999.999.999-02",
+        "birthDate": "1982-10-11",
+        "age": 41,
+        "attractionId": null,
+        "participantId": 2
+    },
+    {
+        "id": 3,
+        "name": "Hudson",
         "email": "user1@gmail.com",
-        "cpf": "999.999.999-99",
-        "birthDate": "2000/12/12",
-        "age": 24
+        "cpf": "999.999.999-03",
+        "birthDate": "2001-09-12",
+        "age": 22,
+        "attractionId": null,
+        "participantId": 3
+    },
+    {
+        "id": 4,
+        "name": "João",
+        "email": "joao@gmail.com",
+        "cpf": "999.999.999-04",
+        "birthDate": "2000-10-20",
+        "age": 23,
+        "attractionId": null,
+        "participantId": 4
+    },
+    {
+        "id": 5,
+        "name": "Nathalia",
+        "email": "user3@gmail.com",
+        "cpf": "999.999.999-05",
+        "birthDate": "2000-08-31",
+        "age": 23,
+        "attractionId": null,
+        "participantId": 5
+    },
+    {
+        "id": 6,
+        "name": "Matheus",
+        "email": "user4@gmail.com",
+        "cpf": "999.999.999-06",
+        "birthDate": "1996-02-10",
+        "age": 28,
+        "attractionId": null,
+        "participantId": 6
+    },
+    {
+        "id": 7,
+        "name": "Atração",
+        "email": "user5@gmail.com",
+        "cpf": "999.999.999-07",
+        "birthDate": "1989-11-02",
+        "age": 34,
+        "attractionId": 1,
+        "participantId": 7
     }
 ]

@@ -20,7 +20,7 @@ public interface IUserService {
     public boolean updateIsValid(SaveUserDTO userDTO, Integer userId) throws NullParameterException, EmailNotValidException, PasswordNotValidException, CpfNotValidException, DateOutOfRangeException;
     public void delete(Integer id);
     public Optional<UserDTO> getUserByCPF(String cpf);
-    public Optional<UserDTO> getUserByEmail(String cpf);
+    public Optional<UserDTO> getUserByEmail(String email) throws NotFoundException;
     public void setUserAttraction(Integer userId, Integer attractionId);
     public void setUserParticipant(Integer userId, Integer participantId);
     public UserDetails authentication(User user) throws PasswordNotValidException;

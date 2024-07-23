@@ -44,6 +44,14 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+    @GetMapping("/getUserByEmail/{email}")
+    public UserDTO getUserByEmail(@PathVariable String email){
+        try {
+            return userService.getUserByEmail(email).get();
+        } catch (NotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> userDelete(@PathVariable Integer id){

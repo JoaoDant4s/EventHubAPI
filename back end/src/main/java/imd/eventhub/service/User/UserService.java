@@ -82,11 +82,11 @@ public class UserService implements IUserService, UserDetailsService {
     }
 
     @Override
-    public Optional<UserDTO> getUserByEmail(String email) {
-        return userRepository.findByEmail(email).stream().findAny().map(user -> {
+    public Optional<UserDTO> getUserByEmail(String email) throws NotFoundException {
+        return Optional.ofNullable(userRepository.findByEmail(email).stream().findAny().map(user -> {
             UserDTO userDTO = UserDTO.toUserDTO(user);
             return userDTO;
-        });
+        }).orElseThrow(() -> new NotFoundException("Usuário não encontrado")));
     }
 
     @Override

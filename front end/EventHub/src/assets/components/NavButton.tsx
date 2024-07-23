@@ -7,7 +7,7 @@ import { ComponentProps } from 'react';
 import { tv, VariantProps } from 'tailwind-variants'
 
 const button = tv({
-    base: ' p-2 px-4 flex items-center text-bg-white font-bold rounded-md',
+    base: ' p-2 py-3 px-4 flex items-center text-bg-white font-bold rounded-md',
     variants: {
         color: {
             default: 'bg-gradient-to-r from-primary to-secondary',
