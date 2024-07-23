@@ -1,24 +1,54 @@
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link, useNavigate } from "react-router-dom"
-import { faUser, faEnvelope, faAddressCard, faCalendarDays, faLock, faArrowRight, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faEnvelope, faAddressCard, faCalendarDays, faLock, faArrowRight, faChevronRight, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 
 import Button from '../../components/Button';
+import { FormEvent, useState } from 'react';
+import { apiParticipantRegistration, participantRegistrationDTO } from '../../api/services/user';
+import Alert, { Status } from '../../components/Alert';
 
 export default function Register() {
-
   const navigate = useNavigate();
 
-  const register=()=>{
-    localStorage.setItem("token", "token");
-    navigate("/dashboard");
-  }
 
+  const [name, setName] = useState<String>("");
+  const [email, setEmail] = useState<String>("");
+  const [cpf, setCpf] = useState<String>("");
+  const [birthDate, setBirthDate] = useState<String>("");
+  const [password, setPassword] = useState<String>("");
+  const [confirmPassword, setConfirmPassword] = useState<String>("");
+
+  const [message, setMessage] = useState<String>("");
+
+  const register = async (e:FormEvent)=>{
+    e.preventDefault();
+    
+    const participant:participantRegistrationDTO = {
+      name: name,
+      email: email,
+      cpf: cpf,
+      birthDate: birthDate,
+      password: password,
+      confirmPassword: confirmPassword
+    }
+
+    const response = await apiParticipantRegistration(participant)
+    .then((response)=>{
+      const data = response?.data;
+      console.log(data)
+      navigate("/");
+    })
+    .catch((e)=>{
+      console.log(e.response.data);
+      setMessage(e.response.data.message);
+    });
+  }
 
   return (
     <section className=" bg-bg-index w-full h-[100vh] flex justify-center items-center ">
       <main className=" bg-bg-white rounded-xl shadow-lg w-[48rem] p-10 ">
-        <form className=" w-full flex flex-col gap-8 ">
+        <form onSubmit={(e)=>register(e)} className=" w-full flex flex-col gap-8 ">
           <div className='flex items-end'>
             <h1 className=" font-bold text-[2rem] text-font-title ">Cadastro</h1>
             <FontAwesomeIcon icon={faChevronRight} className=' pl-3 text-font-text text-[0.6rem] mb-3 ' />
@@ -27,36 +57,39 @@ export default function Register() {
           <div className=" grid grid-cols-2 w-full gap-4">
             <label className=" flex items-center w-full">
               <FontAwesomeIcon icon={faUser} className=' absolute pl-3 text-font-icon text-sm' />
-              <input className=" bg-bg-input w-full p-2 pl-10  w-full rounded-md placeholder-font-placeholder text-font-input text-sm " type="text" name="name" id="name" placeholder="Nome" />
+              <input onChange={(e)=>setName(e.target.value)} className=" bg-bg-input w-full p-2 pl-10  w-full rounded-md placeholder-font-placeholder text-font-input text-sm " type="text" name="name" id="name" placeholder="Nome" />
             </label>
             <label className=" flex items-center w-full">
               <FontAwesomeIcon icon={faEnvelope} className=' absolute pl-3 text-font-icon text-sm' />
-              <input className=" bg-bg-input w-full p-2 pl-10  w-full rounded-md placeholder-font-placeholder text-font-input text-sm " type="email" name="email" id="email" placeholder="E-mail" />
+              <input onChange={(e)=>setEmail(e.target.value)} className=" bg-bg-input w-full p-2 pl-10  w-full rounded-md placeholder-font-placeholder text-font-input text-sm " type="email" name="email" id="email" placeholder="E-mail" />
             </label>
             <label className=" flex items-center w-full ">
               <FontAwesomeIcon icon={faAddressCard} className=' absolute pl-3 text-font-icon text-sm' />
-              <input className=" bg-bg-input w-full p-2 pl-10  w-full rounded-md placeholder-font-placeholder text-font-input text-sm " type="text" name="cpf" id="cpf" placeholder="CPF" />
+              <input onChange={(e)=>setCpf(e.target.value)} className=" bg-bg-input w-full p-2 pl-10  w-full rounded-md placeholder-font-placeholder text-font-input text-sm " type="text" name="cpf" id="cpf" placeholder="CPF" />
             </label>
             <label className=" flex items-center w-full ">
               <FontAwesomeIcon icon={faCalendarDays} className=' absolute pl-3 text-font-icon text-sm' />
-              <input className=" bg-bg-input w-full p-2 pl-10  w-full rounded-md placeholder-font-placeholder text-font-placeholder text-sm " type="date" name="birthDate" id="birthDate" placeholder="Data de nascimento" />
+              <input onChange={(e)=>setBirthDate(e.target.value)} className=" bg-bg-input w-full p-2 pl-10  w-full rounded-md placeholder-font-placeholder text-font-placeholder text-sm " type="date" name="birthDate" id="birthDate" placeholder="Data de nascimento" />
             </label>
             <label className=" flex items-center w-full ">
               <FontAwesomeIcon icon={faLock} className=' absolute pl-3 text-font-icon text-sm' />
-              <input className=" bg-bg-input w-full p-2 pl-10  w-full rounded-md placeholder-font-placeholder text-font-input text-sm " type="password" name="password" id="password" placeholder="Senha" />
+              <input onChange={(e)=>setPassword(e.target.value)} className=" bg-bg-input w-full p-2 pl-10  w-full rounded-md placeholder-font-placeholder text-font-input text-sm " type="password" name="password" id="password" placeholder="Senha" />
             </label>
             <label className=" flex items-center w-full ">
               <FontAwesomeIcon icon={faLock} className=' absolute pl-3 text-font-icon text-sm' />
-              <input className=" bg-bg-input w-full p-2 pl-10  w-full rounded-md placeholder-font-placeholder text-font-input text-sm " type="password" name="password" id="password" placeholder="Confirmação de senha" />
+              <input onChange={(e)=>setConfirmPassword(e.target.value)} className=" bg-bg-input w-full p-2 pl-10  w-full rounded-md placeholder-font-placeholder text-font-input text-sm " type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirmação de senha" />
             </label>
           </div>
           <div className=" grid grid-cols-2 w-full gap-4">
-            <Button color='default' icon={faArrowRight} onClick={()=>register()}>Entrar</Button>
+            <Button color='default' icon={faArrowRight} >Entrar</Button>
             <div></div>
             <Button color="transparency" onClick={()=>navigate("/")}>Já possuo conta, logar</Button>
           </div>
         </form>
       </main>
+      <Alert status={Status.Alert} icon={faCircleExclamation} title="Atenção!">
+          <p className='text-justify text-xs pl-6 mt-2 text-font-text'>{message}</p>
+      </Alert>
     </section>
   )
 }

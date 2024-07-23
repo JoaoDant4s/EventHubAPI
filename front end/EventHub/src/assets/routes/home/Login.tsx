@@ -27,7 +27,7 @@ export default function Login() {
     token:String
   }
 
-  const login= async (e:FormEvent)=>{
+  const login = async (e:FormEvent)=>{
     e.preventDefault();
     
     const auth:LoginDTO = {
@@ -35,20 +35,20 @@ export default function Login() {
       password: password
     }
 
-      const response = await apiLogin(auth)
-      .then((response)=>{
-        const data:authResponse = response?.data;
-        data.roles.forEach((role:String)=>{
-          localStorage.setItem(role.toString(), role.toString());
-        })
-        localStorage.setItem("login", data.login.toString());
-        localStorage.setItem("token", data.token.toString());
-        navigate("/dashboard");
+    const response = await apiLogin(auth)
+    .then((response)=>{
+      const data:authResponse = response?.data;
+      data.roles.forEach((role:String)=>{
+        localStorage.setItem(role.toString(), role.toString());
       })
-      .catch((e)=>{
-        console.log(e.response.data);
-        setMessage(e.response.data.message);
-      });
+      localStorage.setItem("login", data.login.toString());
+      localStorage.setItem("token", data.token.toString());
+      navigate("/dashboard");
+    })
+    .catch((e)=>{
+      console.log(e.response.data);
+      setMessage(e.response.data.message);
+    });
   }
   
 

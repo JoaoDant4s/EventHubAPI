@@ -15,3 +15,7 @@ export const apiGetUsers = MOCK
 export const apiLogin = MOCK
   ? mock.login
   : user.login
+
+  export const apiParticipantRegistration = MOCK
+    ? mock.participantRegistration
+    : user.participantRegistration

@@ -8,3 +8,7 @@ export async function getUsers() {
 export async function login(loginDTO:LoginDTO) {
     return null;
 }
+
+export async function participantRegistration(){
+    return null
+}
