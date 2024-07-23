@@ -4,9 +4,10 @@ import { Link, useNavigate } from "react-router-dom"
 import { faUser, faEnvelope, faAddressCard, faCalendarDays, faLock, faArrowRight, faChevronRight, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 
 import Button from '../../components/Button';
-import { FormEvent, useState } from 'react';
+import { FormEvent, SetStateAction, useState } from 'react';
 import { apiParticipantRegistration, participantRegistrationDTO } from '../../api/services/user';
 import Alert, { Status } from '../../components/Alert';
+import InputMask from 'react-input-mask';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -65,7 +66,7 @@ export default function Register() {
             </label>
             <label className=" flex items-center w-full ">
               <FontAwesomeIcon icon={faAddressCard} className=' absolute pl-3 text-font-icon text-sm' />
-              <input onChange={(e)=>setCpf(e.target.value)} className=" bg-bg-input w-full p-2 pl-10  w-full rounded-md placeholder-font-placeholder text-font-input text-sm " type="text" name="cpf" id="cpf" placeholder="CPF" />
+              <InputMask mask="999.999.999-99" onChange={(e: { target: { value: SetStateAction<String>; }; })=>setCpf(e.target.value)} className=" bg-bg-input w-full p-2 pl-10  w-full rounded-md placeholder-font-placeholder text-font-input text-sm " type="text" name="cpf" id="cpf" placeholder="CPF"  />
             </label>
             <label className=" flex items-center w-full ">
               <FontAwesomeIcon icon={faCalendarDays} className=' absolute pl-3 text-font-icon text-sm' />
