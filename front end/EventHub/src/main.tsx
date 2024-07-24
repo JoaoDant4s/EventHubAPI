@@ -20,9 +20,30 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <Routes>
         {/* PRIVATE ROUTES */}
-        <Route path='/dashboard' element={<PrivateRoute redirect='/'>
-          <Dashboard/>
-        </PrivateRoute>} />
+        <Route 
+          path='/dashboard'
+          element={<PrivateRoute redirect='/'><Dashboard/></PrivateRoute>}
+        />
+        <Route 
+          path='/dashboard/profile'
+          element={<PrivateRoute redirect='/'><Dashboard/></PrivateRoute>}
+        />
+        <Route 
+          path='/dashboard/myTickets'
+          element={<PrivateRoute redirect='/'><Dashboard/></PrivateRoute>}
+        />
+        <Route 
+          path='/dashboard/creditCard'
+          element={<PrivateRoute redirect='/'><Dashboard/></PrivateRoute>}
+        />
+        <Route 
+          path='/admin/users'
+          element={<PrivateRoute redirect='/'><Dashboard/></PrivateRoute>}
+        />
+        <Route 
+          path='/admin/events'
+          element={<PrivateRoute redirect='/'><Dashboard/></PrivateRoute>}
+        />
         {/* PUBLIC ROUTES */}
         <Route path='/' element={<Login/>} />
         <Route path='/register/' element={<Register/>} />

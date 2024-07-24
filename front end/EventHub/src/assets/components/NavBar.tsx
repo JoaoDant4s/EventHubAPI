@@ -1,26 +1,25 @@
-import { ComponentProps, useEffect, useState } from 'react';
-import { faList, faUser, faCreditCard, faTicket, faMapLocationDot, IconDefinition } from "@fortawesome/free-solid-svg-icons";
-import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { ComponentProps, ReactNode } from 'react';
+import { faArrowRightFromBracket, faUser, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import NavButton from './NavButton';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export type NavbarProps = ComponentProps<'nav'> & {
     name?:String
     role?:String
+    items?:Array<NavItem>
 }
 
-interface NavItem {
-    icon:IconDefinition;
-    color:"default"|"transparency";
-    path:String;
+export interface NavItem {
     text:String;
+    icon:IconDefinition;
+    path:String;
+    component:ReactNode;
 }
 
-export default function NavBar({ name = "Username", role = "Participant", className, ...props}:NavbarProps) {
-
+export default function NavBar({ name = "Username", role = "Participant", items, className, ...props}:NavbarProps) {
+    const location = useLocation();
     const navigate = useNavigate();
-    const [navItem, setNavItem] = useState<Array<NavItem>>();
 
     const logout=()=>{
         localStorage.removeItem("token");
@@ -28,34 +27,9 @@ export default function NavBar({ name = "Username", role = "Participant", classN
         if (localStorage.getItem("ROLE_PROMOTER"))localStorage.removeItem("ROLE_PROMOTER");
         if (localStorage.getItem("ROLE_ATTRACTION"))localStorage.removeItem("ROLE_ATTRACTION");
         if (localStorage.getItem("ROLE_USER"))localStorage.removeItem("ROLE_USER");
+        if (localStorage.getItem("login"))localStorage.removeItem("login");
         navigate("/");
     }
-
-
-    const navItemList = new Array;
-    useEffect(()=>{
-        const navItemList = new Array<NavItem>;
-
-        if(localStorage.getItem("ROLE_USER") === "ROLE_USER"){
-            navItemList.push({icon:faList,color:"default",path:"/dashboard",text:"Dashboard"});
-            navItemList.push({icon:faUser,color:"transparency",path:"/dashboard",text:"Perfil"});
-            navItemList.push({icon:faTicket,color:"transparency",path:"/dashboard",text:"Meus ingressos"});
-            navItemList.push({icon:faCreditCard,color:"transparency",path:"/dashboard",text:"Cartão de crédito"});  
-        }
-        if(localStorage.getItem("ROLE_ADMIN") === "ROLE_ADMIN"){
-            navItemList.push({icon:faList,color:"transparency",path:"/dashboard",text:"Usuário"});
-            navItemList.push({icon:faList,color:"transparency",path:"/dashboard",text:"Eventos"});
-        }
-        if(localStorage.getItem("ROLE_PROMOTER") === "ROLE_PROMOTER"){
-            navItemList.push({icon:faList,color:"default",path:"/dashboard",text:"Meus eventos"});
-            navItemList.push({icon:faUser,color:"transparency",path:"/dashboard",text:"Perfil"});
-        }
-        if(localStorage.getItem("ROLE_ATTRACTION") === "ROLE_ATTRACTION"){
-            navItemList.push({icon:faMapLocationDot,color:"transparency",path:"/dashboard",text:"Eventos participados"});
-        }
-        setNavItem(navItemList);
-
-    }, [])
 
   return (
     <nav className=' bg-bg-white w-[360px] h-[100vh] shadow-xl absolute left-0 p-8 flex flex-col' {...props} >
@@ -72,8 +46,8 @@ export default function NavBar({ name = "Username", role = "Participant", classN
                     <p className=' text-font-text font-normal text-[0.8rem] ' >{role}</p>
                 </div>
             </div>
-            {navItem && navItem.map((item, index)=>{
-                return (<NavButton key={`item-${index}`} icon={item.icon} color={item.color}>{item.text}</NavButton>)
+            {items && items.map((item, index)=>{
+                return (<NavButton key={`item-${index}`} icon={item.icon} color={item.path === location.pathname?"default":"transparency"} onClick={()=>navigate(item.path.toString())}>{item.text}</NavButton>)
             })}
         </div>
         <div>
