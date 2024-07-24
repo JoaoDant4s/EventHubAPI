@@ -1,25 +1,21 @@
-import { ComponentProps, ReactNode } from 'react';
+import { ComponentProps, ReactNode, useEffect, useState } from 'react';
 import { faArrowRightFromBracket, faUser, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import NavButton from './NavButton';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { NavItem } from '../../main';
 
 export type NavbarProps = ComponentProps<'nav'> & {
     name?:String
     role?:String
-    items?:Array<NavItem>
+    navItems:Array<NavItem>
+    routes:Array<NavItem>
 }
 
-export interface NavItem {
-    text:String;
-    icon:IconDefinition;
-    path:String;
-    component:ReactNode;
-}
-
-export default function NavBar({ name = "Username", role = "Participant", items, className, ...props}:NavbarProps) {
+export default function NavBar({ name = "Username", role = "Participant", navItems, routes, className, ...props}:NavbarProps) {
     const location = useLocation();
     const navigate = useNavigate();
+    
 
     const logout=()=>{
         localStorage.removeItem("token");
@@ -29,6 +25,14 @@ export default function NavBar({ name = "Username", role = "Participant", items,
         if (localStorage.getItem("ROLE_USER"))localStorage.removeItem("ROLE_USER");
         if (localStorage.getItem("login"))localStorage.removeItem("login");
         navigate("/");
+    }
+
+    const setColor=(item:NavItem)=>{
+        if(item.path === location.pathname || item.path === routes?.find((i)=>i.path === location.pathname)?.pathRoot){
+            return "default"
+        } else {
+            return "transparency"
+        }
     }
 
   return (
@@ -46,8 +50,8 @@ export default function NavBar({ name = "Username", role = "Participant", items,
                     <p className=' text-font-text font-normal text-[0.8rem] ' >{role}</p>
                 </div>
             </div>
-            {items && items.map((item, index)=>{
-                return (<NavButton key={`item-${index}`} icon={item.icon} color={item.path === location.pathname?"default":"transparency"} onClick={()=>navigate(item.path.toString())}>{item.text}</NavButton>)
+            {navItems && navItems.map((item, index)=>{
+                return (<NavButton key={`item-${index}`} icon={item.icon} color={setColor(item)} onClick={()=>navigate(item.path.toString())}>{item.text}</NavButton>)
             })}
         </div>
         <div>

@@ -10,12 +10,13 @@ const button = tv({
     base: ' p-2 px-4 flex items-center justify-between text-bg-white font-bold rounded-md',
     variants: {
         color: {
-            default: 'bg-gradient-to-r from-primary to-secondary',
+            default: 'bg-gradient-to-r from-primary to-secondary shadow-sm',
             transparency: 'bg-transparency text-primary',
         },
         size: {
             full: 'w-full',
             half: 'w-1/2',
+            default: 'w-60',
         }
     },
     defaultVariants: {

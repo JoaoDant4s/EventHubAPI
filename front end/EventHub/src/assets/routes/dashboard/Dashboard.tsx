@@ -1,19 +1,25 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { faList, faUser, faCreditCard, faTicket, faMapLocationDot, IconDefinition } from "@fortawesome/free-solid-svg-icons";
-import NavBar, { NavItem } from "../../components/NavBar";
+import NavBar from "../../components/NavBar";
 import Container from "../../components/Container";
 import Main from "../../components/Main";
-import { useEffect, useState } from "react";
+import { ComponentProps, ReactNode, useEffect, useState } from "react";
 import { apiGetByEmail } from "../../api/services/user";
 import { UserDto } from "../../api/services/user/user";
 import Profile from "./profile/Profile";
 import NextEvents from "./nextEvents/NextEvents";
+import { NavItem, Role } from "../../../main";
 
-export default function Dashboard() {
+
+export type DashboardProps = ComponentProps<'div'> & {
+  routes:Array<NavItem>
+}
+
+export default function Dashboard({routes}:DashboardProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const [user,setUser] = useState<UserDto>();
-  const [role, setRole] = useState<String>("Participante");
+  const [role, setRole] = useState<Role>("Participante");
   const [navItems, setNavItems] = useState<Array<NavItem>>();
   const [currentRoute, setCurrentRoute] = useState<NavItem>();
 
@@ -28,56 +34,47 @@ export default function Dashboard() {
 
   const setUserRole=()=>{
     if(localStorage.getItem("ROLE_ADMIN") == "ROLE_ADMIN") {
-      setRole("Administrador");
+      setRole("admin");
     } else if(localStorage.getItem("ROLE_PROMOTER") == "ROLE_PROMOTER") {
-      setRole("Promotor");
+      setRole("promoter");
     } else if(localStorage.getItem("ROLE_PROMOTER") == "ROLE_PROMOTER") {
-      setRole("Atração");
+      setRole("attraction");
     } else {
-      setRole("Participante");
+      setRole("participant");
+    }
+  }
+
+  const getRoleName=()=>{
+    if(role==="admin"){
+      return "Administrador"
+    } else if(role==="promoter"){
+      return "Promotor"
+    } else if(role==="attraction"){
+      return "Atração"
+    } else {
+      return "Participante"
     }
   }
 
   const setNavItemList=()=>{
-    const navItemList = new Array<NavItem>;
-    if(localStorage.getItem("ROLE_USER") === "ROLE_USER"){
-        navItemList.push({text:"Dashboard", icon:faList, path:"/dashboard", component: <NextEvents />});
-        navItemList.push({text:"Perfil", icon:faUser, path:"/dashboard/profile", component: <Profile/> });
-        navItemList.push({text:"Meus ingressos", icon:faTicket, path:"/dashboard/myTickets", component: <NextEvents/> });
-        navItemList.push({text:"Cartão de crédito", icon:faCreditCard, path:"/dashboard/creditCard", component: <NextEvents/> });  
-    }
-    if(localStorage.getItem("ROLE_ADMIN") === "ROLE_ADMIN"){
-        navItemList.push({text:"Usuário", icon:faList, path:"/admin/users", component: <NextEvents/>});
-        navItemList.push({text:"Eventos", icon:faList, path:"/admin/events", component: <NextEvents/>});
-    }
-    if(localStorage.getItem("ROLE_PROMOTER") === "ROLE_PROMOTER"){
-        navItemList.push({text:"Meus eventos", icon:faList, path:"/dashboard/myEvents", component: <NextEvents/>});
-        navItemList.push({text:"Perfil", icon:faUser, path:"/dashboard/profile", component: <NextEvents/>});
-    }
-    if(localStorage.getItem("ROLE_ATTRACTION") === "ROLE_ATTRACTION"){
-        navItemList.push({text:"Eventos participados", icon:faMapLocationDot,path:"/dashboard/lastEvents", component: <NextEvents/>});
-    }
-
-    const currentItem = navItemList.find((item)=>item.path === location.pathname);
-    if(currentItem !== null) setCurrentRoute(currentItem);
-
-    setNavItems(navItemList);
+    setCurrentRoute(routes.find((item)=>item.path === location.pathname));
+    setNavItems(routes.filter((item=>item.permission.find((p)=>p === role && item.navbar === true))));
   }
 
   useEffect (()=>{
     setUserData();
     setUserRole();
-  }, []);
-
-  useEffect(()=>{
+  });
+  
+  useEffect (()=>{
     setNavItemList();
-  }, [currentRoute]);
+  }, [currentRoute, location]);
 
   return (
     <>
         <Container>
-          { user && (
-            <NavBar name={user.name} role={role.toString()} items={navItems} />
+          { user && navItems && (
+            <NavBar name={user.name} role={getRoleName()} navItems={navItems} routes={routes} />
           )}
           <Main>
             {currentRoute && currentRoute.component}

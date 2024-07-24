@@ -70,27 +70,27 @@ export default function Register() {
           <div className=" grid grid-cols-2 w-full gap-4">
             <label className=" flex items-center w-full">
               <FontAwesomeIcon icon={faUser} className=' absolute pl-3 text-font-icon text-sm' />
-              <input onChange={(e)=>setName(e.target.value)} className=" bg-bg-input w-full p-2 pl-10  w-full rounded-md placeholder-font-placeholder text-font-input text-sm " type="text" name="name" id="name" placeholder="Nome" />
+              <input onChange={(e)=>setName(e.target.value)} className=" bg-bg-input w-full p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm " type="text" name="name" id="name" placeholder="Nome" />
             </label>
             <label className=" flex items-center w-full">
               <FontAwesomeIcon icon={faEnvelope} className=' absolute pl-3 text-font-icon text-sm' />
-              <input onChange={(e)=>setEmail(e.target.value)} className=" bg-bg-input w-full p-2 pl-10  w-full rounded-md placeholder-font-placeholder text-font-input text-sm " type="email" name="email" id="email" placeholder="E-mail" />
+              <input onChange={(e)=>setEmail(e.target.value)} className=" bg-bg-input w-full p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm " type="email" name="email" id="email" placeholder="E-mail" />
             </label>
             <label className=" flex items-center w-full ">
               <FontAwesomeIcon icon={faAddressCard} className=' absolute pl-3 text-font-icon text-sm' />
-              <InputMask mask="999.999.999-99" onChange={(e: { target: { value: SetStateAction<String>; }; })=>setCpf(e.target.value)} className=" bg-bg-input w-full p-2 pl-10  w-full rounded-md placeholder-font-placeholder text-font-input text-sm " type="text" name="cpf" id="cpf" placeholder="CPF"  />
+              <InputMask mask="999.999.999-99" onChange={(e: { target: { value: SetStateAction<String>; }; })=>setCpf(e.target.value)} className=" bg-bg-input w-full p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm " type="text" name="cpf" id="cpf" placeholder="CPF" />
             </label>
             <label className=" flex items-center w-full ">
               <FontAwesomeIcon icon={faCalendarDays} className=' absolute pl-3 text-font-icon text-sm' />
-              <input onChange={(e)=>setBirthDate(e.target.value)} className=" bg-bg-input w-full p-2 pl-10  w-full rounded-md placeholder-font-placeholder text-font-placeholder text-sm " type="date" name="birthDate" id="birthDate" placeholder="Data de nascimento" />
+              <input onChange={(e)=>setBirthDate(e.target.value)} className=" bg-bg-input w-full p-2 pl-10 rounded-md placeholder-font-placeholder text-font-placeholder text-sm " type="date" name="birthDate" id="birthDate" placeholder="Data de nascimento" />
             </label>
             <label className=" flex items-center w-full ">
               <FontAwesomeIcon icon={faLock} className=' absolute pl-3 text-font-icon text-sm' />
-              <input onChange={(e)=>setPassword(e.target.value)} className=" bg-bg-input w-full p-2 pl-10  w-full rounded-md placeholder-font-placeholder text-font-input text-sm " type="password" name="password" id="password" placeholder="Senha" />
+              <input onChange={(e)=>setPassword(e.target.value)} className=" bg-bg-input w-full p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm " type="password" name="password" id="password" placeholder="Senha" />
             </label>
             <label className=" flex items-center w-full ">
               <FontAwesomeIcon icon={faLock} className=' absolute pl-3 text-font-icon text-sm' />
-              <input onChange={(e)=>setConfirmPassword(e.target.value)} className=" bg-bg-input w-full p-2 pl-10  w-full rounded-md placeholder-font-placeholder text-font-input text-sm " type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirmação de senha" />
+              <input onChange={(e)=>setConfirmPassword(e.target.value)} className=" bg-bg-input w-full p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm " type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirmação de senha" />
             </label>
           </div>
           <div className=" grid grid-cols-2 w-full gap-4">
