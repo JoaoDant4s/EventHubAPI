@@ -11,6 +11,8 @@ import org.springframework.web.server.ResponseStatusException;
 import com.imd.web2.pass.model.TicketType;
 import com.imd.web2.pass.model.TicketTypeId;
 import com.imd.web2.pass.repository.ITicketTypeRepository;
+import com.imd.web2.pass.resources.exceptions.DataAlreadyExistsException;
+import com.imd.web2.pass.resources.exceptions.NullParameterException;
 
 @Component
 public class TicketTypeService implements ITicketTypeService {
@@ -19,7 +21,7 @@ public class TicketTypeService implements ITicketTypeService {
     private ITicketTypeRepository ticketTypeRepository;
 
     @Autowired
-    private IEventService eventService;
+    private IEventService eventService; //replace with EventFeignClient
 
     @Override
     public List<TicketType> getAllTicketTypes() {

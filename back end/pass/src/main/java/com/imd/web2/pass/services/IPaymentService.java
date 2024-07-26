@@ -7,11 +7,11 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.imd.web2.pass.model.Payment;
+import com.imd.web2.pass.resources.exceptions.InvalidParameterException;
+import com.imd.web2.pass.resources.exceptions.NoTicketDaysLinkedInTicketException;
+import com.imd.web2.pass.resources.exceptions.NotFoundException;
+import com.imd.web2.pass.resources.exceptions.NullParameterException;
 
-import imd.eventhub.exception.InvalidParameterException;
-import imd.eventhub.exception.NoTicketDaysLinkedInTicketException;
-import imd.eventhub.exception.NotFoundException;
-import imd.eventhub.exception.NullParameterException;
 
 @Service
 public interface IPaymentService {

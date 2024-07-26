@@ -4,15 +4,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import imd.eventhub.exception.DataAlreadyExistsException;
-import imd.eventhub.exception.NotFoundException;
-import imd.eventhub.exception.NullParameterException;
-import imd.eventhub.model.Event;
-import imd.eventhub.model.TicketType;
-import imd.eventhub.model.TicketTypeId;
-import imd.eventhub.restAPI.dto.ticketType.TicketTypeDTO;
-import imd.eventhub.service.Event.IEventService;
-import imd.eventhub.service.TicketType.ITicketTypeService;
+import com.imd.web2.pass.model.TicketType;
+import com.imd.web2.pass.model.TicketTypeId;
+import com.imd.web2.pass.resources.dto.TicketTypeDTO;
+import com.imd.web2.pass.resources.exceptions.DataAlreadyExistsException;
+import com.imd.web2.pass.resources.exceptions.NotFoundException;
+import com.imd.web2.pass.resources.exceptions.NullParameterException;
+import com.imd.web2.pass.services.ITicketTypeService;
+
 import jakarta.validation.Valid;
 
 import java.util.List;

@@ -9,6 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.imd.web2.pass.model.Ticket;
 import com.imd.web2.pass.model.TicketDays;
+import com.imd.web2.pass.resources.exceptions.DataAlreadyExistsException;
+import com.imd.web2.pass.resources.exceptions.InvalidParameterException;
+import com.imd.web2.pass.resources.exceptions.NotFoundException;
+import com.imd.web2.pass.resources.exceptions.NullParameterException;
 
 
 @Service

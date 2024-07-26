@@ -14,6 +14,10 @@ import com.imd.web2.pass.model.Payment;
 import com.imd.web2.pass.model.Ticket;
 import com.imd.web2.pass.model.TicketDays;
 import com.imd.web2.pass.repository.IPaymentRepository;
+import com.imd.web2.pass.resources.exceptions.InvalidParameterException;
+import com.imd.web2.pass.resources.exceptions.NoTicketDaysLinkedInTicketException;
+import com.imd.web2.pass.resources.exceptions.NotFoundException;
+import com.imd.web2.pass.resources.exceptions.NullParameterException;
 
 
 @Component

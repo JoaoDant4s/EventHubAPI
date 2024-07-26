@@ -9,6 +9,11 @@ import com.imd.web2.pass.model.Ticket;
 import com.imd.web2.pass.model.TicketType;
 import com.imd.web2.pass.resources.dto.SaveTicketDTO;
 import com.imd.web2.pass.resources.dto.TicketDTO;
+import com.imd.web2.pass.resources.exceptions.DataAlreadyExistsException;
+import com.imd.web2.pass.resources.exceptions.InvalidParameterException;
+import com.imd.web2.pass.resources.exceptions.NotFoundException;
+import com.imd.web2.pass.resources.exceptions.NullParameterException;
+import com.imd.web2.pass.resources.exceptions.BadRequestException;
 import com.imd.web2.pass.services.ITicketService;
 import com.imd.web2.pass.services.ITicketTypeService;
 

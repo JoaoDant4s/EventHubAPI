@@ -10,9 +10,15 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.imd.web2.pass.model.Event;
 import com.imd.web2.pass.model.Ticket;
 import com.imd.web2.pass.model.TicketDays;
+import com.imd.web2.pass.model.TicketDaysId;
 import com.imd.web2.pass.repository.ITicketDaysRepository;
+import com.imd.web2.pass.resources.exceptions.DataAlreadyExistsException;
+import com.imd.web2.pass.resources.exceptions.InvalidParameterException;
+import com.imd.web2.pass.resources.exceptions.NotFoundException;
+import com.imd.web2.pass.resources.exceptions.NullParameterException;
 
 @Component
 public class TicketDaysService implements ITicketDaysService {
@@ -21,7 +27,7 @@ public class TicketDaysService implements ITicketDaysService {
     private ITicketDaysRepository ticketDaysRepository;
 
     @Autowired
-    private IEventService eventService;
+    private IEventService eventService; //replace with EventFeignClient
 
     @Override
     public List<TicketDays> saveTicketDays(List<TicketDays> ticketDays)

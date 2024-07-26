@@ -5,10 +5,10 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import imd.eventhub.exception.DataAlreadyExistsException;
-import imd.eventhub.exception.NullParameterException;
-import imd.eventhub.model.TicketType;
-import imd.eventhub.model.TicketTypeId;
+import com.imd.web2.pass.model.TicketType;
+import com.imd.web2.pass.model.TicketTypeId;
+import com.imd.web2.pass.resources.exceptions.DataAlreadyExistsException;
+import com.imd.web2.pass.resources.exceptions.NullParameterException;
 
 @Service
 public interface ITicketTypeService {

@@ -10,32 +10,30 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.imd.web2.pass.model.Event;
+import com.imd.web2.pass.model.Payment;
 import com.imd.web2.pass.model.Ticket;
 import com.imd.web2.pass.model.TicketDays;
 import com.imd.web2.pass.model.TicketDaysId;
+import com.imd.web2.pass.repository.ITicketRepository;
+import com.imd.web2.pass.resources.exceptions.DataAlreadyExistsException;
+import com.imd.web2.pass.resources.exceptions.InvalidParameterException;
+import com.imd.web2.pass.resources.exceptions.NotFoundException;
+import com.imd.web2.pass.resources.exceptions.NullParameterException;
 
-// import imd.eventhub.exception.DataAlreadyExistsException;
-// import imd.eventhub.exception.InvalidParameterException;
-// import imd.eventhub.exception.NotFoundException;
-// import imd.eventhub.exception.NullParameterException;
-import imd.eventhub.repository.ITicketRepository;
-import imd.eventhub.service.Event.IEventService;
-import imd.eventhub.service.Participant.IParticipantService;
-import imd.eventhub.service.TicketDays.ITicketDaysService;
-import imd.eventhub.service.TicketType.ITicketTypeService;
 
 @Component
 public class TicketService implements ITicketService {
     @Autowired
     ITicketRepository ticketRepository;
     @Autowired
-    IParticipantService participantService;
+    IParticipantService participantService; //replace with ParticipantFeignClient
     @Autowired
     ITicketTypeService ticketTypeService;
     @Autowired
     ITicketDaysService ticketDaysService;
     @Autowired
-    IEventService eventService;
+    IEventService eventService; //replace with EventFeignClient
 
     @Override
     public Ticket save(Ticket ticket, List<LocalDate> days)
