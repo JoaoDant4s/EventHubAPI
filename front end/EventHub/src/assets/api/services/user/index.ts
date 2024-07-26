@@ -17,6 +17,13 @@ export interface participantRegistrationDTO {
   birthDate:String
 }
 
+export interface participantInfoDTO {
+  id:Number,
+  name:String,
+  cpf:String,
+  birthDate:String,
+}
+
 export const apiGetUsers = MOCK
   ? mock.getUsers
   : user.getUsers;
@@ -32,3 +39,7 @@ export const apiParticipantRegistration = MOCK
 export const apiGetByEmail = MOCK
   ? mock.getByEmail
   : user.getByEmail
+
+export const apiParticipantUpdateInfo = MOCK
+  ? mock.participantUpdateInfo
+  : user.participantUpdateInfo

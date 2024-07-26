@@ -12,6 +12,7 @@ import imd.eventhub.restAPI.dto.attraction.ShowAttractionUserDTO;
 import imd.eventhub.restAPI.dto.participant.ParticipantDTO;
 import imd.eventhub.restAPI.dto.participant.SaveParticipantDTO;
 import imd.eventhub.restAPI.dto.participant.UpdateParticipantDTO;
+import imd.eventhub.restAPI.dto.participant.UpdateParticipantInfoDTO;
 import imd.eventhub.restAPI.dto.user.SaveUserDTO;
 import imd.eventhub.restAPI.dto.user.UpdateUserDTO;
 import imd.eventhub.restAPI.dto.user.UserDTO;
@@ -129,6 +130,32 @@ public class ParticipantService implements IParticipantService{
             user.get().setBirthDate(partDTO.getBirthDate());
             user.get().setAge((int) ChronoUnit.YEARS.between(user.get().getBirthDate(), LocalDate.now()));
             user.get().setPassword(passwordEncoder.encode(partDTO.getPassword()));
+            User savedUser = userRepository.save(user.get());
+
+            UserDTO showUser = UserDTO.toUserDTO(savedUser);
+            return showUser;
+        }
+        return null;
+    }
+
+    @Override
+    public UserDTO updateInfo(UpdateParticipantInfoDTO partDTO) throws NullParameterException, CpfNotValidException, DateOutOfRangeException {
+
+        Optional<User> user = userRepository.findById(partDTO.getId());
+        boolean checkUser = userService.updateInfoIsValid(
+                new UpdateUserDTO(
+                        partDTO.getName(),
+                        partDTO.getCpf(),
+                        partDTO.getBirthDate().toString()
+                ), partDTO.getId()
+        );
+
+
+        if(checkUser) {
+            user.get().setName(partDTO.getName());
+            user.get().setCpf(partDTO.getCpf());
+            user.get().setBirthDate(partDTO.getBirthDate());
+            user.get().setAge((int) ChronoUnit.YEARS.between(user.get().getBirthDate(), LocalDate.now()));
             User savedUser = userRepository.save(user.get());
 
             UserDTO showUser = UserDTO.toUserDTO(savedUser);

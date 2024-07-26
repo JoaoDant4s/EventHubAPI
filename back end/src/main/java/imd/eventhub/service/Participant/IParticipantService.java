@@ -10,6 +10,7 @@ import imd.eventhub.restAPI.dto.attraction.UpdateAttractionDTO;
 import imd.eventhub.restAPI.dto.participant.ParticipantDTO;
 import imd.eventhub.restAPI.dto.participant.SaveParticipantDTO;
 import imd.eventhub.restAPI.dto.participant.UpdateParticipantDTO;
+import imd.eventhub.restAPI.dto.participant.UpdateParticipantInfoDTO;
 import imd.eventhub.restAPI.dto.user.UserDTO;
 import imd.eventhub.service.IBaseService;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,8 @@ public interface IParticipantService {
     public Optional<Participant> getParticipantById(Integer id);
     public UserDTO save(SaveParticipantDTO participantDTO) throws NullParameterException, EmailNotValidException, PasswordNotValidException, CpfNotValidException, DateOutOfRangeException;
 
-    public UserDTO update(UpdateParticipantDTO attractionUserDTO) throws EmailNotValidException, PasswordNotValidException, NullParameterException;
+    public UserDTO update(UpdateParticipantDTO attractionUserDTO) throws EmailNotValidException, PasswordNotValidException, CpfNotValidException, NullParameterException;
 
+    public UserDTO updateInfo(UpdateParticipantInfoDTO attractionUserDTO) throws NullParameterException, EmailNotValidException, CpfNotValidException, DateOutOfRangeException;
     public void delete(Integer id);
 }

@@ -26,12 +26,12 @@ export const getAlert=(
     setTitle:React.Dispatch<React.SetStateAction<String>>
 )=>{
     
-    if(localStorage.getItem("alertMessage") != null) {
+    if(localStorage.getItem("alertMessage") !== null) {
         let localMessage = localStorage.getItem("alertMessage") || "";
         setMessage(localMessage);
         localStorage.removeItem("alertMessage");
       }
-      if(localStorage.getItem("alertStatus") != null) {
+      if(localStorage.getItem("alertStatus") !== null) {
         let localStatus = localStorage.getItem("alertStatus") || "danger";
         setStatus(localStatus);
         localStorage.removeItem("alertStatus");
@@ -41,7 +41,7 @@ export const getAlert=(
         setVisible(localVisible);
         localStorage.removeItem("alertVisible");
       }
-      if(localStorage.getItem("alertTitle") === "Succeso") {
+      if(localStorage.getItem("alertTitle") !== null) {
         let localTitle = localStorage.getItem("alertTitle") || "";
         setTitle(localTitle);
         localStorage.removeItem("alertTitle");
@@ -49,13 +49,13 @@ export const getAlert=(
 }
 
 const getTitle=(status:Status)=>{
-    if(status === "alert"){
+    if(status.toString() === "alert"){
         return "Cuidado!"
-    } else if(status === "danger"){
+    } else if(status.toString() === "danger"){
         return "Erro!"
-    } else if(status === "info"){
+    } else if(status.toString() === "info"){
         return "Informações!"
-    } else if(status === "success"){
+    } else if(status.toString() === "success"){
         return "Sucesso!"
     } else {
         return "Sucesso!"

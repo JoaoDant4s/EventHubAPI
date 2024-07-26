@@ -3,9 +3,34 @@ import Title from "../../../components/Title";
 import Button from "../../../components/Button";
 import { faArrowRight, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useState } from "react";
+import Alert, { getAlert, Status } from "../../../components/Alert";
+import { apiGetByEmail } from "../../../api/services/user";
+import { UserDto } from "../../../api/services/user/user";
 
 export default function Profile() {
   const navigate = useNavigate();
+  const [user,setUser] = useState<UserDto>();
+
+  //ALERT STATES
+  const [message, setMessage] = useState<String>("");
+  const [status, setStatus] = useState<Status>("success");
+  const [visible, setVisible] = useState<boolean>(false);
+  const [title, setTitle] = useState<String>("Sucesso!");
+
+  const setUserData = async () =>{
+    const login = localStorage.getItem("login") || "";
+    const response = await apiGetByEmail(login)
+    .then((response)=>{
+      const data = response?.data;
+      setUser(data);
+    });
+  }
+
+  useEffect(()=>{
+    setUserData();
+    getAlert(setMessage, setStatus, setVisible, setTitle);
+  }, [])
 
   return (
     <>
@@ -13,13 +38,17 @@ export default function Profile() {
             <Title>Perfil</Title>
             <Button type='submit' size="default" color='default' icon={faArrowRight} onClick={()=>navigate("/dashboard/profile/updateProfile")}>Editar perfil</Button>
         </div>
-        <div className=" w-full p-4 pl-6 bg-gradient-to-r from-bg-white from-50% to-tertiary to-100% rounded-md shadow-sm">
+        <div className=" w-full p-4 pl-6 bg-gradient-to-r from-bg-white from-50% to-tertiary to-100% rounded-md shadow-md">
             <h3 className=" font-bold mb-4 text-font-title text-[1.4rem] ">Informações</h3>
-            <p className=" text-font-text "><span className=" font-bold">Nome:</span> Nome</p>
-            <p className=" text-font-text "><span className=" font-bold">Email:</span> Email</p>
-            <p className=" text-font-text "><span className=" font-bold">CPF:</span> CPF</p>
-            <p className=" text-font-text "><span className=" font-bold">Idade:</span> Idade</p>
+            <p className=" text-font-text "><span className=" font-bold">Nome:</span> {user?.name}</p>
+            <p className=" text-font-text "><span className=" font-bold">Email:</span> {user?.email}</p>
+            <p className=" text-font-text "><span className=" font-bold">CPF:</span> {user?.cpf}</p>
+            <p className=" text-font-text "><span className=" font-bold">Data de nascimento:</span> {user?.birthDate}</p>
+            <p className=" text-font-text "><span className=" font-bold">Idade:</span> {user?.age.toString()}</p>
         </div>
+        <Alert status={status} visible={visible} setVisible={setVisible} title={title.toString()}>
+            <p className='text-justify text-xs pl-4 mt-2 text-font-text'>{message}</p>
+        </Alert>
     </>
   )
 }

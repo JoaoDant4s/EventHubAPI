@@ -18,6 +18,7 @@ public interface IUserService {
     public Optional<UserDTO> getById(Integer id);
     public boolean isValid(SaveUserDTO userDTO) throws NullParameterException, EmailNotValidException, PasswordNotValidException, CpfNotValidException, DateOutOfRangeException;
     public boolean updateIsValid(SaveUserDTO userDTO, Integer userId) throws NullParameterException, EmailNotValidException, PasswordNotValidException, CpfNotValidException, DateOutOfRangeException;
+    public boolean updateInfoIsValid(UpdateUserDTO userDTO, Integer userId) throws NullParameterException, CpfNotValidException, DateOutOfRangeException;
     public void delete(Integer id);
     public Optional<UserDTO> getUserByCPF(String cpf);
     public Optional<UserDTO> getUserByEmail(String email) throws NotFoundException;

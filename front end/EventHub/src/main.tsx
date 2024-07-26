@@ -10,6 +10,8 @@ import NextEvents from './assets/routes/dashboard/nextEvents/NextEvents.tsx'
 import { faCreditCard, faList, faMapLocationDot, faTicket, faUser } from '@fortawesome/free-solid-svg-icons'
 import Profile from './assets/routes/dashboard/profile/Profile.tsx'
 import UpdateProfile from './assets/routes/dashboard/profile/UpdateProfile.tsx'
+import CreditCard from './assets/routes/dashboard/creditCard/CreditCard.tsx'
+import RegisterCreditCard from './assets/routes/dashboard/creditCard/RegisterCreditCard.tsx'
 interface PrivateRouteProps {
   redirect: string;
   children: React.ReactNode;
@@ -34,11 +36,12 @@ export interface NavItem {
 
 const routes:Array<NavItem> = [
   {text:"Dashboard", icon:faList, pathRoot:"/dashboard", path:"/dashboard", component: <NextEvents />, permission:["participant","admin","attraction"], navbar:true},
-  {text:"Meus eventos", icon:faList, pathRoot:"/dashboard/myEvents", path:"/dashboard/myEvents", component: <NextEvents/>, permission:["promoter"], navbar:true},
+  {text:"Meus eventos", icon:faList, pathRoot:"/dashboard", path:"/dashboard", component: <NextEvents/>, permission:["promoter"], navbar:true},
   {text:"Perfil", icon:faUser, pathRoot:"/dashboard/profile", path:"/dashboard/profile", component: <Profile/>, permission:["participant","admin","attraction","promoter"], navbar:true},
   {pathRoot:"/dashboard/profile", path:"/dashboard/profile/updateProfile", component: <UpdateProfile/>, permission:["participant","admin","attraction","promoter"]},
   {text:"Meus ingressos", pathRoot:"/dashboard/myTickets", icon:faTicket, path:"/dashboard/myTickets", component: <NextEvents/>, permission:["participant","admin","attraction"], navbar:true},
-  {text:"Cartão de crédito", pathRoot:"/dashboard/creditCard", icon:faCreditCard, path:"/dashboard/creditCard", component: <NextEvents/>, permission:["participant","admin","attraction"], navbar:true},
+  {text:"Cartão de crédito", pathRoot:"/dashboard/creditCard", icon:faCreditCard, path:"/dashboard/creditCard", component: <CreditCard/>, permission:["participant","admin","attraction"], navbar:true},
+  {pathRoot:"/dashboard/creditCard", path:"/dashboard/creditCard/registerCreditCard", component: <RegisterCreditCard/>, permission:["participant","admin","attraction"], navbar:false},
   {text:"Eventos participados", icon:faList, pathRoot:"/dashboard/pastEvents", path:"/dashboard/pastEvents", component: <NextEvents/>, permission:["attraction"], navbar:true},  
   {text:"Usuário", icon:faList, pathRoot:"/admin/users", path:"/admin/users", component: <NextEvents/>, permission:["admin"], navbar:true},
   {text:"Eventos", icon:faList, pathRoot:"/admin/events", path:"/admin/events", component: <NextEvents/>, permission:["admin"], navbar:true},

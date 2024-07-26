@@ -7,7 +7,7 @@ import Button from '../../components/Button';
 import { FormEvent, SetStateAction, useState } from 'react';
 import { apiParticipantRegistration, participantRegistrationDTO } from '../../api/services/user';
 import Alert, { getAlert, setAlert, Status } from '../../components/Alert';
-import InputMask from 'react-input-mask';
+import { PatternFormat } from 'react-number-format';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ export default function Register() {
   const [message, setMessage] = useState<String>("");
   const [status, setStatus] = useState<Status>("success");
   const [visible, setVisible] = useState<boolean>(false);
-  const [title, setTitle] = useState<String>("Sucesso");
+  const [title, setTitle] = useState<String>("Sucesso!");
 
   const register = async (e:FormEvent)=>{
     e.preventDefault();
@@ -78,7 +78,7 @@ export default function Register() {
             </label>
             <label className=" flex items-center w-full ">
               <FontAwesomeIcon icon={faAddressCard} className=' absolute pl-3 text-font-icon text-sm' />
-              <InputMask mask="999.999.999-99" onChange={(e: { target: { value: SetStateAction<String>; }; })=>setCpf(e.target.value)} className=" bg-bg-input w-full p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm " type="text" name="cpf" id="cpf" placeholder="CPF" />
+              <PatternFormat format="###.###.###-##" mask={"_"} allowEmptyFormatting onChange={(e: { target: { value: SetStateAction<String>; }; })=>setCpf(e.target.value)} className=" bg-bg-input w-full p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm " type="text" name="cpf" id="cpf" placeholder="CPF" />
             </label>
             <label className=" flex items-center w-full ">
               <FontAwesomeIcon icon={faCalendarDays} className=' absolute pl-3 text-font-icon text-sm' />
@@ -100,8 +100,7 @@ export default function Register() {
           </div>
         </form>
       </main>
-        
-        <Alert status="alert" visible={visible} setVisible={setVisible} title={title.toString()}>
+        <Alert status={status} visible={visible} setVisible={setVisible} title={title.toString()}>
             <p className='text-justify text-xs pl-4 mt-2 text-font-text'>{message}</p>
         </Alert>
     </section>

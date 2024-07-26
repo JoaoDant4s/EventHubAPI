@@ -8,8 +8,10 @@ import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 import Button from '../../components/Button';
 import Alert, { getAlert, setAlert } from '../../components/Alert';
 import { Status } from '../../components/Alert';
-import { FormEvent, useEffect, useState } from 'react';
+import { ComponentProps, FormEvent, useEffect, useState } from 'react';
 import { apiLogin, LoginDTO } from '../../api/services/user';
+import { NavItem } from '../../../main';
+
 
 export default function Login() {
   const navigate = useNavigate();
@@ -21,7 +23,7 @@ export default function Login() {
   const [message, setMessage] = useState<String>("");
   const [status, setStatus] = useState<Status>("success");
   const [visible, setVisible] = useState<boolean>(false);
-  const [title, setTitle] = useState<String>("Sucesso");
+  const [title, setTitle] = useState<String>("Sucesso!");
 
 
   interface authResponse {
@@ -41,11 +43,19 @@ export default function Login() {
     const response = await apiLogin(auth)
     .then((response)=>{
       const data:authResponse = response?.data;
-      data.roles.forEach((role:String)=>{
-        localStorage.setItem(role.toString(), role.toString());
-      })
       localStorage.setItem("login", data.login.toString());
       localStorage.setItem("token", data.token.toString());
+      
+      if(data.roles.includes("ROLE_ADMIN")){
+        localStorage.setItem("role", "admin");
+      } else if(data.roles.includes("ROLE_PROMOTER")){
+        localStorage.setItem("role", "promoter");
+      } else if(data.roles.includes("ROLE_ATTRACTION")){
+        localStorage.setItem("role", "attraction");
+      } else {
+        localStorage.setItem("role", "participant");
+      }
+
       navigate("/dashboard");
     })
     .catch((e)=>{
@@ -55,9 +65,22 @@ export default function Login() {
     });
   }
   
+
+  const setUserRole=(role:String)=>{
+    if(role == "ROLE_ADMIN") {
+      return "admin";
+    } else if(role == "ROLE_PROMOTER") {
+      return "promoter";
+    } else if(role == "ROLE_PROMOTER") {
+      return "attraction";
+    } else {
+      return "participant"
+    }
+  }
+
   useEffect(()=>{
     getAlert(setMessage, setStatus, setVisible, setTitle);
-  }, [])
+  })
 
   return (
     <section className=" bg-bg-index w-full h-[100vh] flex justify-center items-center ">

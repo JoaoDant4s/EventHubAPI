@@ -161,6 +161,23 @@ public class UserService implements IUserService, UserDetailsService {
 
         return true;
     }
+
+
+    @Override
+    public boolean updateInfoIsValid(UpdateUserDTO userDTO, Integer userId) throws NullParameterException, CpfNotValidException, DateOutOfRangeException {
+        Optional<UserDTO> userWithSameCPF = getUserByCPF(userDTO.getCpf());
+        Optional<User> user = userRepository.findById(userId);
+
+        if(userDTO.getName() == null) throw new NullParameterException("O nome não foi encontrado");
+        if(userDTO.getCpf() == null) throw new NullParameterException("O CPF não foi encontrado");
+        if(userDTO.getBirthDate() == null) throw new NullParameterException("A data de nascimento não foi encontrada");
+        if(!checkCpfIsValid(userDTO.getCpf())) throw new CpfNotValidException(String.format("O CPF digitado ('%s') não segue o padrão 000.000.000-00", userDTO.getCpf()));
+        if(userWithSameCPF.isPresent() && !user.get().getCpf().equals(userDTO.getCpf())) throw new CpfNotValidException("O CPF digitado já está associado a um outro usuário");
+        if(userDTO.getBirthDate().isAfter(LocalDate.now())) throw new DateOutOfRangeException("A data informada é maior do que a data de hoje");
+
+        return true;
+    }
+
     public static boolean checkCpfIsValid(String cpf){
 
         Pattern regex = Pattern.compile("[0-9]{3}\\.?[0-9]{3}\\.?[0-9]{3}\\-?[0-9]{2}");
@@ -171,7 +188,7 @@ public class UserService implements IUserService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        Optional<User> user = userRepository.findByEmail(email);
+        Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("Email ou senha incorreta")));
 
         if(user.isEmpty()){
             throw new NotFoundException("Email ou senha incorreta");

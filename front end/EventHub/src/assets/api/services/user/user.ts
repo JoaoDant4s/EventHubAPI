@@ -1,5 +1,5 @@
 import { axiosAPI } from '../../index';
-import { LoginDTO, participantRegistrationDTO } from '.';
+import { LoginDTO, participantInfoDTO, participantRegistrationDTO } from '.';
 
 let config:object = {
     headers: {
@@ -41,4 +41,16 @@ export async function getByEmail(email:String) {
         }
     }
     return axiosAPI.get('/user/getUserByEmail/'+email, config);
+}
+
+export async function participantUpdateInfo(participantInfo:participantInfoDTO) {
+    const token = localStorage.getItem("token");
+    config = {
+        headers: {
+            'Accept': 'application/json;',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        }
+    }
+    return axiosAPI.put('/participant/updateInfo', participantInfo, config);
 }

@@ -4,6 +4,7 @@ import imd.eventhub.exception.*;
 import imd.eventhub.model.Event;
 import imd.eventhub.restAPI.dto.participant.SaveParticipantDTO;
 import imd.eventhub.restAPI.dto.participant.UpdateParticipantDTO;
+import imd.eventhub.restAPI.dto.participant.UpdateParticipantInfoDTO;
 import imd.eventhub.restAPI.dto.user.UserDTO;
 import imd.eventhub.restAPI.infra.RestErrorMessage;
 import imd.eventhub.restAPI.infra.RestSuccessMessage;
@@ -55,6 +56,16 @@ public class ParticipantController {
             UserDTO userDTO = participantService.update(participant);
             return userDTO;
         } catch (NullParameterException | EmailNotValidException | PasswordNotValidException | CpfNotValidException | ContactNotValidException | DateOutOfRangeException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @PutMapping("/updateInfo")
+    public UserDTO participantInfoUpdate(@RequestBody UpdateParticipantInfoDTO participant){
+        try {
+            UserDTO userDTO = participantService.updateInfo(participant);
+            return userDTO;
+        } catch (NullParameterException | EmailNotValidException | CpfNotValidException | ContactNotValidException | DateOutOfRangeException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

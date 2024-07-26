@@ -16,3 +16,8 @@ export async function participantRegistration(){
 export async function getByEmail(email:String) {
     return null;
 }
+
+
+export async function participantUpdateInfo(participantInfo:participantInfoDTO) {
+    return null;
+}

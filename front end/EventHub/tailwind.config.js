@@ -27,7 +27,8 @@ export default {
         icon: '#4D4D4D',
         navItem: '#4D4D4D',
         text: '#666666',
-        placeholder: '#808080'
+        placeholder: '#808080',
+        white: '#FFFFFF',
       },
       'primary': '#559EF5',
       'secondary': '#55F5CE',

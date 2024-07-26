@@ -1,14 +1,12 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { faList, faUser, faCreditCard, faTicket, faMapLocationDot, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import NavBar from "../../components/NavBar";
 import Container from "../../components/Container";
 import Main from "../../components/Main";
 import { ComponentProps, ReactNode, useEffect, useState } from "react";
 import { apiGetByEmail } from "../../api/services/user";
 import { UserDto } from "../../api/services/user/user";
-import Profile from "./profile/Profile";
-import NextEvents from "./nextEvents/NextEvents";
 import { NavItem, Role } from "../../../main";
+import { getAlert, Status } from "../../components/Alert";
 
 
 export type DashboardProps = ComponentProps<'div'> & {
@@ -18,31 +16,18 @@ export type DashboardProps = ComponentProps<'div'> & {
 export default function Dashboard({routes}:DashboardProps) {
   const location = useLocation();
   const navigate = useNavigate();
+
   const [user,setUser] = useState<UserDto>();
   const [role, setRole] = useState<Role>("Participante");
   const [navItems, setNavItems] = useState<Array<NavItem>>();
   const [currentRoute, setCurrentRoute] = useState<NavItem>();
 
-  const setUserData = async () =>{
-    const email = localStorage.getItem("login") || "";
-    const response = await apiGetByEmail(email)
-    .then((response)=>{
-      const data = response?.data;
-      setUser(data);
-    });
-  }
+  //ALERT STATES
+  const [message, setMessage] = useState<String>("");
+  const [status, setStatus] = useState<Status>("success");
+  const [visible, setVisible] = useState<boolean>(false);
+  const [title, setTitle] = useState<String>("Sucesso!");
 
-  const setUserRole=()=>{
-    if(localStorage.getItem("ROLE_ADMIN") == "ROLE_ADMIN") {
-      setRole("admin");
-    } else if(localStorage.getItem("ROLE_PROMOTER") == "ROLE_PROMOTER") {
-      setRole("promoter");
-    } else if(localStorage.getItem("ROLE_PROMOTER") == "ROLE_PROMOTER") {
-      setRole("attraction");
-    } else {
-      setRole("participant");
-    }
-  }
 
   const getRoleName=()=>{
     if(role==="admin"){
@@ -61,10 +46,21 @@ export default function Dashboard({routes}:DashboardProps) {
     setNavItems(routes.filter((item=>item.permission.find((p)=>p === role && item.navbar === true))));
   }
 
-  useEffect (()=>{
+
+  const setUserData = async () =>{
+    const login = localStorage.getItem("login") || "";
+    const response = await apiGetByEmail(login)
+    .then((response)=>{
+      const data = response?.data;
+      setUser(data);
+    });
+  }
+
+  useEffect(()=>{
     setUserData();
-    setUserRole();
-  });
+    getAlert(setMessage, setStatus, setVisible, setTitle);
+    setRole(localStorage.getItem("role") || "participant");
+  }, [])
   
   useEffect (()=>{
     setNavItemList();
