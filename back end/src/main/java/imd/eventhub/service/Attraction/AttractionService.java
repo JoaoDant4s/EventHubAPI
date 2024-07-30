@@ -5,10 +5,8 @@ import imd.eventhub.model.Attraction;
 import imd.eventhub.model.User;
 import imd.eventhub.repository.IAttractionRepository;
 import imd.eventhub.repository.IUserRepository;
-import imd.eventhub.restAPI.dto.attraction.SaveAttractionDTO;
-import imd.eventhub.restAPI.dto.attraction.SaveAttractionUserDTO;
-import imd.eventhub.restAPI.dto.attraction.ShowAttractionUserDTO;
-import imd.eventhub.restAPI.dto.attraction.UpdateAttractionDTO;
+import imd.eventhub.restAPI.dto.attraction.*;
+import imd.eventhub.restAPI.dto.participant.UpdateParticipantInfoDTO;
 import imd.eventhub.restAPI.dto.user.SaveUserDTO;
 import imd.eventhub.restAPI.dto.user.UpdateUserDTO;
 import imd.eventhub.restAPI.dto.user.UserDTO;
@@ -37,16 +35,18 @@ public class AttractionService implements IAttractionService {
     public PasswordEncoder passwordEncoder;
 
     @Override
-    public Optional<UserDTO> getById(Integer attractionId){
-        Optional<User> user = userRepository.findByAttraction_id(attractionId);
+    public AttractionDTO getById(Integer attractionId) throws NotFoundException {
+        Optional<Attraction> attraction = attractionRepository.findById(attractionId);
 
-        if(user.isEmpty()) {
+        if(attraction.isEmpty()) {
             throw new NotFoundException("Usuário não encontrado");
         }
 
-        Optional<UserDTO> userDTO = Optional.of(UserDTO.toUserDTO(user.get()));
+        AttractionDTO attractionDTO = new AttractionDTO();
+        attractionDTO = AttractionDTO.toAttractionDTO(attraction.get());
 
-        return userDTO;
+
+        return attractionDTO;
     }
 
     @Override
@@ -55,6 +55,42 @@ public class AttractionService implements IAttractionService {
             UserDTO userDTO = UserDTO.toUserDTO(user);
             return userDTO;
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    public UserDTO updateInfo(UpdateAttractionInfoDTO attrDTO) throws NullParameterException, CpfNotValidException, ContactNotValidException, DateOutOfRangeException {
+
+        Optional<Attraction> attraction = attractionRepository.findById(attrDTO.getId());
+
+        boolean checkUser = userService.updateInfoIsValid(
+                new UpdateUserDTO(
+                        attrDTO.getName(),
+                        attrDTO.getCpf(),
+                        attrDTO.getBirthDate().toString()
+                ), attraction.get().getUser().getId()
+        );
+
+        boolean checkAttraction = isValid(new SaveAttractionDTO(attrDTO.getDescription(), attrDTO.getContact()));
+
+
+        if(checkUser && checkAttraction) {
+
+            attraction.get().setDescription(attrDTO.getDescription());
+            attraction.get().setContact(attrDTO.getContact());
+            attractionRepository.save(attraction.get());
+
+            User user = attraction.get().getUser();
+
+            user.setName(attrDTO.getName());
+            user.setCpf(attrDTO.getCpf());
+            user.setBirthDate(attrDTO.getBirthDate());
+            user.setAge((int) ChronoUnit.YEARS.between(user.getBirthDate(), LocalDate.now()));
+            User savedUser = userRepository.save(user);
+
+            UserDTO showUser = UserDTO.toUserDTO(savedUser);
+            return showUser;
+        }
+        return null;
     }
 
     @Override

@@ -51,7 +51,7 @@ export default function Register() {
       if(e.response.data.detail == null){
         setAlert("Algo inesperado aconteceu", "alert", true);
       } else {
-        setAlert(e.response.data.detail, "success", true);
+        setAlert(e.response.data.detail, "alert", true);
       }
       getAlert(setMessage, setStatus, setVisible, setTitle);
 
@@ -78,7 +78,7 @@ export default function Register() {
             </label>
             <label className=" flex items-center w-full ">
               <FontAwesomeIcon icon={faAddressCard} className=' absolute pl-3 text-font-icon text-sm' />
-              <PatternFormat format="###.###.###-##" mask={"_"} allowEmptyFormatting onChange={(e: { target: { value: SetStateAction<String>; }; })=>setCpf(e.target.value)} className=" bg-bg-input w-full p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm " type="text" name="cpf" id="cpf" placeholder="CPF" />
+              <PatternFormat format="###.###.###-##" mask={"_"} onChange={(e: { target: { value: SetStateAction<String>; }; })=>setCpf(e.target.value)} className=" bg-bg-input w-full p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm " type="text" name="cpf" id="cpf" placeholder="CPF" />
             </label>
             <label className=" flex items-center w-full ">
               <FontAwesomeIcon icon={faCalendarDays} className=' absolute pl-3 text-font-icon text-sm' />

@@ -1,14 +1,22 @@
-import { MOCK } from "../../index"
-import * as mock from './mock';
-import * as user from './user';
-
+import { axiosAPI } from "../../index"
 
 export interface LoginDTO {
   email:String
   password:String
 }
 
-export interface participantRegistrationDTO {
+export interface UserDTO {
+    id:Number
+    name:String
+    email:String
+    cpf:String
+    birthDate:String
+    age:Number
+    attractionId:Number
+    participantId:Number
+}
+
+export interface ParticipantRegistrationDTO {
   email:String
   password:String
   confirmPassword:String
@@ -17,29 +25,92 @@ export interface participantRegistrationDTO {
   birthDate:String
 }
 
-export interface participantInfoDTO {
+export interface ParticipantInfoDTO {
   id:Number,
   name:String,
   cpf:String,
   birthDate:String,
 }
 
-export const apiGetUsers = MOCK
-  ? mock.getUsers
-  : user.getUsers;
+export interface AttractionInfoDTO {
+  id:Number,
+  name:String,
+  cpf:String,
+  birthDate:String,
+  description:String,
+  contact:String,
+}
 
-export const apiLogin = MOCK
-  ? mock.login
-  : user.login
+export interface AttractionDTO {
+  id:Number,
+  description:String
+  contact:String
+  userId:Number
+}
 
-export const apiParticipantRegistration = MOCK
-  ? mock.participantRegistration
-  : user.participantRegistration
+let config:object = {
+    headers: {
+        'Accept': 'application/json;',
+        'Content-Type': 'application/json',
+    }
+}
 
-export const apiGetByEmail = MOCK
-  ? mock.getByEmail
-  : user.getByEmail
+export async function apiLogin(loginDTO:LoginDTO) {
+    return axiosAPI.post('/user/auth', loginDTO, config);
+}
 
-export const apiParticipantUpdateInfo = MOCK
-  ? mock.participantUpdateInfo
-  : user.participantUpdateInfo
+export async function apiGetUsers() {
+    return axiosAPI.get('/user', config);
+}
+
+export async function apiParticipantRegistration(participantRegistration:ParticipantRegistrationDTO) {
+    return axiosAPI.post('/participant', participantRegistration, config);
+}
+
+export async function apiGetByEmail(email:String) {
+    const token = localStorage.getItem("token");
+    config = {
+        headers: {
+            'Accept': 'application/json;',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        }
+    }
+    return axiosAPI.get('/user/getUserByEmail/'+email, config);
+}
+
+export async function apiParticipantUpdateInfo(participantInfo:ParticipantInfoDTO) {
+    const token = localStorage.getItem("token");
+    config = {
+        headers: {
+            'Accept': 'application/json;',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        }
+    }
+    return axiosAPI.put('/participant/updateInfo', participantInfo, config);
+}
+
+export async function apiGetAttractionById(id:Number) {
+    const token = localStorage.getItem("token");
+    config = {
+        headers: {
+            'Accept': 'application/json;',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        }
+    }
+    return axiosAPI.get('/attraction/'+id, config);
+}
+
+export async function apiAttractionUpdateInfo(attractionInfo:AttractionInfoDTO) {
+    const token = localStorage.getItem("token");
+    config = {
+        headers: {
+            'Accept': 'application/json;',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        }
+    }
+    return axiosAPI.put('/attraction/updateInfo', attractionInfo, config);
+}

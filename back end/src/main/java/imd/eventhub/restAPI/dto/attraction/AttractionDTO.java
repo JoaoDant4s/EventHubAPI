@@ -15,12 +15,12 @@ public class AttractionDTO {
     private Integer userId;
     public AttractionDTO(){}
 
-    public static AttractionDTO convertAttractionToAttractionDTO(Attraction attraaction){
+    public static AttractionDTO toAttractionDTO(Attraction attraction){
         AttractionDTO attractionDTO = new AttractionDTO();
-        attractionDTO.setId(attraaction.getId());
-        attractionDTO.setDescription(attraaction.getDescription());
-        attractionDTO.setContact(attraaction.getContact());
-        attractionDTO.setUserId(attraaction.getUser().getId());
+        attractionDTO.setId(attraction.getId());
+        attractionDTO.setDescription(attraction.getDescription());
+        attractionDTO.setContact(attraction.getContact());
+        attractionDTO.setUserId(attraction.getUser().getId());
         return attractionDTO;
     }
 }

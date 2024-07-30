@@ -4,6 +4,7 @@ import NavButton from './NavButton';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavItem } from '../../main';
+import { unsetStates } from '../api/services/utils';
 
 export type NavbarProps = ComponentProps<'nav'> & {
     name?:String
@@ -18,12 +19,7 @@ export default function NavBar({ name = "Username", role = "Participant", navIte
     
 
     const logout=()=>{
-        localStorage.removeItem("token");
-        if (localStorage.getItem("ROLE_ADMIN"))localStorage.removeItem("ROLE_ADMIN");
-        if (localStorage.getItem("ROLE_PROMOTER"))localStorage.removeItem("ROLE_PROMOTER");
-        if (localStorage.getItem("ROLE_ATTRACTION"))localStorage.removeItem("ROLE_ATTRACTION");
-        if (localStorage.getItem("ROLE_USER"))localStorage.removeItem("ROLE_USER");
-        if (localStorage.getItem("login"))localStorage.removeItem("login");
+        unsetStates();
         navigate("/");
     }
 

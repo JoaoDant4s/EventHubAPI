@@ -1,9 +1,13 @@
 package imd.eventhub.restAPI.controller;
 
 import imd.eventhub.exception.*;
+import imd.eventhub.model.Attraction;
 import imd.eventhub.model.User;
+import imd.eventhub.restAPI.dto.attraction.AttractionDTO;
 import imd.eventhub.restAPI.dto.attraction.SaveAttractionUserDTO;
 import imd.eventhub.restAPI.dto.attraction.UpdateAttractionDTO;
+import imd.eventhub.restAPI.dto.attraction.UpdateAttractionInfoDTO;
+import imd.eventhub.restAPI.dto.participant.UpdateParticipantInfoDTO;
 import imd.eventhub.restAPI.dto.user.UserDTO;
 import imd.eventhub.restAPI.infra.RestErrorMessage;
 import imd.eventhub.restAPI.infra.RestSuccessMessage;
@@ -29,9 +33,9 @@ public class AttractionController {
     }
 
     @GetMapping("/{id}")
-    public UserDTO getUserByAttractionId(@PathVariable Integer id){
+    public AttractionDTO getUserByAttractionId(@PathVariable Integer id){
         try {
-            return attractionService.getById(id).get();
+            return attractionService.getById(id);
         } catch (NotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
@@ -54,6 +58,16 @@ public class AttractionController {
             UserDTO userDTO = attractionService.update(attraction);
             return userDTO;
         } catch (NullParameterException | EmailNotValidException | PasswordNotValidException | CpfNotValidException | ContactNotValidException | DateOutOfRangeException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @PutMapping("/updateInfo")
+    public UserDTO attractionInfoUpdate(@RequestBody UpdateAttractionInfoDTO attraction){
+        try {
+            UserDTO userDTO = attractionService.updateInfo(attraction);
+            return userDTO;
+        } catch (NullParameterException | CpfNotValidException | ContactNotValidException | DateOutOfRangeException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

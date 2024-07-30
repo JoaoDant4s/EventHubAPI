@@ -3,10 +3,8 @@ package imd.eventhub.service.Attraction;
 import imd.eventhub.exception.*;
 import imd.eventhub.model.Attraction;
 import imd.eventhub.model.User;
-import imd.eventhub.restAPI.dto.attraction.SaveAttractionDTO;
-import imd.eventhub.restAPI.dto.attraction.SaveAttractionUserDTO;
-import imd.eventhub.restAPI.dto.attraction.ShowAttractionUserDTO;
-import imd.eventhub.restAPI.dto.attraction.UpdateAttractionDTO;
+import imd.eventhub.restAPI.dto.attraction.*;
+import imd.eventhub.restAPI.dto.participant.UpdateParticipantInfoDTO;
 import imd.eventhub.restAPI.dto.user.UserDTO;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +15,10 @@ import java.util.Optional;
 public interface IAttractionService {
 
     public List<UserDTO> getList();
-    public Optional<UserDTO> getById(Integer attractionId);
+    public AttractionDTO getById(Integer attractionId) throws NotFoundException;
     public boolean isValid(SaveAttractionDTO attractionDTO) throws NullParameterException, ContactNotValidException;
     public UserDTO save(SaveAttractionUserDTO object) throws NullParameterException, EmailNotValidException, PasswordNotValidException, CpfNotValidException, ContactNotValidException, DateOutOfRangeException;
-
     public UserDTO update(UpdateAttractionDTO attractionUserDTO) throws  NullParameterException, EmailNotValidException, PasswordNotValidException, CpfNotValidException, ContactNotValidException, DateOutOfRangeException;
-
+    public UserDTO updateInfo(UpdateAttractionInfoDTO attrDTO) throws NullParameterException, CpfNotValidException, ContactNotValidException, DateOutOfRangeException;
     public void delete(Integer id);
 }
