@@ -11,9 +11,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class UpdateUserDTO {
     private Integer id;
-    private String email;
-    private String password;
-    private String confirmPassword;
     private String name;
     private String cpf;
     private LocalDate birthDate;

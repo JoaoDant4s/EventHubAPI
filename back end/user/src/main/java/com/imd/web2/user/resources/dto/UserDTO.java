@@ -1,6 +1,7 @@
 package main.java.com.imd.web2.user.resources.dto;
 
-//import imd.eventhub.restAPI.dto.participant.ParticipantDTO;
+import imd.eventhub.model.User;
+import imd.eventhub.restAPI.dto.participant.ParticipantDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
