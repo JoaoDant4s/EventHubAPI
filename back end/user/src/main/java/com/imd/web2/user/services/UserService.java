@@ -1,21 +1,32 @@
 package com.imd.web2.user.services;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.imd.web2.user.model.Attraction;
+import com.imd.web2.user.model.Participant;
+import com.imd.web2.user.model.User;
+import com.imd.web2.user.repository.IAttractionRepository;
+import com.imd.web2.user.repository.IParticipantRepository;
+import com.imd.web2.user.repository.IUserRepository;
+import com.imd.web2.user.resources.dto.SaveUserDTO;
+import com.imd.web2.user.resources.dto.UpdateUserDTO;
+import com.imd.web2.user.resources.dto.UserDTO;
+import com.imd.web2.user.resources.exceptions.CpfNotValidException;
+import com.imd.web2.user.resources.exceptions.DateOutOfRangeException;
+import com.imd.web2.user.resources.exceptions.EmailNotValidException;
+import com.imd.web2.user.resources.exceptions.NotFoundException;
+import com.imd.web2.user.resources.exceptions.NullParameterException;
+import com.imd.web2.user.resources.exceptions.PasswordNotValidException;
+
 @Component
-public class UserService implements IUserService, UserDetailsService {
+public class UserService implements IUserService {
     @Autowired
     IUserRepository userRepository;
     @Autowired
@@ -25,8 +36,6 @@ public class UserService implements IUserService, UserDetailsService {
     @Autowired
     IParticipantRepository participantRepository;
 
-    @Autowired
-    public PasswordEncoder passwordEncoder;
 
     @Override
     public List<UserDTO> getList() {
@@ -106,6 +115,21 @@ public class UserService implements IUserService, UserDetailsService {
     }
 
     @Override
+    public boolean updateInfoIsValid(UpdateUserDTO userDTO, Integer userId) throws NullParameterException, CpfNotValidException, DateOutOfRangeException {
+        Optional<UserDTO> userWithSameCPF = getUserByCPF(userDTO.getCpf());
+        Optional<User> user = userRepository.findById(userId);
+
+        if(userDTO.getName() == null) throw new NullParameterException("O nome não foi encontrado");
+        if(userDTO.getCpf() == null) throw new NullParameterException("O CPF não foi encontrado");
+        if(userDTO.getBirthDate() == null) throw new NullParameterException("A data de nascimento não foi encontrada");
+        if(!checkCpfIsValid(userDTO.getCpf())) throw new CpfNotValidException("O CPF/CNPJ digitado não segue o padrão");
+        if(userWithSameCPF.isPresent() && !user.get().getCpf().equals(userDTO.getCpf())) throw new CpfNotValidException("O CPF digitado já está associado a um outro usuário");
+        if(userDTO.getBirthDate().isAfter(LocalDate.now())) throw new DateOutOfRangeException("A data informada é maior do que a data de hoje");
+
+        return true;
+    }
+
+    @Override
     public boolean isValid(SaveUserDTO userDTO) throws NullParameterException, EmailNotValidException,
             PasswordNotValidException, CpfNotValidException, DateOutOfRangeException {
         Optional<UserDTO> userWithSameCPF = getUserByCPF(userDTO.getCpf());
@@ -177,47 +201,5 @@ public class UserService implements IUserService, UserDetailsService {
         Pattern regex = Pattern.compile("[0-9]{3}\\.?[0-9]{3}\\.?[0-9]{3}\\-?[0-9]{2}");
         return regex.matcher(cpf).find();
 
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-
-        Optional<User> user = userRepository.findByEmail(email);
-
-        if (user.isEmpty()) {
-            throw new NotFoundException("Email ou senha incorreta");
-        }
-
-        List<String> roles = new ArrayList<>();
-        if (user.get().isAdmin()) {
-            roles.add("ADMIN");
-            roles.add("USER");
-        } else if (user.get().getAttraction() != null) {
-            roles.add("ATTRACTION");
-            roles.add("USER");
-        } else if (user.get().isPromoter()) {
-            roles.add("PROMOTER");
-        } else {
-            roles.add("USER");
-        }
-
-        // Cria e retorna o objeto UserDetails com os detalhes do usuário
-        return org.springframework.security.core.userdetails.User
-                .builder()
-                .username(user.get().getEmail())
-                .password(user.get().getPassword())
-                .roles(roles.toArray(new String[roles.size() - 1]))
-                .build();
-
-    }
-
-    public UserDetails authentication(User user) throws PasswordNotValidException {
-        UserDetails userDetails = loadUserByUsername(user.getEmail());
-        boolean checkPassword = passwordEncoder.matches(user.getPassword(), userDetails.getPassword());
-        if (checkPassword) {
-            return userDetails;
-        }
-
-        throw new PasswordNotValidException("Email ou senha incorretos");
     }
 }
