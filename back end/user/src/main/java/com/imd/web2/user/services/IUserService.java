@@ -1,14 +1,10 @@
-package main.java.com.imd.web2.user.services;
+package com.imd.web2.user.services;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
-import main.java.com.imd.web2.user.model.User;
-import main.java.com.imd.web2.user.resources.dto.SaveUserDTO;
-import main.java.com.imd.web2.user.resources.dto.UserDTO;
 
 @Service
 public interface IUserService {

@@ -1,4 +1,4 @@
-package main.java.com.imd.web2.user.services;
+package com.imd.web2.user.services;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,10 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import main.java.com.imd.web2.user.model.User;
-import main.java.com.imd.web2.user.resources.dto.SaveUserDTO;
-import main.java.com.imd.web2.user.resources.dto.UserDTO;
 
 @Component
 public class UserService implements IUserService, UserDetailsService {

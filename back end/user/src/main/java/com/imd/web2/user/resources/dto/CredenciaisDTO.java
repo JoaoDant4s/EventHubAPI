@@ -1,4 +1,4 @@
-package main.java.com.imd.web2.user.resources.dto;
+package com.imd.web2.user.resources.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

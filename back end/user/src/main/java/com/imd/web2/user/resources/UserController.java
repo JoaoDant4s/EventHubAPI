@@ -1,31 +1,26 @@
-package main.java.com.imd.web2.user.resources;
+package com.imd.web2.user.resources;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.imd.web2.user.model.User;
+import com.imd.web2.user.resources.dto.UserDTO;
+import com.imd.web2.user.resources.exceptions.NotFoundException;
+import com.imd.web2.user.resources.exceptions.RestErrorMessage;
+import com.imd.web2.user.resources.exceptions.RestSuccessMessage;
+import com.imd.web2.user.services.IUserService;
 
 import java.util.List;
-
-import main.java.com.imd.web2.user.model.User;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/user")
-public class UserResource {
+public class UserController {
     @Autowired
     IUserService userService;
-    @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
-    JwtService jwtService;
 
     @GetMapping
     public ResponseEntity<Object> getUserList(){
@@ -57,23 +52,6 @@ public class UserResource {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RestErrorMessage(404, HttpStatus.NOT_FOUND, exception.getMessage()));
         } catch(Exception exception){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RestErrorMessage(500, HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage()));
-        }
-    }
-
-    @PostMapping("/auth")
-    public TokenDTO authentication(@RequestBody CredenciaisDTO credenciais){
-        try{
-            User user = new User();
-            user.setEmail(credenciais.getEmail());
-            user.setPassword(credenciais.getPassword());
-
-            UserDetails authenticatedUser = userService.authentication(user);
-            String token = jwtService.gerarToken(user);
-
-            List<String> roles = authenticatedUser.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
-            return new TokenDTO(user.getEmail(), token, roles);
-        } catch (PasswordNotValidException e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 }

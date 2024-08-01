@@ -1,13 +1,12 @@
-package main.java.com.imd.web2.user.resources.dto;
+package com.imd.web2.user.resources.dto;
 
-import imd.eventhub.model.User;
-import imd.eventhub.restAPI.dto.participant.ParticipantDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import main.java.com.imd.web2.user.model.User;
 
 import java.time.LocalDate;
+
+import com.imd.web2.user.model.User;
 
 @Getter
 @Setter
