@@ -1,7 +1,5 @@
 package com.imd.web2.auth.security;
 
-import imd.eventhub.security.JwtService;
-import imd.eventhub.service.User.UserService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +10,13 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.imd.web2.auth.services.AuthService;
-
-import imd.eventhub.security.JwtAuthFilter;
 
 
 @Configuration
@@ -33,12 +31,14 @@ public class SecurityConfig {
     @Autowired
     private AuthService authService;
 
-    
-
-
     @Bean
     public OncePerRequestFilter jwtFilter(){
         return new JwtAuthFilter(jwtService, authService);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean

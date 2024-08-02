@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import com.imd.web2.auth.feignclients.UserFeignClient;
 import com.imd.web2.auth.model.User;
@@ -16,7 +17,7 @@ import com.imd.web2.auth.resources.exceptions.*;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 
-
+@Service
 public class AuthService implements UserDetailsService{
     @Autowired
     private UserFeignClient userClient;

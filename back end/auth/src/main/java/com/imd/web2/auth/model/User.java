@@ -5,10 +5,8 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.cglib.core.Local;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -20,18 +18,22 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Column(length = 255)
     private String email;
+
     @Column(length = 255)
     private String password;
+
     @Column(length = 100)
     private String name;
+
     @Column(length = 18)
     private String cpf;
+
     @Column
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Temporal(TemporalType.DATE)
-    private LocalDate birthDate;
+    private LocalDate birthDate; // Removido @Temporal, pois não é necessário para LocalDate
 
     @Column(length = 3)
     private Integer age;
@@ -76,7 +78,7 @@ public class User {
         this.name = name;
         this.cpf = cpf;
         this.birthDate = LocalDate.parse(birthDate);
-        this.age = (int) ChronoUnit.YEARS.between(LocalDate.parse(birthDate),LocalDate.now());
+        this.age = (int) ChronoUnit.YEARS.between(LocalDate.parse(birthDate), LocalDate.now());
         this.email = email;
         this.password = password;
         this.admin = admin;
