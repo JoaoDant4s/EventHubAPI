@@ -5,7 +5,7 @@ import { faUser, faEnvelope, faAddressCard, faCalendarDays, faLock, faArrowRight
 
 import Button from '../../components/Button';
 import { FormEvent, SetStateAction, useState } from 'react';
-import { apiParticipantRegistration, participantRegistrationDTO } from '../../api/services/user';
+import { apiParticipantRegistration, ParticipantRegistrationDTO } from '../../api/services/user';
 import Alert, { getAlert, setAlert, Status } from '../../components/Alert';
 import { PatternFormat } from 'react-number-format';
 
@@ -29,7 +29,7 @@ export default function Register() {
   const register = async (e:FormEvent)=>{
     e.preventDefault();
     
-    const participant:participantRegistrationDTO = {
+    const participant:ParticipantRegistrationDTO = {
       email: email,
       password: password,
       confirmPassword: confirmPassword,

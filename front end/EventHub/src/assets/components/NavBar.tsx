@@ -32,7 +32,7 @@ export default function NavBar({ name = "Username", role = "Participant", navIte
     }
 
   return (
-    <nav className=' bg-bg-white w-[360px] h-[100vh] shadow-xl absolute left-0 p-8 flex flex-col' {...props} >
+    <nav className=' bg-bg-white w-[360px] h-[100vh] shadow-xl fixed left-0 p-8 flex flex-col' {...props} >
         <div className='flex justify-center'>
             <h1 className=' text-font-title font-extrabold text-[2rem] my-10 '>EVENTHUB</h1>
         </div>

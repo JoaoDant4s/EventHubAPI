@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import Title from "../../../components/Title";
 import Button from "../../../components/Button";
-import { faAddressCard, faArrowRight, faCalendarDays, faChevronRight, faComment, faPhone, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faAddressCard, faArrowRight, faCalendarDays, faChevronRight, faComment, faPhone, faUser, faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FormEvent, useEffect, useState } from "react";
 import Alert, { getAlert, setAlert, Status } from "../../../components/Alert";
@@ -10,13 +10,14 @@ import { UserDTO } from "../../../api/services/user";
 import { PatternFormat } from 'react-number-format';
 import { Role } from "../../../../main";
 
-export default function UpdateProfile() {
+export default function AttractionRegistration() {
   const navigate = useNavigate();
   const [user,setUser] = useState<UserDTO>();
   const [attraction, setAttraction] = useState<AttractionDTO>();
   const [role, setRole] = useState<Role>("participant");
   
   const [name, setName] = useState<String>("");
+  const [email, setEmail] = useState<String>("");
   const [cpf, setCpf] = useState<String>("");
   const [birthDate, setBirthDate] = useState<String>("");
   const [description, setDescription] = useState<String>("");
@@ -28,7 +29,7 @@ export default function UpdateProfile() {
   const [visible, setVisible] = useState<boolean>(false);
   const [title, setTitle] = useState<String>("Sucesso!");
   
-  const updateUser=async (e: FormEvent<HTMLFormElement>)=> {
+  const saveUser=async (e: FormEvent<HTMLFormElement>)=> {
     e.preventDefault();
     
     if(role === "attraction"){
@@ -112,72 +113,55 @@ export default function UpdateProfile() {
     <>
         <div className=" flex justify-between items-center mb-10">
             <div className='flex items-end'>
-                <Title>Editar Perfil</Title>
+                <Title>Cadastrar atração</Title>
                 <div className=" flex items-end ">
                   <FontAwesomeIcon icon={faChevronRight} className=' pl-3 text-font-text text-[0.6rem] mb-4 ' />
-                  <Link to="/dashboard/profile" className=' pl-3 text-font-text text-[0.8rem] mb-[0.6rem]'>Voltar</Link>
+                  <Link to="/admin/users" className=' pl-3 text-font-text text-[0.8rem] mb-[0.6rem]'>Voltar</Link>
                 </div>
             </div>
         </div>
-        <form onSubmit={(e)=>updateUser(e)} className=" w-full flex flex-col gap-8 ">
+        <form onSubmit={(e)=>saveUser(e)} className=" w-full flex flex-col gap-8 ">
           <div className=" flex flex-col">
             <p className=" font-bold text-font-input ml-3 mb-2 ">Nome</p>
             <label className=" flex items-center w-full mb-5">
               <FontAwesomeIcon icon={faUser} className=' absolute pl-3 text-font-icon text-sm' />
-              <input onChange={(e)=>setName(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="name" id="name" defaultValue={user?.name.toString()} placeholder="Nome" />
+              <input onChange={(e)=>setName(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="name" id="name" placeholder="Nome" />
             </label>
-            {
-              role == "promoter"
-              ? (
-                <>
-                  <p className=" font-bold text-font-input ml-3 mb-2 ">CNPJ</p>
-                  <label className=" flex items-center w-full mb-5 ">
-                    <FontAwesomeIcon icon={faAddressCard} className=' absolute pl-3 text-font-icon text-sm' />
-                    <PatternFormat format="##.###.###/####-##" mask={"_"} allowEmptyFormatting onChange={(e) => setCpf(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="cpf" id="cpf" value={user?.cpf.toString()} placeholder="CPF" />
-                  </label>
-                </>
-              )
-              : (
-                <>
-                  <p className=" font-bold text-font-input ml-3 mb-2 ">CPF</p>
-                  <label className=" flex items-center w-full mb-5 ">
-                    <FontAwesomeIcon icon={faAddressCard} className=' absolute pl-3 text-font-icon text-sm' />
-                    <PatternFormat format="###.###.###-##" mask={"_"} allowEmptyFormatting onChange={(e) => setCpf(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="cpf" id="cpf" value={user?.cpf.toString()} placeholder="CPF" />
-                  </label>
-                </>
-              )
-            }
-            {
-              role == "promoter"
-              ? (
-                <p className=" font-bold text-font-input ml-3 mb-2 ">Data de fundação</p>
-              )
-              : (
-                <p className=" font-bold text-font-input ml-3 mb-2 ">Data de nascimento</p>
-              )
-            }
+            <p className=" font-bold text-font-input ml-3 mb-2 ">E-mail</p>
+            <label className=" flex items-center w-full mb-5">
+              <FontAwesomeIcon icon={faEnvelope} className=' absolute pl-3 text-font-icon text-sm' />
+              <input onChange={(e)=>setEmail(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="email" id="email" placeholder="E-mail" />
+            </label>
+            <p className=" font-bold text-font-input ml-3 mb-2 ">CPF</p>
+            <label className=" flex items-center w-full mb-5 ">
+              <FontAwesomeIcon icon={faAddressCard} className=' absolute pl-3 text-font-icon text-sm' />
+              <PatternFormat format="###.###.###-##" mask={"_"} allowEmptyFormatting onChange={(e) => setCpf(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="cpf" id="cpf" value={user?.cpf.toString()} placeholder="CPF" />
+            </label>
+            <p className=" font-bold text-font-input ml-3 mb-2 ">Data de nascimento</p>
             <label className=" flex items-center w-full mb-5 last:mb-0 ">
               <FontAwesomeIcon icon={faCalendarDays} className=' absolute pl-3 text-font-icon text-sm' />
               <input onChange={(e)=>setBirthDate(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-placeholder text-sm shadow-sm " type="date" name="birthDate" id="birthDate" defaultValue={user?.birthDate.toString()} placeholder="Data de nascimento" />
             </label>
-            {
-              role == "attraction"
-              ? (
-                <>
-                  <p className=" font-bold text-font-input ml-3 mb-2 ">Contato</p>
-                  <label className=" flex items-center w-full mb-5 last:mb-0 ">
-                    <FontAwesomeIcon icon={faPhone} className=' absolute pl-3 text-font-icon text-sm' />
-                    <PatternFormat format="(##) #####-####" mask={"_"} onChange={(e) => setContact(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="contact" id="contact" value={attraction?.contact.toString()} placeholder="Contato" />
-                  </label>
-                  <p className=" font-bold text-font-input ml-3 mb-2 ">Descrição</p>
-                  <label className=" flex items-center w-full mb-5 last:mb-0 ">
-                    <FontAwesomeIcon icon={faComment} className=' absolute pl-3 text-font-icon text-sm' />
-                    <textarea onChange={(e)=>setDescription(e.target.value)} rows={4} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-sm shadow-sm " name="description" id="description" defaultValue={attraction?.description.toString()} placeholder="Descrição" ></textarea>
-                  </label>
-                </>
-              )
-              : null
-            }
+            <p className=" font-bold text-font-input ml-3 mb-2 ">Senha</p>
+            <label className=" flex items-center w-full mb-5">
+              <FontAwesomeIcon icon={faLock} className=' absolute pl-3 text-font-icon text-sm' />
+              <input onChange={(e)=>setName(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="password" id="password" placeholder="Senha" />
+            </label>
+            <p className=" font-bold text-font-input ml-3 mb-2 ">Confirmação de senha</p>
+            <label className=" flex items-center w-full mb-5">
+              <FontAwesomeIcon icon={faLock} className=' absolute pl-3 text-font-icon text-sm' />
+              <input onChange={(e)=>setName(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="confirmPassword" id="confirmPassword" placeholder="Confirmação de senha" />
+            </label>
+            <p className=" font-bold text-font-input ml-3 mb-2 ">Contato</p>
+            <label className=" flex items-center w-full mb-5 last:mb-0 ">
+              <FontAwesomeIcon icon={faPhone} className=' absolute pl-3 text-font-icon text-sm' />
+              <PatternFormat format="(##) #####-####" mask={"_"} onChange={(e) => setContact(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="contact" id="contact" value={attraction?.contact.toString()} placeholder="Contato" />
+            </label>
+            <p className=" font-bold text-font-input ml-3 mb-2 ">Descrição</p>
+            <label className=" flex items-center w-full mb-5 last:mb-0 ">
+              <FontAwesomeIcon icon={faComment} className=' absolute pl-3 text-font-icon text-sm' />
+              <textarea onChange={(e)=>setDescription(e.target.value)} rows={4} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-sm shadow-sm " name="description" id="description" defaultValue={attraction?.description.toString()} placeholder="Descrição" ></textarea>
+            </label>
 
           </div>
           <div className=" grid grid-cols-2 w-full gap-4">

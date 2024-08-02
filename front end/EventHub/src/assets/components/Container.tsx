@@ -10,8 +10,8 @@ export default function Container({children, className, ...props}:ContainerProps
 
 
   return (
-    <section className=' bg-bg-dashboard w-full h-[100vh] absolute top-0' {...props} >
-        <div className='w-[calc(100% - 360px)] ml-[360px] h-[100vh]'>
+    <section className=' bg-bg-dashboard w-full min-h-[100vh] absolute top-0' {...props} >
+        <div className='w-[calc(100% - 360px)] ml-[360px] '>
           <div className=' w-3/4 m-auto'>
             {children}
           </div>
