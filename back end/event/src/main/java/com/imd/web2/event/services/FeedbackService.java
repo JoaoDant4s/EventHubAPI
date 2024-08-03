@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
+import com.imd.web2.event.feignclients.UserFeignClient;
 import com.imd.web2.event.model.Event;
 import com.imd.web2.event.model.Feedback;
 import com.imd.web2.event.model.User;
@@ -24,11 +25,10 @@ import com.imd.web2.event.resources.exceptions.RatingOutOfRangeException;
 @Component
 public class FeedbackService implements IFeedbackService {
 
-    @Autowired
     IFeedbackRepository feedbackRepository;
     @Autowired
-    IUserRepository userRepository; //replace with ParticipantFeignClient
-    @Autowired
+    UserFeignClient userClient;
+
     IEventRepository eventRepository;
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -72,7 +72,7 @@ public class FeedbackService implements IFeedbackService {
     @Override
     public FeedbackDTO save(SaveFeedbackDTO feedbackDTO) throws RatingOutOfRangeException {
 
-        Optional<User> user = userRepository.findById(feedbackDTO.getUserId());
+        Optional<User> user = Optional.ofNullable(userClient.getUserById(feedbackDTO.getUserId()).getBody());
         Optional<Event> event = eventRepository.findById(feedbackDTO.getEventId());
 
         if(feedbackDTO.getComment() == null){

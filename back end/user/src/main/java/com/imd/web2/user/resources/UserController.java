@@ -6,15 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.imd.web2.user.model.User;
 import com.imd.web2.user.resources.dto.UserDTO;
 import com.imd.web2.user.resources.exceptions.NotFoundException;
 import com.imd.web2.user.resources.exceptions.RestErrorMessage;
 import com.imd.web2.user.resources.exceptions.RestSuccessMessage;
 import com.imd.web2.user.services.IUserService;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/user")

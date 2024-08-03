@@ -10,6 +10,7 @@ import com.imd.web2.event.resources.dto.UpdateFeedbackDTO;
 import com.imd.web2.event.resources.exceptions.NotFoundException;
 import com.imd.web2.event.resources.exceptions.RatingOutOfRangeException;
 import com.imd.web2.event.resources.exceptions.RestErrorMessage;
+import com.imd.web2.event.resources.exceptions.RestSuccessMessage;
 import com.imd.web2.event.services.IFeedbackService;
 
 @RestController

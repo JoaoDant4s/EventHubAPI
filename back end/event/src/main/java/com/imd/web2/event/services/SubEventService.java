@@ -17,7 +17,7 @@ import com.imd.web2.event.resources.exceptions.NullParameterException;
 
 @Component
 public class SubEventService implements ISubEventService {
-    @Autowired
+
     ISubEventRepository subEventRepository;
 
     @Autowired

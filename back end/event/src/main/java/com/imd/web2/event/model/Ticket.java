@@ -1,7 +1,5 @@
 package com.imd.web2.event.model;
 
-import com.imd.web2.user.model.TicketType;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
