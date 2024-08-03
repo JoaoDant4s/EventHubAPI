@@ -21,7 +21,6 @@ import com.imd.web2.user.resources.exceptions.RestSuccessMessage;
 import com.imd.web2.user.services.IParticipantService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/participant")

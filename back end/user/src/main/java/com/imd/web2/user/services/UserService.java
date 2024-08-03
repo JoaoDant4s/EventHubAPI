@@ -27,13 +27,13 @@ import com.imd.web2.user.resources.exceptions.PasswordNotValidException;
 
 @Component
 public class UserService implements IUserService {
-    @Autowired
+
     IUserRepository userRepository;
-    @Autowired
+
     IAttractionRepository attractionRepository;
     @Autowired
     IAttractionService attractionService;
-    @Autowired
+
     IParticipantRepository participantRepository;
 
 

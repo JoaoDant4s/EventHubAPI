@@ -32,13 +32,14 @@ import java.util.stream.Collectors;
 
 @Component
 public class AttractionService implements IAttractionService {
-    @Autowired
+    
     IAttractionRepository attractionRepository;
 
     @Autowired
     IUserService userService;
-    @Autowired
+
     IUserRepository userRepository;
+    
     @Autowired
     public PasswordEncoder passwordEncoder;
 

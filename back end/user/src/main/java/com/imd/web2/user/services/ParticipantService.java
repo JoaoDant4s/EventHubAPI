@@ -24,10 +24,9 @@ import java.util.stream.Collectors;
 
 @Component
 public class ParticipantService implements IParticipantService{
-    @Autowired
+
     IParticipantRepository participantRepository;
 
-    @Autowired
     IUserRepository userRepository;
 
     @Autowired

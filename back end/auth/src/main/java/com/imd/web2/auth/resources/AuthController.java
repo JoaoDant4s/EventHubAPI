@@ -19,8 +19,6 @@ import com.imd.web2.auth.security.JwtService;
 import com.imd.web2.auth.services.AuthService;
 
 public class AuthController {
-    @Autowired
-    PasswordEncoder passwordEncoder;
 
     @Autowired
     AuthService authService;

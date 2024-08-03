@@ -18,13 +18,11 @@ import com.imd.web2.user.resources.exceptions.*;
 @Component
 public class CreditCardService implements ICreditCardService{
 
-    @Autowired
     ICreditCardRepository creditCardRepository;
 
     @Autowired
     IParticipantService participantService;
 
-    @Autowired
     IParticipantRepository participantRepository;
 
     @Override
