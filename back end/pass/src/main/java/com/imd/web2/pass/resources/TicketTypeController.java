@@ -4,6 +4,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.imd.web2.pass.feignclients.EventFeignClient;
+import com.imd.web2.pass.model.Event;
 import com.imd.web2.pass.model.TicketType;
 import com.imd.web2.pass.model.TicketTypeId;
 import com.imd.web2.pass.resources.dto.TicketTypeDTO;
@@ -15,6 +17,7 @@ import com.imd.web2.pass.services.ITicketTypeService;
 import jakarta.validation.Valid;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +36,7 @@ public class TicketTypeController {
     ITicketTypeService ticketTypeService;
 
     @Autowired 
-    IEventService eventService;
+    EventFeignClient eventClient;
 
     @PostMapping("")
     public TicketTypeDTO saveTicketType(@Valid @RequestBody TicketTypeDTO ticketTypeDTO) {
@@ -82,8 +85,10 @@ public class TicketTypeController {
 
     private TicketType fromDto(TicketTypeDTO dto) throws NotFoundException, NullParameterException {
         TicketType ticketType = new TicketType();
-        Event event = eventService.getByID(dto.getEventID()).orElseThrow(() -> new NotFoundException("Evento não encontrado"));
-        TicketTypeId ticketTypeId = new TicketTypeId(dto.getName(), dto.getBatch(), event.getId());
+        Optional<Event> event = Optional.ofNullable(eventClient.getEventById(dto.getEventID()).getBody());
+        if(event.isEmpty()) throw new NotFoundException("Evento não encontrado");
+
+        TicketTypeId ticketTypeId = new TicketTypeId(dto.getName(), dto.getBatch(), event.get().getId());
         ticketType.setId(ticketTypeId);
         ticketType.setPrice(dto.getPrice());
         ticketType.setDescription(dto.getDescription());

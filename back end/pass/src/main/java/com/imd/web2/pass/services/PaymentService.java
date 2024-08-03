@@ -23,7 +23,6 @@ import com.imd.web2.pass.resources.exceptions.NullParameterException;
 @Component
 public class PaymentService implements IPaymentService {
 
-    @Autowired
     private IPaymentRepository paymentRepository;
 
     @Autowired

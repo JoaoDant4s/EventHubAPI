@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.imd.web2.pass.feignclients.EventFeignClient;
+import com.imd.web2.pass.feignclients.ParticipantFeignClient;
 import com.imd.web2.pass.model.Event;
 import com.imd.web2.pass.model.Payment;
 import com.imd.web2.pass.model.Ticket;
@@ -24,16 +26,16 @@ import com.imd.web2.pass.resources.exceptions.NullParameterException;
 
 @Component
 public class TicketService implements ITicketService {
-    @Autowired
+
     ITicketRepository ticketRepository;
     @Autowired
-    IParticipantService participantService; //replace with ParticipantFeignClient
+    ParticipantFeignClient participantClient; 
     @Autowired
     ITicketTypeService ticketTypeService;
     @Autowired
     ITicketDaysService ticketDaysService;
     @Autowired
-    IEventService eventService; //replace with EventFeignClient
+    EventFeignClient eventClient;
 
     @Override
     public Ticket save(Ticket ticket, List<LocalDate> days)
@@ -44,10 +46,12 @@ public class TicketService implements ITicketService {
         if (days.isEmpty()) {
             throw new InvalidParameterException("Número de dias não pode ser 0");
         }
-        Event event = eventService.getByID(ticket.getTicketType().getId().getEventID()).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não existe nenhum evento com esse id"));
-        LocalDate initialDate = event.getInitialDate().toLocalDate();
-        LocalDate finalDate = event.getFinalDate().toLocalDate();
+        
+        Optional<Event> event = Optional.ofNullable(eventClient.getEventById(ticket.getTicketType().getId().getEventID()).getBody());
+        if(event.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Não existe nenhum evento com esse id");
+
+        LocalDate initialDate = event.get().getInitialDate().toLocalDate();
+        LocalDate finalDate = event.get().getFinalDate().toLocalDate();
         if (days.stream().anyMatch(day -> day.isBefore(initialDate) || day.isAfter(finalDate))) {
             throw new InvalidParameterException("Algum dos dias passados não faz parte dos dias que o evento ocorrerá");
         }

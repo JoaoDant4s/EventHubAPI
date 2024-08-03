@@ -8,20 +8,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.imd.web2.pass.feignclients.EventFeignClient;
+import com.imd.web2.pass.model.Event;
 import com.imd.web2.pass.model.TicketType;
 import com.imd.web2.pass.model.TicketTypeId;
 import com.imd.web2.pass.repository.ITicketTypeRepository;
 import com.imd.web2.pass.resources.exceptions.DataAlreadyExistsException;
+import com.imd.web2.pass.resources.exceptions.NotFoundException;
 import com.imd.web2.pass.resources.exceptions.NullParameterException;
 
 @Component
 public class TicketTypeService implements ITicketTypeService {
 
-    @Autowired
     private ITicketTypeRepository ticketTypeRepository;
 
     @Autowired
-    private IEventService eventService; //replace with EventFeignClient
+    private EventFeignClient eventClient;
 
     @Override
     public List<TicketType> getAllTicketTypes() {
@@ -33,8 +35,8 @@ public class TicketTypeService implements ITicketTypeService {
         if (id == null)
             throw new NullParameterException("ID do evento passado é nulo");
 
-        eventService.getByID(id).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Não existe nenhum evento com esse id"));
+        Optional<Event> event = Optional.ofNullable(eventClient.getEventById(id).getBody());
+        if(event.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Não existe nenhum evento com esse id");
         return ticketTypeRepository.findById_EventID(id);
     }
 

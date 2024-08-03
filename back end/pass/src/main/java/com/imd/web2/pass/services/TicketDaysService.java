@@ -8,8 +8,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
+import com.imd.web2.pass.feignclients.EventFeignClient;
 import com.imd.web2.pass.model.Event;
 import com.imd.web2.pass.model.Ticket;
 import com.imd.web2.pass.model.TicketDays;
@@ -23,11 +26,10 @@ import com.imd.web2.pass.resources.exceptions.NullParameterException;
 @Component
 public class TicketDaysService implements ITicketDaysService {
 
-    @Autowired
     private ITicketDaysRepository ticketDaysRepository;
 
     @Autowired
-    private IEventService eventService; //replace with EventFeignClient
+    private EventFeignClient eventClient;
 
     @Override
     public List<TicketDays> saveTicketDays(List<TicketDays> ticketDays)
@@ -51,11 +53,10 @@ public class TicketDaysService implements ITicketDaysService {
     }
 
     @Override
-    public List<TicketDays> getTicketDaysByEventIdAndTicketId(Integer eventID, Integer ticketID)
-            throws NotFoundException, NullParameterException, InvalidParameterException {
-        Optional<Event> optEvent = eventService.getByID(eventID);
-        if (optEvent.isEmpty())
-            throw new NotFoundException("Não existe nenhum evento com o ID informado");
+    public List<TicketDays> getTicketDaysByEventIdAndTicketId(Integer eventID, Integer ticketID) throws NotFoundException, NullParameterException, InvalidParameterException {
+
+        Optional<Event> optEvent = Optional.ofNullable(eventClient.getEventById(eventID).getBody());
+        if(optEvent.isEmpty()) throw new NotFoundException("Não existe nenhum evento com o ID informado");
         Event event = optEvent.get();
         List<LocalDateTime> eventDays = getDateTimeRange(event.getInitialDate(), event.getFinalDate());
         return getTicketDaysByEventDays(eventDays, ticketID);

@@ -1,10 +1,15 @@
 package com.imd.web2.pass.resources;
 
 import jakarta.validation.Valid;
+
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import com.imd.web2.pass.feignclients.ParticipantFeignClient;
+import com.imd.web2.pass.model.Participant;
 import com.imd.web2.pass.model.Ticket;
 import com.imd.web2.pass.model.TicketType;
 import com.imd.web2.pass.resources.dto.SaveTicketDTO;
@@ -28,7 +33,7 @@ public class TicketController {
     private ITicketTypeService ticketTypeService;
 
     @Autowired
-    private IParticipantService participantService;
+    private ParticipantFeignClient participantClient;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -55,10 +60,11 @@ public class TicketController {
 
         TicketType ticketType = ticketTypeService.findTicketTypeByNameAndBatchAndEventID(dto.getTicketTypeId().getName(), dto.getTicketTypeId().getBatch(), dto.getTicketTypeId().getEventID()).orElseThrow(() -> new NotFoundException("Não existe um TicketType com esse ID"));
         ticket.setTicketType(ticketType);
-        
-        Participant participant = participantService.getParticipantById(dto.getParticipantId()).orElseThrow(() -> new NotFoundException("Não existe um TicketType com esse ID"));
+        Optional<Participant> participant = Optional.ofNullable(participantClient.getParticipantById(dto.getParticipantId()).getBody());
 
-        ticket.setParticipant(participant);
+        if(participant.isEmpty()) throw new NotFoundException("Não existe um TicketType com esse ID");
+
+        ticket.setParticipant(participant.get());
         return ticket;
 
     }
