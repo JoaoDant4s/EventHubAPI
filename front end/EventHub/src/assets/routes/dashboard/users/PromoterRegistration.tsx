@@ -22,6 +22,8 @@ export default function PromoterRegistration() {
   const [birthDate, setBirthDate] = useState<String>("");
   const [description, setDescription] = useState<String>("");
   const [contact, setContact] = useState<String>("");
+  const [password, setPassword] = useState<String>("");
+  const [confirmPassword, setConfirmPassword] = useState<String>("");
 
   //ALERT STATES
   const [message, setMessage] = useState<String>("");
@@ -135,45 +137,26 @@ export default function PromoterRegistration() {
             <p className=" font-bold text-font-input ml-3 mb-2 ">CNPJ</p>
             <label className=" flex items-center w-full mb-5 ">
               <FontAwesomeIcon icon={faAddressCard} className=' absolute pl-3 text-font-icon text-sm' />
-              <PatternFormat format="##.###.###/####-##" mask={"_"} allowEmptyFormatting onChange={(e) => setCpf(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="cpf" id="cpf" value={user?.cpf.toString()} placeholder="CPF" />
+              <PatternFormat format="##.###.###/####-##" mask={"_"} onChange={(e) => setCpf(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="cpf" id="cpf" placeholder="CNPJ" />
             </label>
             <p className=" font-bold text-font-input ml-3 mb-2 ">Data de fundação</p>
             <label className=" flex items-center w-full mb-5 last:mb-0 ">
               <FontAwesomeIcon icon={faCalendarDays} className=' absolute pl-3 text-font-icon text-sm' />
-              <input onChange={(e)=>setBirthDate(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-placeholder text-sm shadow-sm " type="date" name="birthDate" id="birthDate" defaultValue={user?.birthDate.toString()} placeholder="Data de nascimento" />
+              <input onChange={(e)=>setBirthDate(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-placeholder text-sm shadow-sm " type="date" name="birthDate" id="birthDate" placeholder="Data de nascimento" />
             </label>
             <p className=" font-bold text-font-input ml-3 mb-2 ">Senha</p>
             <label className=" flex items-center w-full mb-5">
               <FontAwesomeIcon icon={faLock} className=' absolute pl-3 text-font-icon text-sm' />
-              <input onChange={(e)=>setName(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="password" id="password" placeholder="Senha" />
+              <input onChange={(e)=>setPassword(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="password" name="password" id="password" placeholder="Senha" />
             </label>
             <p className=" font-bold text-font-input ml-3 mb-2 ">Confirmação de senha</p>
             <label className=" flex items-center w-full mb-5">
               <FontAwesomeIcon icon={faLock} className=' absolute pl-3 text-font-icon text-sm' />
-              <input onChange={(e)=>setName(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="confirmPassword" id="confirmPassword" placeholder="Confirmação de senha" />
+              <input onChange={(e)=>setConfirmPassword(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirmação de senha" />
             </label>
-            {
-              role == "attraction"
-              ? (
-                <>
-                  <p className=" font-bold text-font-input ml-3 mb-2 ">Contato</p>
-                  <label className=" flex items-center w-full mb-5 last:mb-0 ">
-                    <FontAwesomeIcon icon={faPhone} className=' absolute pl-3 text-font-icon text-sm' />
-                    <PatternFormat format="(##) #####-####" mask={"_"} allowEmptyFormatting onChange={(e) => setContact(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="contact" id="contact" value={attraction?.contact.toString()} placeholder="Contato" />
-                  </label>
-                  <p className=" font-bold text-font-input ml-3 mb-2 ">Descrição</p>
-                  <label className=" flex items-center w-full mb-5 last:mb-0 ">
-                    <FontAwesomeIcon icon={faComment} className=' absolute pl-3 text-font-icon text-sm' />
-                    <textarea onChange={(e)=>setDescription(e.target.value)} rows={4} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-sm shadow-sm " name="description" id="description" defaultValue={attraction?.description.toString()} placeholder="Descrição" ></textarea>
-                  </label>
-                </>
-              )
-              : null
-            }
-
           </div>
           <div className=" grid grid-cols-2 w-full gap-4">
-            <Button size="default" color='default' icon={faArrowRight} >Salvar</Button>
+            <Button type="submit" size="default" color='default' icon={faArrowRight} >Salvar</Button>
           </div>
         </form>
         <Alert status={status} visible={visible} setVisible={setVisible} title={title.toString()}>

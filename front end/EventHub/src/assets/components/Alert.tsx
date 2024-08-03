@@ -81,7 +81,7 @@ export default function Alert({children, status = "success", visible = false, se
         <div
             className={
             twMerge(
-                ` ${status == "success"?' bg-success-50 border-success-500':''} ${status == "alert"?' bg-alert-50 border-alert-500':''} ${status == "danger"?'bg-danger-50 border-danger-500':''} ${status == "info"?' bg-info-50 border-info-500 ':''} border-l-8 w-[400px]  absolute box-border top-0 right-0 p-4 m-8 rounded-md shadow-md cursor-pointer select-none ${visible==true?'':'hidden opacity-0'} `,
+                ` ${status == "success"?' bg-success-50 border-success-500':''} ${status == "alert"?' bg-alert-50 border-alert-500':''} ${status == "danger"?'bg-danger-50 border-danger-500':''} ${status == "info"?' bg-info-50 border-info-500 ':''} border-l-8 w-[400px] fixed box-border top-0 right-0 p-4 m-8 rounded-md shadow-md cursor-pointer select-none ${visible==true?'':'hidden opacity-0'} `,
                 className
             )}
             onClick={(e)=>closeAlert(e)}

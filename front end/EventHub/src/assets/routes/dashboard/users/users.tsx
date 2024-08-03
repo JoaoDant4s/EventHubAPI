@@ -3,8 +3,8 @@ import Title from "../../../components/Title";
 import Button from "../../../components/Button";
 import { faArrowRight, faTrash, faUser, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import Alert, { getAlert, Status } from "../../../components/Alert";
-import { apiGetAttractionById, apiGetByEmail } from "../../../api/services/user";
+import Alert, { getAlert, setAlert, Status } from "../../../components/Alert";
+import { apiDeleteUser, apiGetAttractionById, apigetAttractionList, apiGetByEmail, apigetParticipantList } from "../../../api/services/user";
 import { UserDTO, AttractionDTO } from "../../../api/services/user";
 import { Role } from "../../../../main";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,8 +12,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export default function Users() {
   const navigate = useNavigate();
   const [user, setUser] = useState<UserDTO>();
-  const [attraction, setAttraction] = useState<AttractionDTO>();
+  const [attractionList, setAttractionList] = useState<Array<UserDTO>>();
+  const [participantList, setParticipantList] = useState<Array<UserDTO>>();
   const [role, setRole] = useState<Role>("participant");
+  const [deleteControl, setDeleteControl] = useState<Boolean>(true);
 
   //ALERT STATES
   const [message, setMessage] = useState<String>("");
@@ -23,23 +25,31 @@ export default function Users() {
 
   const setUserData = async () =>{
     const login = localStorage.getItem("login") || "";
-    const response = await apiGetByEmail(login)
+
+    await apiGetByEmail(login)
     .then((response)=>{
       const data = response?.data;
       setUser(data);
-      return response
     });
   }
-  
-  const setAttractionData = async () =>{
-    if(role=="attraction" && user != null){
-      const attResponse = await apiGetAttractionById(user?.attractionId)
-      .then((response)=>{
-        const data = response?.data;
-        setAttraction(data);
-        localStorage.setItem("attraction",JSON.stringify(data));
-      })
-    }
+
+  const deleteUser= async (userId:Number)=>{
+    await apiDeleteUser(userId)
+    .then((response)=>{
+      setAlert("Participante apagado com sucesso!", "success", true);
+      getAlert(setMessage, setStatus, setVisible, setTitle);
+    })
+    .catch((e)=>{
+      console.log(e.response)
+      if(e.response.data.detail == null){
+        setAlert("Algo inesperado aconteceu", "alert", true);
+      } else {
+        setAlert(e.response.data.detail, "alert", true);
+      }
+      getAlert(setMessage, setStatus, setVisible, setTitle);
+
+    });
+    setDeleteControl(!deleteControl);
   }
 
   useEffect(()=>{
@@ -48,9 +58,24 @@ export default function Users() {
     setRole(localStorage.getItem("role") || "participant");
   }, [])
 
+
+  const setList = async () =>{
+    await apigetParticipantList()
+    .then((response)=>{
+      const data = response?.data;
+      setParticipantList(data);
+    });
+
+    await apigetAttractionList()
+    .then((response)=>{
+      const data = response?.data;
+      setAttractionList(data);
+    });
+  }
+
   useEffect(()=>{
-    setAttractionData();
-  }, [user])
+    setList();
+  }, [deleteControl])
 
   return (
     <>
@@ -68,84 +93,107 @@ export default function Users() {
             <p className=" font-bold text-[1.2rem] text-font-placeholder ">5</p>
           </div>
         </div>
+      {
+        participantList && participantList?.length > 0
+        ? (
+          <>
+            <div className=" flex justify-between items-center mb-10">
+                <Title>Participantes</Title>
+                <Button type='submit' size="default" color='default' icon={faArrowRight} onClick={()=>navigate("/admin/users/participantRegistration")}>Cadastrar</Button>
+            </div>
 
-        <div className=" flex justify-between items-center mb-10">
-            <Title>Participantes</Title>
-            <Button type='submit' size="default" color='default' icon={faArrowRight} onClick={()=>navigate("/admin/users/participantRegistration")}>Cadastrar</Button>
-        </div>
+            <table className=" w-full border-collapse mb-10 ">
+              <thead>
+                <tr className=" text-left bg-bg-white ">
+                  <th className=" py-4 pl-8 w-2/4 text-font-subtitle ">Nome</th>
+                  <th className=" py-4 text-font-subtitle ">CPF</th>
+                  <th colSpan={2} className=" py-4 text-font-subtitle ">Data de nascimento</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  participantList.map((participant)=>(
+                    <tr key={`participant-${participant.id}`} className=" border-t-4 border-bg-dashboard my-2 bg-table-odd even:bg-table-even ">
+                      <td className=" py-2 pl-8 text-font-text ">
+                        <div className=" flex items-center ">
+                          <div className=" absolute m-[-52px] bg-primary w-10 h-10 rounded-[50%] border-4 border-bg-dashboard flex justify-center items-center ">
+                            <FontAwesomeIcon icon={faUser} className=' text-font-white text-[1rem]' />
+                          </div>
+                          {participant.name}
+                        </div>
+                      </td>
+                      <td className=" py-2 text-font-text ">{participant.cpf}</td>
+                      <td className=" py-2 text-font-text ">{participant.birthDate}</td>
+                      <td className=" py-2 ">
+                        <div className=" flex justify-end mr-2 gap-2 ">
+                          <div onClick={()=>navigate(`/admin/users/updateParticipant/${participant.id}`)} className=" bg-tertiary w-8 h-8 p-2 flex justify-center items-center rounded-md cursor-pointer ">
+                            <FontAwesomeIcon icon={faPenToSquare} className=' text-font-white text-[1rem]' />
+                          </div>
+                          <div onClick={()=>deleteUser(participant.id)} className=" bg-danger-400 w-8 h-8 p-2 flex justify-center items-center rounded-md cursor-pointer ">
+                            <FontAwesomeIcon icon={faTrash} className=' text-font-white text-[1rem]' />
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+          </>
+        )
+        : null
+      }
+      
+      {
+        attractionList && attractionList?.length > 0
+        ? (
+          <>
+            <div className=" flex justify-between items-center mb-10">
+                <Title>Atrações</Title>
+                <Button type='submit' size="default" color='default' icon={faArrowRight} onClick={()=>navigate("/admin/users/attractionRegistration")}>Cadastrar</Button>
+            </div>
 
-        <table className=" w-full border-collapse mb-10 ">
-          <thead>
-            <tr className=" text-left bg-bg-white ">
-              <th className=" py-4 pl-8 w-2/4 text-font-subtitle ">Nome</th>
-              <th className=" py-4 text-font-subtitle ">CPF</th>
-              <th colSpan={2} className=" py-4 text-font-subtitle ">Data de nascimento</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className=" border-t-4 border-bg-dashboard my-2 bg-table-odd even:bg-table-even ">
-              <td className=" py-2 pl-8 text-font-text ">
-                <div className=" flex items-center ">
-                  <div className=" absolute m-[-52px] bg-primary w-10 h-10 rounded-[50%] border-4 border-bg-dashboard flex justify-center items-center ">
-                    <FontAwesomeIcon icon={faUser} className=' text-font-white text-[1rem]' />
-                  </div>
-                  Fulano de tal
-                </div>
-              </td>
-              <td className=" py-2 text-font-text ">999.999.999-99</td>
-              <td className=" py-2 text-font-text ">10/10/2000</td>
-              <td className=" py-2 ">
-                <div className=" flex justify-end mr-2 gap-2 ">
-                  <div className=" bg-tertiary w-8 h-8 p-2 flex justify-center items-center rounded-md cursor-pointer ">
-                    <FontAwesomeIcon icon={faPenToSquare} className=' text-font-white text-[1rem]' />
-                  </div>
-                  <div className=" bg-danger-400 w-8 h-8 p-2 flex justify-center items-center rounded-md cursor-pointer ">
-                    <FontAwesomeIcon icon={faTrash} className=' text-font-white text-[1rem]' />
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div className=" flex justify-between items-center mb-10">
-            <Title>Atrações</Title>
-            <Button type='submit' size="default" color='default' icon={faArrowRight} onClick={()=>navigate("/admin/users/attractionRegistration")}>Cadastrar</Button>
-        </div>
-
-        <table className=" w-full border-collapse mb-10 ">
-          <thead>
-            <tr className=" text-left bg-bg-white ">
-              <th className=" py-4 pl-8 w-2/4 text-font-subtitle ">Nome</th>
-              <th className=" py-4 text-font-subtitle ">CPF</th>
-              <th colSpan={2} className=" py-4 text-font-subtitle ">Data de nascimento</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className=" border-t-4 border-bg-dashboard my-2 bg-table-odd even:bg-table-even ">
-              <td className=" py-2 pl-8 text-font-text ">
-                <div className=" flex items-center ">
-                  <div className=" absolute m-[-52px] bg-secondary w-10 h-10 rounded-[50%] border-4 border-bg-dashboard flex justify-center items-center ">
-                    <FontAwesomeIcon icon={faUser} className=' text-font-white text-[1rem]' />
-                  </div>
-                  Fulano de tal
-                </div>
-              </td>
-              <td className=" py-2 text-font-text ">999.999.999-99</td>
-              <td className=" py-2 text-font-text ">10/10/2000</td>
-              <td className=" py-2 ">
-                <div className=" flex justify-end mr-2 gap-2 ">
-                  <div className=" bg-tertiary w-8 h-8 p-2 flex justify-center items-center rounded-md cursor-pointer ">
-                    <FontAwesomeIcon icon={faPenToSquare} className=' text-font-white text-[1rem]' />
-                  </div>
-                  <div className=" bg-danger-400 w-8 h-8 p-2 flex justify-center items-center rounded-md cursor-pointer ">
-                    <FontAwesomeIcon icon={faTrash} className=' text-font-white text-[1rem]' />
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+            <table className=" w-full border-collapse mb-10 ">
+              <thead>
+                <tr className=" text-left bg-bg-white ">
+                  <th className=" py-4 pl-8 w-2/4 text-font-subtitle ">Nome</th>
+                  <th className=" py-4 text-font-subtitle ">CPF</th>
+                  <th colSpan={2} className=" py-4 text-font-subtitle ">Data de nascimento</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  attractionList.map((attraction)=>(
+                    <tr key={`attraction-${attraction.id}`} className=" border-t-4 border-bg-dashboard my-2 bg-table-odd even:bg-table-even ">
+                      <td className=" py-2 pl-8 text-font-text ">
+                        <div className=" flex items-center ">
+                          <div className=" absolute m-[-52px] bg-secondary w-10 h-10 rounded-[50%] border-4 border-bg-dashboard flex justify-center items-center ">
+                            <FontAwesomeIcon icon={faUser} className=' text-font-white text-[1rem]' />
+                          </div>
+                          {attraction.name}
+                        </div>
+                      </td>
+                      <td className=" py-2 text-font-text ">{attraction.cpf}</td>
+                      <td className=" py-2 text-font-text ">{attraction.birthDate}</td>
+                      <td className=" py-2 ">
+                        <div className=" flex justify-end mr-2 gap-2 ">
+                          <div className=" bg-tertiary w-8 h-8 p-2 flex justify-center items-center rounded-md cursor-pointer ">
+                            <FontAwesomeIcon icon={faPenToSquare} className=' text-font-white text-[1rem]' />
+                          </div>
+                          <div onClick={()=>deleteUser(attraction.id)} className=" bg-danger-400 w-8 h-8 p-2 flex justify-center items-center rounded-md cursor-pointer ">
+                            <FontAwesomeIcon icon={faTrash} className=' text-font-white text-[1rem]' />
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+          </>
+        )
+        : null
+      }
 
         <div className=" flex justify-between items-center mb-10">
             <Title>Promotores</Title>
@@ -177,7 +225,7 @@ export default function Users() {
                   <div className=" bg-tertiary w-8 h-8 p-2 flex justify-center items-center rounded-md cursor-pointer ">
                     <FontAwesomeIcon icon={faPenToSquare} className=' text-font-white text-[1rem]' />
                   </div>
-                  <div className=" bg-danger-400 w-8 h-8 p-2 flex justify-center items-center rounded-md cursor-pointer ">
+                  <div onClick={()=>deleteUser(2)} className=" bg-danger-400 w-8 h-8 p-2 flex justify-center items-center rounded-md cursor-pointer ">
                     <FontAwesomeIcon icon={faTrash} className=' text-font-white text-[1rem]' />
                   </div>
                 </div>
