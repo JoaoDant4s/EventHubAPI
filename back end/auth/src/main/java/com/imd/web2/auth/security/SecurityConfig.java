@@ -51,12 +51,12 @@ public class SecurityConfig {
             authorize
                 .requestMatchers("/v3/api-docs/**", "/swagger-resources/**", "/swagger-ui/**").permitAll()
                 .requestMatchers("/").permitAll()
-
+/*
                 //USER PERMISSIONS
-                .requestMatchers(HttpMethod.POST ,"/api/user").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.POST ,"/api/user/auth").permitAll()
-                .requestMatchers(HttpMethod.DELETE ,"/api/user").hasRole("ADMIN")
-                .requestMatchers("/api/user").hasAnyRole("USER", "ADMIN")
+                //.requestMatchers(HttpMethod.POST ,"/api/user").hasRole("ADMIN")
+                //.requestMatchers(HttpMethod.POST ,"/api/user/auth").permitAll()
+                //.requestMatchers(HttpMethod.DELETE ,"/api/user").hasRole("ADMIN")
+                //.requestMatchers("/api/user").hasAnyRole("USER", "ADMIN")
 
                 //ATTRACTION PERMISSIONS
                 .requestMatchers(HttpMethod.POST ,"/api/attraction").hasRole("ADMIN")
@@ -82,7 +82,10 @@ public class SecurityConfig {
 
                 //FEEDBACK PERMISSIONS
                 .requestMatchers("/api/feedback").hasAnyRole("USER", "ADMIN")
+                    */
+
                 .anyRequest().permitAll()
+
             )
             /*
              * No Java Spring Security, o método addFilterBefore() é usado para adicionar um filtro 

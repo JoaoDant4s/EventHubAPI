@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.imd.web2.auth.model.User;
@@ -18,6 +20,8 @@ import com.imd.web2.auth.resources.exceptions.PasswordNotValidException;
 import com.imd.web2.auth.security.JwtService;
 import com.imd.web2.auth.services.AuthService;
 
+@RestController
+@RequestMapping("api/auth")
 public class AuthController {
 
     @Autowired
@@ -26,7 +30,7 @@ public class AuthController {
     @Autowired
     JwtService jwtService;
 
-    @PostMapping("/auth")
+    @PostMapping
     public TokenDTO authentication(@RequestBody CredenciaisDTO credenciais){
         try{
             User user = new User();
