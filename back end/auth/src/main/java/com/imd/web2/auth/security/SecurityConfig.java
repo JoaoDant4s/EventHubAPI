@@ -44,30 +44,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .headers(headers -> headers.frameOptions(frame -> frame.disable()))
-            .authorizeHttpRequests(authorize -> authorize
-                .anyRequest().permitAll() // Permite todas as requisições sem restrições
-            )
-            /*
-             * No Java Spring Security, o método addFilterBefore() é usado para adicionar um filtro 
-             * antes de um filtro específico na cadeia de filtros de segurança. 
-             * Isso significa que o filtro JWT será executado antes do filtro de autenticação 
-             * de nome de usuário e senha. 
-             * O filtro JWT é usado para validar tokens JWT em solicitações HTTP para 
-             * autenticação e autorização, 
-             * Adicionando o filtro JWT antes do UsernamePasswordAuthenticationFilter, 
-             * você está configurando o sistema para primeiro verificar se há um token JWT válido antes de 
-             * tentar autenticar com nome de usuário e senha. Isso é comum em aplicativos que usam autenticação baseada em tokens JWT.
-             */
-            .addFilterBefore(
-                jwtFilter(), 
-                UsernamePasswordAuthenticationFilter.class);
-            //.httpBasic(Customizer.withDefaults()); //possibilita "logar" com o headers de autenticação
-         //retorno da cadeia de filtros   
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .headers(headers -> headers.frameOptions(frame -> frame.disable()))
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/auth/api/auth/**").permitAll() // Permitir todos os endpoints de autenticação
+                        .requestMatchers("/eureka/**").permitAll() // Permitir todos os endpoints do Eureka
+                        .requestMatchers("/event/api/event/**").permitAll() // Permitir todos os endpoints de eventos
+                        .requestMatchers("/user/api/user/**").permitAll() // Permitir todos os endpoints de user
+                        .requestMatchers("/pass/api/pass/**").permitAll() // Permitir todos os endpoints de pass
+
+                        .anyRequest().authenticated() // Requer autenticação para outros endpoints
+                )
+                .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
-        
     }
     
 }

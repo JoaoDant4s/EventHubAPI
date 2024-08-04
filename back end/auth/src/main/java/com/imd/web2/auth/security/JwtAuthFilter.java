@@ -45,36 +45,18 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             boolean isValid = jwtService.tokenValido(token);
 
             if (isValid) {
-                // Obtenção do login do usuário a partir do token JWT
                 String loginUsuario = jwtService.obterLoginUsuario(token);
-                // Carregamento dos detalhes do usuário a partir do login (a partir do BD)
                 UserDetails usuario = authService.loadUserByUsername(loginUsuario);
-                // Criação de uma instância de UsernamePasswordAuthenticationToken para
-                // autenticar o usuário
-                UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken(usuario, null,
-                        usuario.getAuthorities());
-                /*
-                 * detalhes da autenticação para o objeto user com base nos detalhes da solicitação HTTP 
-                 * fornecidos pela instância de HttpServletRequest. 
-                 * Isso é útil para registrar informações adicionais sobre a autenticação, 
-                 * especialmente em um contexto de aplicativo da web - ip do cliente, agente do usário...
-                 */
+                UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
                 user.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
-                // Configuração da autenticação no contexto de segurança do Spring
-                /*
-                 * está configurando a instância de autenticação user como a instância 
-                 * atualmente autenticada no contexto de segurança. 
-                 * Isso significa que o usuário associado a essa instância de autenticação 
-                 * será considerado o usuário autenticado para a duração da solicitação ou da sessão,
-                 *  dependendo da configuração.
-                 */
                 SecurityContextHolder.getContext().setAuthentication(user);
+            } else {
+                httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
             }
         }
 
-        // passa a requisição com o usuário autenticado no contexto de segurança
         filterChain.doFilter(httpServletRequest, httpServletResponse);
-
     }
 
 }
