@@ -133,7 +133,7 @@ export default function UpdateProfile() {
                   <p className=" font-bold text-font-input ml-3 mb-2 ">CNPJ</p>
                   <label className=" flex items-center w-full mb-5 ">
                     <FontAwesomeIcon icon={faAddressCard} className=' absolute pl-3 text-font-icon text-sm' />
-                    <PatternFormat format="##.###.###/####-##" mask={"_"} allowEmptyFormatting onChange={(e) => setCpf(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="cpf" id="cpf" value={user?.cpf.toString()} placeholder="CPF" />
+                    <PatternFormat format="##.###.###/####-##" mask={"_"} onChange={(e) => setCpf(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="cpf" id="cpf" value={user?.cpf.toString()} placeholder="CNPJ" />
                   </label>
                 </>
               )
@@ -142,7 +142,7 @@ export default function UpdateProfile() {
                   <p className=" font-bold text-font-input ml-3 mb-2 ">CPF</p>
                   <label className=" flex items-center w-full mb-5 ">
                     <FontAwesomeIcon icon={faAddressCard} className=' absolute pl-3 text-font-icon text-sm' />
-                    <PatternFormat format="###.###.###-##" mask={"_"} allowEmptyFormatting onChange={(e) => setCpf(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="cpf" id="cpf" value={user?.cpf.toString()} placeholder="CPF" />
+                    <PatternFormat format="###.###.###-##" mask={"_"} onChange={(e) => setCpf(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="cpf" id="cpf" value={user?.cpf.toString()} placeholder="CPF" />
                   </label>
                 </>
               )
@@ -181,7 +181,7 @@ export default function UpdateProfile() {
 
           </div>
           <div className=" grid grid-cols-2 w-full gap-4">
-            <Button size="default" color='default' icon={faArrowRight} >Salvar</Button>
+            <Button type="submit" size="default" color='default' icon={faArrowRight} >Salvar</Button>
           </div>
         </form>
         <Alert status={status} visible={visible} setVisible={setVisible} title={title.toString()}>
