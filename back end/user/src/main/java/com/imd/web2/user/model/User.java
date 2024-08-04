@@ -47,6 +47,8 @@ public class User {
     private boolean promoter;
 
     public User() {
+        this.admin = false;
+        this.promoter = false;
     }
 
     public User(String name, String cpf) {

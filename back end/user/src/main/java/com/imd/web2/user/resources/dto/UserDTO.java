@@ -20,6 +20,7 @@ public class UserDTO {
     private Integer age;
     private Integer attractionId;
     private Integer participantId;
+    private Boolean promoter;
 
     public UserDTO(){}
 
@@ -31,6 +32,7 @@ public class UserDTO {
         userDTO.setCpf(user.getCpf());
         userDTO.setBirthDate(user.getBirthDate());
         userDTO.setAge(user.getAge());
+        userDTO.setPromoter(user.isPromoter());
         if (user.getAttraction() != null) {
             userDTO.setAttractionId(user.getAttraction().getId());
         } else {

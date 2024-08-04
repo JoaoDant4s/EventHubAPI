@@ -1,14 +1,17 @@
 package com.imd.web2.user.services;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import com.imd.web2.user.resources.dto.SaveParticipantDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import com.imd.web2.user.model.Attraction;
 import com.imd.web2.user.model.Participant;
 import com.imd.web2.user.model.User;
@@ -36,6 +39,8 @@ public class UserService implements IUserService {
 
     IParticipantRepository participantRepository;
 
+    @Autowired
+    public PasswordEncoder passwordEncoder;
 
     @Override
     public List<UserDTO> getList() {
@@ -55,6 +60,51 @@ public class UserService implements IUserService {
             throw new NotFoundException("Usuário não encontrado");
         }
         return showUser;
+    }
+
+    @Override
+    public List<UserDTO> getPromoterList() {
+        return userRepository.getPromoters().stream().map(user-> {
+            UserDTO userDTO = UserDTO.toUserDTO(user);
+            return userDTO;
+        }).collect(Collectors.toList());
+    }
+
+    @Override
+    public UserDTO savePromoter(SaveParticipantDTO partDTO) throws NullParameterException, EmailNotValidException, PasswordNotValidException, CpfNotValidException, DateOutOfRangeException {
+
+
+        boolean checkUser = isValid(
+                new SaveUserDTO(
+                        partDTO.getName(),
+                        partDTO.getCpf(),
+                        partDTO.getBirthDate().toString(),
+                        partDTO.getEmail(),
+                        partDTO.getPassword(),
+                        partDTO.getConfirmPassword()
+                )
+        );
+
+        if(checkUser){
+            Participant participant = new Participant();
+            Participant savedParticipant = participantRepository.save(participant);
+
+            User user = new User();
+            user.setName(partDTO.getName());
+            user.setCpf(partDTO.getCpf());
+            user.setEmail(partDTO.getEmail());
+            user.setBirthDate(partDTO.getBirthDate());
+            user.setAge((int) ChronoUnit.YEARS.between(user.getBirthDate(),LocalDate.now()));
+            user.setPassword(passwordEncoder.encode(partDTO.getPassword()));
+            user.setParticipant(savedParticipant);
+            user.setPromoter(true);
+            User savedUser = userRepository.save(user);
+
+            UserDTO showUser = UserDTO.toUserDTO(savedUser);
+            return showUser;
+        }
+
+        return null;
     }
 
     @Override

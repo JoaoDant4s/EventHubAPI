@@ -42,8 +42,23 @@ export default function Dashboard({routes}:DashboardProps) {
     }
   }
 
+  const dynamicRoute=(itemPath:String, locationPath:String)=>{
+      let itemPathSplit = itemPath.split('/');
+      let locationPathSplit = locationPath.split('/');
+      itemPathSplit.pop();
+      locationPathSplit.pop();
+      let itemPathJoined = itemPathSplit.join('/') + "/";
+      let locationPathJoined = locationPathSplit.join('/') + "/";
+
+      if(itemPathJoined === locationPathJoined){
+          return true;
+      }
+
+      return false;
+  }
+
   const setNavItemList=()=>{
-    setCurrentRoute(routes.find((item)=>item.path === location.pathname));
+    setCurrentRoute(routes.find((item)=>item.path === location.pathname || dynamicRoute(item.path, location.pathname)));
     setNavItems(routes.filter((item=>item.permission.find((p)=>p === role && item.navbar === true))));
   }
 

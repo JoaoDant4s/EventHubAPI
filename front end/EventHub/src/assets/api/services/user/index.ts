@@ -14,6 +14,7 @@ export interface UserDTO {
     age:Number
     attractionId:Number
     participantId:Number
+    promoter:Boolean
 }
 
 export interface ParticipantRegistrationDTO {
@@ -167,7 +168,7 @@ export async function apiAttractionUpdateInfo(attractionInfo:AttractionInfoDTO) 
     return axiosAPI.put('/attraction/updateInfo', attractionInfo, config);
 }
 
-export async function apigetParticipantList() {
+export async function apiGetParticipantList() {
     const token = localStorage.getItem("token");
     config = {
         headers: {
@@ -179,7 +180,7 @@ export async function apigetParticipantList() {
     return axiosAPI.get('/participant', config);
 }
 
-export async function apigetAttractionList() {
+export async function apiGetAttractionList() {
     const token = localStorage.getItem("token");
     config = {
         headers: {
@@ -189,4 +190,29 @@ export async function apigetAttractionList() {
         }
     }
     return axiosAPI.get('/attraction', config);
+}
+
+export async function apiGetPromoterList() {
+    const token = localStorage.getItem("token");
+    config = {
+        headers: {
+            'Accept': 'application/json;',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        }
+    }
+    return axiosAPI.get('/user/promoter', config);
+}
+
+
+export async function apiPromoterRegistration(participantRegistration:ParticipantRegistrationDTO) {
+    const token = localStorage.getItem("token");
+    config = {
+        headers: {
+            'Accept': 'application/json;',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        }
+    }
+    return axiosAPI.post('/user/promoter', participantRegistration, config);
 }

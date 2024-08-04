@@ -15,8 +15,8 @@ import RegisterCreditCard from './assets/routes/dashboard/creditCard/RegisterCre
 import ParticipantRegistration from './assets/routes/dashboard/users/ParticipantRegistration.tsx'
 import AttractionRegistration from './assets/routes/dashboard/users/AttractionRegistration.tsx'
 import PromoterRegistration from './assets/routes/dashboard/users/PromoterRegistration.tsx'
-import UpdateParticipant from './assets/routes/dashboard/users/UpdateParticipant.tsx'
 import Users from './assets/routes/dashboard/users/users.tsx'
+import UpdateUser from './assets/routes/dashboard/users/UpdateUser.tsx'
 
 interface PrivateRouteProps {
   redirect: string;
@@ -55,7 +55,7 @@ const routes:Array<NavItem> = [
   {pathRoot:"/dashboard/profile", path:"/dashboard/profile/updateProfile", component: <UpdateProfile/>, permission:["participant","admin","attraction","promoter"]},
   {pathRoot:"/dashboard/creditCard", path:"/dashboard/creditCard/registerCreditCard", component: <RegisterCreditCard/>, permission:["participant","admin","attraction"], navbar:false},
   {pathRoot:"/admin/users", path:"/admin/users/participantRegistration", component: <ParticipantRegistration/>, permission:["admin"], navbar:false},
-  {pathRoot:"/admin/users", path:"/admin/users/updateParticipant/:id", component: <UpdateParticipant/>, permission:["admin"], navbar:false},
+  {pathRoot:"/admin/users", path:"/admin/users/updateUser/:id", component: <UpdateUser/>, permission:["admin"], navbar:false},
   {pathRoot:"/admin/users", path:"/admin/users/attractionRegistration", component: <AttractionRegistration/>, permission:["admin"], navbar:false},
   {pathRoot:"/admin/users", path:"/admin/users/promoterRegistration", component: <PromoterRegistration/>, permission:["admin"], navbar:false},
 ]

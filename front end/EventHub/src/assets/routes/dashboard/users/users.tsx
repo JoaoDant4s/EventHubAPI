@@ -4,7 +4,7 @@ import Button from "../../../components/Button";
 import { faArrowRight, faTrash, faUser, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import Alert, { getAlert, setAlert, Status } from "../../../components/Alert";
-import { apiDeleteUser, apiGetAttractionById, apigetAttractionList, apiGetByEmail, apigetParticipantList } from "../../../api/services/user";
+import { apiDeleteUser, apiGetAttractionById, apiGetAttractionList, apiGetByEmail, apiGetParticipantList, apiGetPromoterList } from "../../../api/services/user";
 import { UserDTO, AttractionDTO } from "../../../api/services/user";
 import { Role } from "../../../../main";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,6 +14,7 @@ export default function Users() {
   const [user, setUser] = useState<UserDTO>();
   const [attractionList, setAttractionList] = useState<Array<UserDTO>>();
   const [participantList, setParticipantList] = useState<Array<UserDTO>>();
+  const [promoterList, setPromoterList] = useState<Array<UserDTO>>();
   const [role, setRole] = useState<Role>("participant");
   const [deleteControl, setDeleteControl] = useState<Boolean>(true);
 
@@ -36,7 +37,7 @@ export default function Users() {
   const deleteUser= async (userId:Number)=>{
     await apiDeleteUser(userId)
     .then((response)=>{
-      setAlert("Participante apagado com sucesso!", "success", true);
+      setAlert("Usuário apagado com sucesso!", "success", true);
       getAlert(setMessage, setStatus, setVisible, setTitle);
     })
     .catch((e)=>{
@@ -56,20 +57,26 @@ export default function Users() {
     setUserData();
     getAlert(setMessage, setStatus, setVisible, setTitle);
     setRole(localStorage.getItem("role") || "participant");
-  }, [])
+  })
 
 
   const setList = async () =>{
-    await apigetParticipantList()
+    await apiGetParticipantList()
     .then((response)=>{
       const data = response?.data;
       setParticipantList(data);
     });
 
-    await apigetAttractionList()
+    await apiGetAttractionList()
     .then((response)=>{
       const data = response?.data;
       setAttractionList(data);
+    });
+
+    await apiGetPromoterList()
+    .then((response)=>{
+      const data = response?.data;
+      setPromoterList(data);
     });
   }
 
@@ -79,20 +86,24 @@ export default function Users() {
 
   return (
     <>
-        <div className=" flex gap-8 mb-10">
-          <div className="bg-bg-white h-32 flex justify-center items-center flex-col flex-grow rounded-md shadow-md border-b-[14px] border-primary ">
-            <h2 className=" font-bold text-[1.2rem] text-font-subtitle ">Participantes</h2>
-            <p className=" font-bold text-[1.2rem] text-font-placeholder ">100</p>
+      { participantList && attractionList && promoterList && (
+        <>
+          <div className=" flex gap-8 mb-10">
+            <div className="bg-bg-white h-32 flex justify-center items-center flex-col flex-grow rounded-md shadow-md border-b-[14px] border-primary ">
+              <h2 className=" font-bold text-[1.2rem] text-font-subtitle ">Participantes</h2>
+              <p className=" font-bold text-[1.2rem] text-font-placeholder ">{participantList.length}</p>
+            </div>
+            <div className="bg-bg-white h-32 flex justify-center items-center flex-col flex-grow rounded-md shadow-md border-b-[14px] border-secondary ">
+              <h2 className=" font-bold text-[1.2rem] text-font-subtitle ">Atrações</h2>
+              <p className=" font-bold text-[1.2rem] text-font-placeholder ">{attractionList.length}</p>
+            </div>
+            <div className="bg-bg-white h-32 flex justify-center items-center flex-col flex-grow rounded-md shadow-md border-b-[14px] border-tertiary ">
+              <h2 className=" font-bold text-[1.2rem] text-font-subtitle ">Promotores</h2>
+              <p className=" font-bold text-[1.2rem] text-font-placeholder ">{promoterList.length}</p>
+            </div>
           </div>
-          <div className="bg-bg-white h-32 flex justify-center items-center flex-col flex-grow rounded-md shadow-md border-b-[14px] border-secondary ">
-            <h2 className=" font-bold text-[1.2rem] text-font-subtitle ">Atrações</h2>
-            <p className=" font-bold text-[1.2rem] text-font-placeholder ">20</p>
-          </div>
-          <div className="bg-bg-white h-32 flex justify-center items-center flex-col flex-grow rounded-md shadow-md border-b-[14px] border-tertiary ">
-            <h2 className=" font-bold text-[1.2rem] text-font-subtitle ">Promotores</h2>
-            <p className=" font-bold text-[1.2rem] text-font-placeholder ">5</p>
-          </div>
-        </div>
+        </>
+      )}
       {
         participantList && participantList?.length > 0
         ? (
@@ -126,7 +137,7 @@ export default function Users() {
                       <td className=" py-2 text-font-text ">{participant.birthDate}</td>
                       <td className=" py-2 ">
                         <div className=" flex justify-end mr-2 gap-2 ">
-                          <div onClick={()=>navigate(`/admin/users/updateParticipant/${participant.id}`)} className=" bg-tertiary w-8 h-8 p-2 flex justify-center items-center rounded-md cursor-pointer ">
+                          <div onClick={()=>navigate(`/admin/users/updateUser/${participant.id}`)} className=" bg-tertiary w-8 h-8 p-2 flex justify-center items-center rounded-md cursor-pointer ">
                             <FontAwesomeIcon icon={faPenToSquare} className=' text-font-white text-[1rem]' />
                           </div>
                           <div onClick={()=>deleteUser(participant.id)} className=" bg-danger-400 w-8 h-8 p-2 flex justify-center items-center rounded-md cursor-pointer ">
@@ -178,7 +189,7 @@ export default function Users() {
                       <td className=" py-2 ">
                         <div className=" flex justify-end mr-2 gap-2 ">
                           <div className=" bg-tertiary w-8 h-8 p-2 flex justify-center items-center rounded-md cursor-pointer ">
-                            <FontAwesomeIcon icon={faPenToSquare} className=' text-font-white text-[1rem]' />
+                            <FontAwesomeIcon onClick={()=>navigate(`/admin/users/updateUser/${attraction.id}`)} icon={faPenToSquare} className=' text-font-white text-[1rem]' />
                           </div>
                           <div onClick={()=>deleteUser(attraction.id)} className=" bg-danger-400 w-8 h-8 p-2 flex justify-center items-center rounded-md cursor-pointer ">
                             <FontAwesomeIcon icon={faTrash} className=' text-font-white text-[1rem]' />
@@ -195,45 +206,57 @@ export default function Users() {
         : null
       }
 
-        <div className=" flex justify-between items-center mb-10">
-            <Title>Promotores</Title>
-            <Button type='submit' size="default" color='default' icon={faArrowRight} onClick={()=>navigate("/admin/users/promoterRegistration")}>Cadastrar</Button>
-        </div>
+      {
+        promoterList && promoterList?.length > 0
+        ? (
+          <>
+            <div className=" flex justify-between items-center mb-10">
+                <Title>Promotores</Title>
+                <Button type='submit' size="default" color='default' icon={faArrowRight} onClick={()=>navigate("/admin/users/promoterRegistration")}>Cadastrar</Button>
+            </div>
 
-        <table className=" w-full border-collapse mb-10 ">
-          <thead>
-            <tr className=" text-left bg-bg-white ">
-              <th className=" py-4 pl-8 w-2/4 text-font-subtitle ">Nome</th>
-              <th className=" py-4 text-font-subtitle ">CPF</th>
-              <th colSpan={2} className=" py-4 text-font-subtitle ">Data de nascimento</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className=" border-t-4 border-bg-dashboard my-2 bg-table-odd even:bg-table-even ">
-              <td className=" py-2 pl-8 text-font-text ">
-                <div className=" flex items-center ">
-                  <div className=" absolute m-[-52px] bg-tertiary w-10 h-10 rounded-[50%] border-4 border-bg-dashboard flex justify-center items-center ">
-                    <FontAwesomeIcon icon={faUser} className=' text-font-white text-[1rem]' />
-                  </div>
-                  Fulano de tal
-                </div>
-              </td>
-              <td className=" py-2 text-font-text ">999.999.999-99</td>
-              <td className=" py-2 text-font-text ">10/10/2000</td>
-              <td className=" py-2 ">
-                <div className=" flex justify-end mr-2 gap-2 ">
-                  <div className=" bg-tertiary w-8 h-8 p-2 flex justify-center items-center rounded-md cursor-pointer ">
-                    <FontAwesomeIcon icon={faPenToSquare} className=' text-font-white text-[1rem]' />
-                  </div>
-                  <div onClick={()=>deleteUser(2)} className=" bg-danger-400 w-8 h-8 p-2 flex justify-center items-center rounded-md cursor-pointer ">
-                    <FontAwesomeIcon icon={faTrash} className=' text-font-white text-[1rem]' />
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        
+            <table className=" w-full border-collapse mb-10 ">
+              <thead>
+                <tr className=" text-left bg-bg-white ">
+                  <th className=" py-4 pl-8 w-2/4 text-font-subtitle ">Nome</th>
+                  <th className=" py-4 text-font-subtitle ">CNPJ</th>
+                  <th colSpan={2} className=" py-4 text-font-subtitle ">Data de fundação</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  promoterList.map((promoter)=>(
+                    <tr key={`promoter-${promoter.id}`} className=" border-t-4 border-bg-dashboard my-2 bg-table-odd even:bg-table-even ">
+                      <td className=" py-2 pl-8 text-font-text ">
+                        <div className=" flex items-center ">
+                          <div className=" absolute m-[-52px] bg-tertiary w-10 h-10 rounded-[50%] border-4 border-bg-dashboard flex justify-center items-center ">
+                            <FontAwesomeIcon icon={faUser} className=' text-font-white text-[1rem]' />
+                          </div>
+                          {promoter.name}
+                        </div>
+                      </td>
+                      <td className=" py-2 text-font-text ">{promoter.cpf}</td>
+                      <td className=" py-2 text-font-text ">{promoter.birthDate}</td>
+                      <td className=" py-2 ">
+                        <div className=" flex justify-end mr-2 gap-2 ">
+                          <div className=" bg-tertiary w-8 h-8 p-2 flex justify-center items-center rounded-md cursor-pointer ">
+                            <FontAwesomeIcon onClick={()=>navigate(`/admin/users/updateUser/${promoter.id}`)} icon={faPenToSquare} className=' text-font-white text-[1rem]' />
+                          </div>
+                          <div onClick={()=>deleteUser(promoter.id)} className=" bg-danger-400 w-8 h-8 p-2 flex justify-center items-center rounded-md cursor-pointer ">
+                            <FontAwesomeIcon icon={faTrash} className=' text-font-white text-[1rem]' />
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+          </>
+        )
+        : null
+      }
+
         <Alert status={status} visible={visible} setVisible={setVisible} title={title.toString()}>
             <p className='text-justify text-xs pl-4 mt-2 text-font-text'>{message}</p>
         </Alert>

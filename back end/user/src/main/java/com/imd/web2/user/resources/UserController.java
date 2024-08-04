@@ -6,10 +6,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.imd.web2.user.resources.dto.SaveParticipantDTO;
 import com.imd.web2.user.resources.dto.UserDTO;
 import com.imd.web2.user.resources.exceptions.NotFoundException;
 import com.imd.web2.user.resources.exceptions.RestErrorMessage;
 import com.imd.web2.user.resources.exceptions.RestSuccessMessage;
+import com.imd.web2.user.resources.exceptions.CpfNotValidException;
+import com.imd.web2.user.resources.exceptions.DateOutOfRangeException;
+import com.imd.web2.user.resources.exceptions.EmailNotValidException;
+import com.imd.web2.user.resources.exceptions.NullParameterException;
+import com.imd.web2.user.resources.exceptions.PasswordNotValidException;
 import com.imd.web2.user.services.IUserService;
 
 @RestController
@@ -30,6 +36,24 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
+    @GetMapping("/promoter")
+    public ResponseEntity<Object> getPromoterList(){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getPromoterList());
+    }
+
+    @PostMapping("/promoter")
+    public UserDTO saveUserParticipant(@RequestBody SaveParticipantDTO participantDTO){
+        try {
+            UserDTO userDTO = userService.savePromoter(participantDTO);
+            return userDTO;
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (NullParameterException | EmailNotValidException | PasswordNotValidException | CpfNotValidException | DateOutOfRangeException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
     @GetMapping("/getUserByEmail/{email}")
     public UserDTO getUserByEmail(@PathVariable String email){
         try {

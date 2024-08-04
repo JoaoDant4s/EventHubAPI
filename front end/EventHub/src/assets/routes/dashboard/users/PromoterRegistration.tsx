@@ -5,7 +5,7 @@ import { faAddressCard, faArrowRight, faCalendarDays, faChevronRight, faComment,
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FormEvent, useEffect, useState } from "react";
 import Alert, { getAlert, setAlert, Status } from "../../../components/Alert";
-import { apiAttractionUpdateInfo, apiGetAttractionById, apiGetByEmail, apiParticipantUpdateInfo, AttractionDTO, AttractionInfoDTO, ParticipantInfoDTO } from "../../../api/services/user";
+import { apiAttractionUpdateInfo, apiGetAttractionById, apiGetByEmail, apiParticipantRegistration, apiParticipantUpdateInfo, apiPromoterRegistration, AttractionDTO, AttractionInfoDTO, ParticipantInfoDTO, ParticipantRegistrationDTO } from "../../../api/services/user";
 import { UserDTO } from "../../../api/services/user";
 import { PatternFormat } from 'react-number-format';
 import { Role } from "../../../../main";
@@ -34,57 +34,33 @@ export default function PromoterRegistration() {
   const saveUser=async (e: FormEvent<HTMLFormElement>)=> {
     e.preventDefault();
     
-    if(role === "attraction"){
-      const attractionInfo:AttractionInfoDTO = {
-        id:Number(attraction?.id),
-        name:name.trim(),
-        cpf:cpf.trim(),
-        birthDate:birthDate.trim(),
-        description:description.trim(),
-        contact:contact.trim(),
-      }
-  
-      const response = await apiAttractionUpdateInfo(attractionInfo)
-      .then((response)=>{
-        const data = response?.data;
-        console.log(data);
-        setAlert("Informações atualizadas com sucesso!", "success", true);
-        navigate("/dashboard/profile");
-      })
-      .catch((e)=>{
-        if(e.response.data.detail == null){
-          setAlert("Algo inesperado aconteceu", "alert", true);
-        } else {
-          setAlert(e.response.data.detail, "alert", true);
-        }
-        getAlert(setMessage, setStatus, setVisible, setTitle);
-  
-      });
-    } else {
-      const participantInfo:ParticipantInfoDTO = {
-        id:Number(user?.id),
-        name:name.trim(),
-        cpf:cpf.trim(),
-        birthDate:birthDate.trim(),
-      }
-  
-      const response = await apiParticipantUpdateInfo(participantInfo)
-      .then((response)=>{
-        const data = response?.data;
-        
-        setAlert("Informações atualizadas com sucesso!", "success", true);
-        navigate("/dashboard/profile");
-      })
-      .catch((e)=>{
-        if(e.response.data.detail == null){
-          setAlert("Algo inesperado aconteceu", "alert", true);
-        } else {
-          setAlert(e.response.data.detail, "alert", true);
-        }
-        getAlert(setMessage, setStatus, setVisible, setTitle);
-  
-      });
+    const participant:ParticipantRegistrationDTO = {
+      email: email,
+      password: password,
+      confirmPassword: confirmPassword,
+      name: name,
+      cpf: cpf,
+      birthDate: birthDate,
     }
+
+    const response = await apiPromoterRegistration(participant)
+    .then((response)=>{
+      const data = response?.data;
+      console.log(data)
+      
+      setAlert("Promotor cadastrado com sucesso!", "success", true);
+      navigate("/admin/users");
+    })
+    .catch((e)=>{
+      console.log(e.response.data);
+      if(e.response.data.detail == null){
+        setAlert("Algo inesperado aconteceu", "alert", true);
+      } else {
+        setAlert(e.response.data.detail, "alert", true);
+      }
+      getAlert(setMessage, setStatus, setVisible, setTitle);
+
+    });
   }
 
   const setUserData = async () =>{
