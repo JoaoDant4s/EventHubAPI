@@ -19,6 +19,9 @@ import com.imd.web2.auth.resources.dto.TokenDTO;
 import com.imd.web2.auth.resources.exceptions.PasswordNotValidException;
 import com.imd.web2.auth.security.JwtService;
 import com.imd.web2.auth.services.AuthService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("api/auth")
@@ -46,4 +49,11 @@ public class AuthController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
+
+    @GetMapping("/validate")
+    public String validateToken(@RequestParam("token") String token) {
+        Boolean result = jwtService.tokenValido(token);
+        return result ? "Valid token" : "Not valid token";
+    }
+    
 }

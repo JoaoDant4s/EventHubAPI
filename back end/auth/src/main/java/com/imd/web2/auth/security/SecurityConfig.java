@@ -47,45 +47,8 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .headers(headers -> headers.frameOptions(frame -> frame.disable()))
-            .authorizeHttpRequests((authorize) ->
-            authorize
-                .requestMatchers("/v3/api-docs/**", "/swagger-resources/**", "/swagger-ui/**").permitAll()
-                .requestMatchers("/").permitAll()
-/*
-                //USER PERMISSIONS
-                //.requestMatchers(HttpMethod.POST ,"/api/user").hasRole("ADMIN")
-                //.requestMatchers(HttpMethod.POST ,"/api/user/auth").permitAll()
-                //.requestMatchers(HttpMethod.DELETE ,"/api/user").hasRole("ADMIN")
-                //.requestMatchers("/api/user").hasAnyRole("USER", "ADMIN")
-
-                //ATTRACTION PERMISSIONS
-                .requestMatchers(HttpMethod.POST ,"/api/attraction").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE ,"/api/attraction").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.PUT ,"/api/attraction").hasAnyRole("ADMIN", "ATTRACTION")
-                .requestMatchers("/api/attraction").hasAnyRole("ADMIN", "ATTRACTION", "PROMOTER")
-
-                //PARTICIPANT PERMISSIONS
-                .requestMatchers(HttpMethod.POST ,"/api/participant").permitAll()
-                .requestMatchers(HttpMethod.DELETE ,"/api/participant").hasRole("ADMIN")
-                .requestMatchers("/api/participant").hasAnyRole("USER", "ADMIN")
-
-                //EVENT PERMISSIONS
-                //.requestMatchers("/api/event/").hasAnyRole("ADMIN", "PROMOTER")
-                .requestMatchers("/api/event/").permitAll()
-
-                //SUB EVENT PERMISSIONS
-                //.requestMatchers("/api/event/").hasAnyRole("ADMIN", "PROMOTER")
-                .requestMatchers("/api/subEvent/").permitAll()
-                
-                //CREDIT CARD PERMISSIONS
-                .requestMatchers("/api/creditCard").hasAnyRole("USER", "ADMIN")
-
-                //FEEDBACK PERMISSIONS
-                .requestMatchers("/api/feedback").hasAnyRole("USER", "ADMIN")
-                    */
-
-                .anyRequest().permitAll()
-
+            .authorizeHttpRequests(authorize -> authorize
+                .anyRequest().permitAll() // Permite todas as requisições sem restrições
             )
             /*
              * No Java Spring Security, o método addFilterBefore() é usado para adicionar um filtro 
