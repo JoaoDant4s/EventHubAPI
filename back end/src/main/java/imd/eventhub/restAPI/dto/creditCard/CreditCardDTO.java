@@ -25,7 +25,7 @@ public class CreditCardDTO {
 
     public CreditCardDTO(){}
 
-    public static CreditCardDTO convertCreditCardToCreditCardDTO(CreditCard creditCard){
+    public static CreditCardDTO toCreditCardDTO(CreditCard creditCard){
         CreditCardDTO creditCardDTO = new CreditCardDTO();
         creditCardDTO.setId(creditCard.getId());
         creditCardDTO.setCardNumber(creditCard.getCardNumber());

@@ -1,6 +1,7 @@
 package imd.eventhub.restAPI.controller;
 
 import imd.eventhub.exception.*;
+import imd.eventhub.restAPI.dto.creditCard.CreditCardDTO;
 import imd.eventhub.restAPI.dto.creditCard.SaveCreditCardDTO;
 import imd.eventhub.restAPI.dto.creditCard.UpdateCreditCardDTO;
 import imd.eventhub.restAPI.infra.RestErrorMessage;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("api/creditCard")
@@ -20,22 +22,32 @@ public class CreditCardController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getCreditCardById(@PathVariable Integer id){
+    public CreditCardDTO getCreditCardById(@PathVariable Integer id){
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(creditCardService.getById(id).get());
-        } catch (NotFoundException exception){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RestErrorMessage(404, HttpStatus.NOT_FOUND, exception.getMessage()));
+            return creditCardService.getById(id).get();
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+    @GetMapping("/getByParticipantId/{id}")
+    public CreditCardDTO getByParticipantId(@PathVariable Integer id){
+        try {
+            return creditCardService.getByParticipantId(id).get();
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @PostMapping
-    public ResponseEntity<Object> saveCreditCard(@RequestBody SaveCreditCardDTO creditCardDTODTO){
+    public CreditCardDTO saveCreditCard(@RequestBody SaveCreditCardDTO creditCardDTODTO){
         try{
-            return ResponseEntity.status(HttpStatus.CREATED).body(creditCardService.save(creditCardDTODTO));
-        } catch(NotFoundException | CreditCardNotValidException exception){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RestErrorMessage(400, HttpStatus.BAD_REQUEST, exception.getMessage()));
-        } catch(Exception exception){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new RestErrorMessage(500, HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage()));
+            return creditCardService.save(creditCardDTODTO);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (CreditCardNotValidException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 

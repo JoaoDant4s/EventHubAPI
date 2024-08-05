@@ -2,6 +2,7 @@ package imd.eventhub.restAPI.controller;
 
 import imd.eventhub.exception.*;
 import imd.eventhub.model.User;
+import imd.eventhub.restAPI.dto.participant.SaveParticipantDTO;
 import imd.eventhub.restAPI.dto.user.*;
 import imd.eventhub.restAPI.infra.RestErrorMessage;
 import imd.eventhub.restAPI.infra.RestSuccessMessage;
@@ -36,6 +37,24 @@ public class UserController {
     public ResponseEntity<Object> getUserList(){
         return ResponseEntity.status(HttpStatus.OK).body(userService.getList());
     }
+
+    @GetMapping("/promoter")
+    public ResponseEntity<Object> getPromoterList(){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getPromoterList());
+    }
+
+    @PostMapping("/promoter")
+    public UserDTO saveUserParticipant(@RequestBody SaveParticipantDTO participantDTO){
+        try {
+            UserDTO userDTO = userService.savePromoter(participantDTO);
+            return userDTO;
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (NullParameterException | EmailNotValidException | PasswordNotValidException | CpfNotValidException | DateOutOfRangeException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
     @GetMapping("/{id}")
     public UserDTO getUserById(@PathVariable Integer id){
         try {

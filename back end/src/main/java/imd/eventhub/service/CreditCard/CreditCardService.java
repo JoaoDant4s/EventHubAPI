@@ -24,13 +24,10 @@ public class CreditCardService implements ICreditCardService{
     ICreditCardRepository creditCardRepository;
 
     @Autowired
-    IParticipantService participantService;
-
-    @Autowired
     IParticipantRepository participantRepository;
 
     @Override
-    public CreditCardDTO save(SaveCreditCardDTO creditCardDTO) throws Exception{
+    public CreditCardDTO save(SaveCreditCardDTO creditCardDTO) throws NotFoundException, CreditCardNotValidException {
 
         if (creditCardDTO.getCardNumber() == null || creditCardDTO.getCardNumber().isEmpty()) throw new NotFoundException("Número do cartão não pode estar vazio");
         if (creditCardDTO.getExpiration() == null) throw new NotFoundException("Data de validade não pode estar vazia");
@@ -49,7 +46,7 @@ public class CreditCardService implements ICreditCardService{
 
         CreditCard savedCreditCard = creditCardRepository.save(creditCard);
 
-        CreditCardDTO showCreditCard = CreditCardDTO.convertCreditCardToCreditCardDTO(savedCreditCard);
+        CreditCardDTO showCreditCard = CreditCardDTO.toCreditCardDTO(savedCreditCard);
 
         return showCreditCard;
     }
@@ -68,7 +65,7 @@ public class CreditCardService implements ICreditCardService{
 
         CreditCard savedCreditCard = creditCardRepository.save(getCreditCard.get());
 
-        CreditCardDTO showCreditCard = CreditCardDTO.convertCreditCardToCreditCardDTO(savedCreditCard);
+        CreditCardDTO showCreditCard = CreditCardDTO.toCreditCardDTO(savedCreditCard);
 
         return showCreditCard;
     }
@@ -85,7 +82,7 @@ public class CreditCardService implements ICreditCardService{
 
     @Override
     public Optional<CreditCardDTO> getById(Integer id){
-        Optional<CreditCardDTO> creditCardDTO = creditCardRepository.findById(id).stream().findAny().map(CreditCardDTO::convertCreditCardToCreditCardDTO);
+        Optional<CreditCardDTO> creditCardDTO = creditCardRepository.findById(id).stream().findAny().map(CreditCardDTO::toCreditCardDTO);
         if(creditCardDTO.isEmpty()) throw new NotFoundException("Cartão de crédito não encontrado");
         return creditCardDTO;
     }
@@ -98,9 +95,9 @@ public class CreditCardService implements ICreditCardService{
     }
 
     @Override
-    public Optional<CreditCardDTO> getByParticipant(Participant participant) throws Exception{
-        if(participant == null) throw new Exception("Participante passado é nulo");
-        Optional<CreditCardDTO> creditCardDTO = creditCardRepository.findCreditCardByParticipant(participant).stream().findAny().map(CreditCardDTO::convertCreditCardToCreditCardDTO);
+    public Optional<CreditCardDTO> getByParticipantId(Integer id) throws Exception{
+        if(id == null) throw new Exception("Participante passado é nulo");
+        Optional<CreditCardDTO> creditCardDTO = creditCardRepository.getByParticipantId(id).stream().findAny().map(CreditCardDTO::toCreditCardDTO);
         if(creditCardDTO.isEmpty()) throw new Exception("Não existe um cartão de crédito vinculado ao participante informado");
         return creditCardDTO;
     }

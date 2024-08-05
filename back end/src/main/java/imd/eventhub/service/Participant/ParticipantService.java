@@ -42,7 +42,7 @@ public class ParticipantService implements IParticipantService{
 
     @Override
     public List<UserDTO> getList() {
-        return userRepository.findByParticipantIsNotNull().stream().map(user-> {
+        return userRepository.getParticipants().stream().map(user-> {
             UserDTO userDTO = UserDTO.toUserDTO(user);
             return userDTO;
         }).collect(Collectors.toList());

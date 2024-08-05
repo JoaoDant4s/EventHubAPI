@@ -8,6 +8,7 @@ import imd.eventhub.model.User;
 import imd.eventhub.repository.IAttractionRepository;
 import imd.eventhub.repository.IParticipantRepository;
 import imd.eventhub.repository.IUserRepository;
+import imd.eventhub.restAPI.dto.participant.SaveParticipantDTO;
 import imd.eventhub.restAPI.dto.user.SaveUserDTO;
 import imd.eventhub.restAPI.dto.user.UpdateUserDTO;
 import imd.eventhub.restAPI.dto.user.UserDTO;
@@ -50,6 +51,51 @@ public class UserService implements IUserService, UserDetailsService {
             UserDTO userDTO = UserDTO.toUserDTO(user);
             return userDTO;
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserDTO> getPromoterList() {
+        return userRepository.getPromoters().stream().map(user-> {
+            UserDTO userDTO = UserDTO.toUserDTO(user);
+            return userDTO;
+        }).collect(Collectors.toList());
+    }
+
+    @Override
+    public UserDTO savePromoter(SaveParticipantDTO partDTO) throws NullParameterException, EmailNotValidException, PasswordNotValidException, CpfNotValidException, DateOutOfRangeException {
+
+
+        boolean checkUser = isValid(
+                new SaveUserDTO(
+                        partDTO.getName(),
+                        partDTO.getCpf(),
+                        partDTO.getBirthDate().toString(),
+                        partDTO.getEmail(),
+                        partDTO.getPassword(),
+                        partDTO.getConfirmPassword()
+                )
+        );
+
+        if(checkUser){
+            Participant participant = new Participant();
+            Participant savedParticipant = participantRepository.save(participant);
+
+            User user = new User();
+            user.setName(partDTO.getName());
+            user.setCpf(partDTO.getCpf());
+            user.setEmail(partDTO.getEmail());
+            user.setBirthDate(partDTO.getBirthDate());
+            user.setAge((int) ChronoUnit.YEARS.between(user.getBirthDate(),LocalDate.now()));
+            user.setPassword(passwordEncoder.encode(partDTO.getPassword()));
+            user.setParticipant(savedParticipant);
+            user.setPromoter(true);
+            User savedUser = userRepository.save(user);
+
+            UserDTO showUser = UserDTO.toUserDTO(savedUser);
+            return showUser;
+        }
+
+        return null;
     }
 
     @Override

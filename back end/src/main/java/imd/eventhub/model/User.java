@@ -51,17 +51,23 @@ public class User {
     private boolean promoter;
 
     public User() {
+        this.admin = false;
+        this.promoter = false;
     }
 
     public User(String name, String cpf) {
         this.name = name;
         this.cpf = cpf;
+        this.admin = false;
+        this.promoter = false;
     }
 
     public User(String name, String cpf, String birthDate) {
         this.name = name;
         this.cpf = cpf;
         this.birthDate = LocalDate.parse(birthDate);
+        this.admin = false;
+        this.promoter = false;
     }
 
     public User(String name, String cpf, String birthDate, String email, String password) {
@@ -70,6 +76,8 @@ public class User {
         this.birthDate = LocalDate.parse(birthDate);
         this.email = email;
         this.password = password;
+        this.admin = false;
+        this.promoter = false;
     }
 
     public User(String name, String cpf, String birthDate, String email, String password, boolean admin, boolean promoter) {
