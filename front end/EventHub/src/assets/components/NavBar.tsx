@@ -13,6 +13,24 @@ export type NavbarProps = ComponentProps<'nav'> & {
     routes:Array<NavItem>
 }
 
+export const dynamicRoute=(itemPath:String, locationPath:String)=>{  
+    if(itemPath.includes(":")){
+      let itemPathSplit = itemPath.split('/');
+      let locationPathSplit = locationPath.split('/');
+  
+      itemPathSplit.pop();
+      locationPathSplit.pop();
+      let itemPathJoined = itemPathSplit.join('/') + "/";
+      let locationPathJoined = locationPathSplit.join('/') + "/";
+  
+      if(itemPathJoined === locationPathJoined){
+          return true;
+      }
+    }
+  
+    return false;
+  }
+
 export default function NavBar({ name = "Username", role = "Participant", navItems, routes, className, ...props}:NavbarProps) {
     const location = useLocation();
     const navigate = useNavigate();
@@ -24,7 +42,7 @@ export default function NavBar({ name = "Username", role = "Participant", navIte
     }
 
     const setColor=(item:NavItem)=>{
-        if(item.path === location.pathname || item.path === routes?.find((i)=>i.path === location.pathname)?.pathRoot){
+        if(item.path === location.pathname || item.path === routes?.find((i)=>i.path === location.pathname || dynamicRoute(i.path, location.pathname))?.pathRoot){
             return "default"
         } else {
             return "transparency"
@@ -32,7 +50,7 @@ export default function NavBar({ name = "Username", role = "Participant", navIte
     }
 
   return (
-    <nav className=' bg-bg-white w-[360px] h-[100vh] shadow-xl absolute left-0 p-8 flex flex-col' {...props} >
+    <nav className=' bg-bg-white w-[360px] h-[100vh] shadow-xl fixed left-0 p-8 flex flex-col' {...props} >
         <div className='flex justify-center'>
             <h1 className=' text-font-title font-extrabold text-[2rem] my-10 '>EVENTHUB</h1>
         </div>

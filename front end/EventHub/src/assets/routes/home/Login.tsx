@@ -16,20 +16,20 @@ import { NavItem } from '../../../main';
 export default function Login() {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState<String>("");
-  const [password, setPassword] = useState<String>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   //ALERT STATES
-  const [message, setMessage] = useState<String>("");
+  const [message, setMessage] = useState<string>("");
   const [status, setStatus] = useState<Status>("success");
   const [visible, setVisible] = useState<boolean>(false);
-  const [title, setTitle] = useState<String>("Sucesso!");
+  const [title, setTitle] = useState<string>("Sucesso!");
 
 
   interface authResponse {
-    login:String,
-    roles:Array<String>
-    token:String
+    login:string,
+    roles:Array<string>
+    token:string
   }
 
   const login = async (e:FormEvent)=>{
@@ -59,7 +59,6 @@ export default function Login() {
       navigate("/dashboard");
     })
     .catch((e)=>{
-      console.log(e.response.data);
       setAlert(e.response.data.message, "alert", true);
       getAlert(setMessage, setStatus, setVisible, setTitle);
     });

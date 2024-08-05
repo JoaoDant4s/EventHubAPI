@@ -15,10 +15,10 @@ export default function Profile() {
   const [role, setRole] = useState<Role>("participant");
 
   //ALERT STATES
-  const [message, setMessage] = useState<String>("");
+  const [message, setMessage] = useState<string>("");
   const [status, setStatus] = useState<Status>("success");
   const [visible, setVisible] = useState<boolean>(false);
-  const [title, setTitle] = useState<String>("Sucesso!");
+  const [title, setTitle] = useState<string>("Sucesso!");
 
   const setUserData = async () =>{
     const login = localStorage.getItem("login") || "";
@@ -62,7 +62,7 @@ export default function Profile() {
             <p className=" text-font-text "><span className=" font-bold">Nome:</span> {user?.name}</p>
             <p className=" text-font-text "><span className=" font-bold">Email:</span> {user?.email}</p>
             <p className=" text-font-text "><span className=" font-bold">{role == "promoter"?"CNPJ:":"CPF:"}</span> {user?.cpf}</p>
-            <p className=" text-font-text "><span className=" font-bold">Data de nascimento:</span> {user?.birthDate}</p>
+            <p className=" text-font-text "><span className=" font-bold">{role == "promoter"?"Data de fundação:":"Data de nascimento:"}</span> {user?.birthDate}</p>
             <p className=" text-font-text "><span className=" font-bold">Idade:</span> {user?.age.toString()}</p>
             {
               role == "attraction"

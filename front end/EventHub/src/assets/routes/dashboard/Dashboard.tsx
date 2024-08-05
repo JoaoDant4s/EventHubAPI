@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import NavBar from "../../components/NavBar";
+import NavBar, { dynamicRoute } from "../../components/NavBar";
 import Container from "../../components/Container";
 import Main from "../../components/Main";
 import { ComponentProps, ReactNode, useEffect, useState } from "react";
@@ -24,10 +24,10 @@ export default function Dashboard({routes}:DashboardProps) {
   const [currentRoute, setCurrentRoute] = useState<NavItem>();
 
   //ALERT STATES
-  const [message, setMessage] = useState<String>("");
+  const [message, setMessage] = useState<string>("");
   const [status, setStatus] = useState<Status>("success");
   const [visible, setVisible] = useState<boolean>(false);
-  const [title, setTitle] = useState<String>("Sucesso!");
+  const [title, setTitle] = useState<string>("Sucesso!");
 
 
   const getRoleName=()=>{
@@ -43,7 +43,7 @@ export default function Dashboard({routes}:DashboardProps) {
   }
 
   const setNavItemList=()=>{
-    setCurrentRoute(routes.find((item)=>item.path === location.pathname));
+    setCurrentRoute(routes.find((item)=>item.path === location.pathname || dynamicRoute(item.path, location.pathname)));
     setNavItems(routes.filter((item=>item.permission.find((p)=>p === role && item.navbar === true))));
   }
 

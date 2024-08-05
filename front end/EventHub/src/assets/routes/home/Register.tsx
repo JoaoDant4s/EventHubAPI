@@ -5,7 +5,7 @@ import { faUser, faEnvelope, faAddressCard, faCalendarDays, faLock, faArrowRight
 
 import Button from '../../components/Button';
 import { FormEvent, SetStateAction, useState } from 'react';
-import { apiParticipantRegistration, participantRegistrationDTO } from '../../api/services/user';
+import { apiParticipantRegistration, ParticipantRegistrationDTO } from '../../api/services/user';
 import Alert, { getAlert, setAlert, Status } from '../../components/Alert';
 import { PatternFormat } from 'react-number-format';
 
@@ -13,23 +13,23 @@ export default function Register() {
   const navigate = useNavigate();
 
 
-  const [name, setName] = useState<String>("");
-  const [email, setEmail] = useState<String>("");
-  const [cpf, setCpf] = useState<String>("");
-  const [birthDate, setBirthDate] = useState<String>("");
-  const [password, setPassword] = useState<String>("");
-  const [confirmPassword, setConfirmPassword] = useState<String>("");
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [cpf, setCpf] = useState<string>("");
+  const [birthDate, setBirthDate] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
 
   //ALERT STATES
-  const [message, setMessage] = useState<String>("");
+  const [message, setMessage] = useState<string>("");
   const [status, setStatus] = useState<Status>("success");
   const [visible, setVisible] = useState<boolean>(false);
-  const [title, setTitle] = useState<String>("Sucesso!");
+  const [title, setTitle] = useState<string>("Sucesso!");
 
   const register = async (e:FormEvent)=>{
     e.preventDefault();
     
-    const participant:participantRegistrationDTO = {
+    const participant:ParticipantRegistrationDTO = {
       email: email,
       password: password,
       confirmPassword: confirmPassword,
@@ -41,13 +41,11 @@ export default function Register() {
     const response = await apiParticipantRegistration(participant)
     .then((response)=>{
       const data = response?.data;
-      console.log(data)
       
       setAlert("Participante cadastrado com sucesso!", "success", true);
       navigate("/");
     })
     .catch((e)=>{
-      console.log(e.response.data);
       if(e.response.data.detail == null){
         setAlert("Algo inesperado aconteceu", "alert", true);
       } else {
@@ -78,7 +76,7 @@ export default function Register() {
             </label>
             <label className=" flex items-center w-full ">
               <FontAwesomeIcon icon={faAddressCard} className=' absolute pl-3 text-font-icon text-sm' />
-              <PatternFormat format="###.###.###-##" mask={"_"} onChange={(e: { target: { value: SetStateAction<String>; }; })=>setCpf(e.target.value)} className=" bg-bg-input w-full p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm " type="text" name="cpf" id="cpf" placeholder="CPF" />
+              <PatternFormat format="###.###.###-##" mask={"_"} onChange={(e: { target: { value: SetStateAction<string>; }; })=>setCpf(e.target.value)} className=" bg-bg-input w-full p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm " type="text" name="cpf" id="cpf" placeholder="CPF" />
             </label>
             <label className=" flex items-center w-full ">
               <FontAwesomeIcon icon={faCalendarDays} className=' absolute pl-3 text-font-icon text-sm' />

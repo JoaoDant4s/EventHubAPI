@@ -2,16 +2,16 @@ import { ComponentProps } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 
-export type Status = "success" | "info" | "alert" | "danger" | String;
+export type Status = "success" | "info" | "alert" | "danger" | string;
 
 type AlertProps = ComponentProps<'div'> & {
     status?:Status;
-    title:String;
+    title:string;
     visible?:boolean;
     setVisible?:React.Dispatch<React.SetStateAction<boolean>>
 } 
 
-export const setAlert=(message:String, status:Status, visible:boolean)=>{
+export const setAlert=(message:string, status:Status, visible:boolean)=>{
     
     localStorage.setItem("alertMessage", message.toString());
     localStorage.setItem("alertStatus", status.toString());
@@ -20,10 +20,10 @@ export const setAlert=(message:String, status:Status, visible:boolean)=>{
 }
 
 export const getAlert=(
-    setMessage:React.Dispatch<React.SetStateAction<String>>,
+    setMessage:React.Dispatch<React.SetStateAction<string>>,
     setStatus:React.Dispatch<React.SetStateAction<Status>>,
     setVisible:React.Dispatch<React.SetStateAction<boolean>>,
-    setTitle:React.Dispatch<React.SetStateAction<String>>
+    setTitle:React.Dispatch<React.SetStateAction<string>>
 )=>{
     
     if(localStorage.getItem("alertMessage") !== null) {
@@ -81,7 +81,7 @@ export default function Alert({children, status = "success", visible = false, se
         <div
             className={
             twMerge(
-                ` ${status == "success"?' bg-success-50 border-success-500':''} ${status == "alert"?' bg-alert-50 border-alert-500':''} ${status == "danger"?'bg-danger-50 border-danger-500':''} ${status == "info"?' bg-info-50 border-info-500 ':''} border-l-8 w-[400px]  absolute box-border top-0 right-0 p-4 m-8 rounded-md shadow-md cursor-pointer select-none ${visible==true?'':'hidden opacity-0'} `,
+                ` ${status == "success"?' bg-success-50 border-success-500':''} ${status == "alert"?' bg-alert-50 border-alert-500':''} ${status == "danger"?'bg-danger-50 border-danger-500':''} ${status == "info"?' bg-info-50 border-info-500 ':''} border-l-8 w-[400px] fixed box-border top-0 right-0 p-4 m-8 rounded-md shadow-md cursor-pointer select-none ${visible==true?'':'hidden opacity-0'} `,
                 className
             )}
             onClick={(e)=>closeAlert(e)}
