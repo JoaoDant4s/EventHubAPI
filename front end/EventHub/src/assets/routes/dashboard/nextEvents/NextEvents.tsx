@@ -5,6 +5,7 @@ import Button from "../../../components/Button";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { apiGetEventList, EventDTO } from "../../../api/services/events";
+import { formatDate } from "../../../api/services/utils";
 
 export default function NextEvents() {
   const navigate = useNavigate();
@@ -22,12 +23,6 @@ export default function NextEvents() {
   useEffect(()=>{
     getEvents()
   })
-
-  const formatDate=(date:String)=>{
-    let dateObject = new Date(date.toString());
-
-    return dateObject.toLocaleDateString("pt-br")
-  }
 
   return (
     <>

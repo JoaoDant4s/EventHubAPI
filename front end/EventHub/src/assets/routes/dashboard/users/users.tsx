@@ -8,6 +8,7 @@ import { apiDeleteUser, apiGetAttractionById, apiGetAttractionList, apiGetByEmai
 import { UserDTO, AttractionDTO } from "../../../api/services/user";
 import { Role } from "../../../../main";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { formatDate } from "../../../api/services/utils";
 
 export default function Users() {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ export default function Users() {
     });
   }
 
-  const deleteUser= async (userId:Number)=>{
+  const deleteUser= async (userId:number)=>{
     await apiDeleteUser(userId)
     .then((response)=>{
       setAlert("Usuário apagado com sucesso!", "success", true);
@@ -50,12 +51,6 @@ export default function Users() {
 
     });
     setDeleteControl(!deleteControl);
-  }
-
-  const formatDate=(date:String)=>{
-    let dateObject = new Date(date.toString());
-
-    return dateObject.toLocaleDateString("pt-br")
   }
 
   useEffect(()=>{

@@ -1,82 +1,82 @@
 import { axiosAPI } from "../../index"
 
 export interface LoginDTO {
-  email:String,
-  password:String
+  email:string,
+  password:string
 }
 
 export interface UserDTO {
-    id:Number,
-    name:String,
-    email:String,
-    cpf:String,
-    birthDate:String,
-    age:Number,
-    attractionId:Number,
-    participantId:Number,
+    id:number,
+    name:string,
+    email:string,
+    cpf:string,
+    birthDate:string,
+    age:number,
+    attractionId:number,
+    participantId:number,
     promoter:Boolean
 }
 
 export interface ParticipantRegistrationDTO {
-  email:String,
-  password:String,
-  confirmPassword:String,
-  name:String,
-  cpf:String,
-  birthDate:String
+  email:string,
+  password:string,
+  confirmPassword:string,
+  name:string,
+  cpf:string,
+  birthDate:string
 }
 
 export interface ParticipantInfoDTO {
-  id:Number,
-  name:String,
-  cpf:String,
-  birthDate:String,
+  id:number,
+  name:string,
+  cpf:string,
+  birthDate:string,
 }
 
 export interface AttractionInfoDTO {
-  id:Number,
-  name:String,
-  cpf:String,
-  birthDate:String,
-  description:String,
-  contact:String,
+  id:number,
+  name:string,
+  cpf:string,
+  birthDate:string,
+  description:string,
+  contact:string,
 }
 
 export interface AttractionDTO {
-  id:Number,
-  description:String,
-  contact:String,
-  userId:Number
+  id:number,
+  description:string,
+  contact:string,
+  userId:number
 }
 
 export interface SaveAttractionDTO {
-  description:String,
-  contact:String
+  description:string,
+  contact:string
 }
 
 export interface SaveAttractionUserDTO {
-    email:String,
-    password:String,
-    confirmPassword:String,
-    name:String,
-    cpf:String,
-    birthDate:String,
+    email:string,
+    password:string,
+    confirmPassword:string,
+    name:string,
+    cpf:string,
+    birthDate:string,
     attraction:SaveAttractionDTO
 }
 
 export interface SaveCreditCardDTO {
-    cardNumber:String,
-    expiration:String,
-    cardHolderName:String,
-    participantId:Number
+    cardnumber:string,
+    expiration:string,
+    cardHolderName:string,
+    participantId:number
 }
 
 export interface CreditCardDTO {
-    id:Number
-    cardHolderName:String
-    cardNumber:String
-    expiration:String
-    participantId:Number
+    id:number
+    cardHolderName:string
+    cardnumber:string
+    expiration:string
+    participantId:number
 }
 
 let config:object = {
@@ -94,7 +94,7 @@ export async function apiGetUsers() {
     return axiosAPI.get('/user', config);
 }
 
-export async function apiGetUserById(userId:Number) {
+export async function apiGetUserById(userId:number) {
     const token = localStorage.getItem("token");
     config = {
         headers: {
@@ -110,7 +110,7 @@ export async function apiParticipantRegistration(participantRegistration:Partici
     return axiosAPI.post('/participant', participantRegistration, config);
 }
 
-export async function apiGetByEmail(email:String) {
+export async function apiGetByEmail(email:string) {
     const token = localStorage.getItem("token");
     config = {
         headers: {
@@ -122,7 +122,7 @@ export async function apiGetByEmail(email:String) {
     return axiosAPI.get('/user/getUserByEmail/'+email, config);
 }
 
-export async function apiDeleteUser(userId:Number) {
+export async function apiDeleteUser(userId:number) {
     const token = localStorage.getItem("token");
     config = {
         headers: {
@@ -146,7 +146,7 @@ export async function apiParticipantUpdateInfo(participantInfo:ParticipantInfoDT
     return axiosAPI.put('/participant/updateInfo', participantInfo, config);
 }
 
-export async function apiGetAttractionById(id:Number) {
+export async function apiGetAttractionById(id:number) {
     const token = localStorage.getItem("token");
     config = {
         headers: {
@@ -244,7 +244,7 @@ export async function apiSaveCreditCard(saveCreditCardDTO:SaveCreditCardDTO) {
     return axiosAPI.post('/creditCard', saveCreditCardDTO, config);
 }
 
-export async function apiGetByParticipantId(participantId:Number) {
+export async function apiGetByParticipantId(participantId:number) {
     const token = localStorage.getItem("token");
     config = {
         headers: {
@@ -256,7 +256,7 @@ export async function apiGetByParticipantId(participantId:Number) {
     return axiosAPI.get('/creditCard/getByParticipantId/'+participantId, config);
 }
 
-export async function apiDeleteCreditCrad(creditCardId:Number) {
+export async function apiDeleteCreditCrad(creditCardId:number) {
     const token = localStorage.getItem("token");
     config = {
         headers: {

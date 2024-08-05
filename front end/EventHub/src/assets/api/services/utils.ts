@@ -8,3 +8,9 @@ export const unsetStates=()=>{
     if (localStorage.getItem("login"))localStorage.removeItem("login");
     if (localStorage.getItem("attraction"))localStorage.removeItem("attraction"); 
 }
+
+export const formatDate=(date:string)=>{
+    let dateObject = new Date(date.toString());
+
+    return dateObject.toLocaleDateString("pt-br")
+}
