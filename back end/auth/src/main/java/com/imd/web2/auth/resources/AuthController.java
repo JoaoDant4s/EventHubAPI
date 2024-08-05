@@ -15,10 +15,21 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.imd.web2.auth.model.User;
 import com.imd.web2.auth.resources.dto.CredenciaisDTO;
+import com.imd.web2.auth.resources.dto.SaveParticipantDTO;
 import com.imd.web2.auth.resources.dto.TokenDTO;
+import com.imd.web2.auth.resources.dto.UserDTO;
+import com.imd.web2.auth.resources.exceptions.CpfNotValidException;
+import com.imd.web2.auth.resources.exceptions.DateOutOfRangeException;
+import com.imd.web2.auth.resources.exceptions.EmailNotValidException;
+import com.imd.web2.auth.resources.exceptions.NotFoundException;
+import com.imd.web2.auth.resources.exceptions.NullParameterException;
 import com.imd.web2.auth.resources.exceptions.PasswordNotValidException;
 import com.imd.web2.auth.security.JwtService;
 import com.imd.web2.auth.services.AuthService;
+import com.imd.web2.auth.services.IParticipantService;
+import com.imd.web2.auth.services.ParticipantService;
+import com.netflix.discovery.converters.Auto;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -29,6 +40,9 @@ public class AuthController {
 
     @Autowired
     AuthService authService;
+
+    @Autowired
+    ParticipantService participantService;
 
     @Autowired
     JwtService jwtService;
@@ -56,4 +70,15 @@ public class AuthController {
         return result ? "Valid token" : "Not valid token";
     }
     
+    @PostMapping("/create")
+    public UserDTO saveUserParticipant(@RequestBody SaveParticipantDTO participantDTO){
+        try {
+            UserDTO userDTO = participantService.save(participantDTO);
+            return userDTO;
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (NullParameterException | EmailNotValidException | PasswordNotValidException | CpfNotValidException | DateOutOfRangeException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
 }

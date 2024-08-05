@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.imd.web2.auth.feignclients.UserFeignClient;
 import com.imd.web2.auth.model.User;
+import com.imd.web2.auth.repository.IUserRepository;
 import com.imd.web2.auth.resources.exceptions.*;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,15 +21,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 @Service
 public class AuthService implements UserDetailsService{
     @Autowired
-    private UserFeignClient userClient;
+    private IUserRepository userClient;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        Optional<User> user = Optional.ofNullable(userClient.findByEmail(email)
-        .getBody());
+        Optional<User> user = userClient.findByEmail(email);
 
         if(user.isEmpty()){
             throw new NotFoundException("Email ou senha incorreta");
