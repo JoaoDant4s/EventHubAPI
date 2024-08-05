@@ -1,28 +1,28 @@
 import { axiosAPI } from "../../index"
 
 export interface LoginDTO {
-  email:String
+  email:String,
   password:String
 }
 
 export interface UserDTO {
-    id:Number
-    name:String
-    email:String
-    cpf:String
-    birthDate:String
-    age:Number
-    attractionId:Number
-    participantId:Number
+    id:Number,
+    name:String,
+    email:String,
+    cpf:String,
+    birthDate:String,
+    age:Number,
+    attractionId:Number,
+    participantId:Number,
     promoter:Boolean
 }
 
 export interface ParticipantRegistrationDTO {
-  email:String
-  password:String
-  confirmPassword:String
-  name:String
-  cpf:String
+  email:String,
+  password:String,
+  confirmPassword:String,
+  name:String,
+  cpf:String,
   birthDate:String
 }
 
@@ -44,13 +44,13 @@ export interface AttractionInfoDTO {
 
 export interface AttractionDTO {
   id:Number,
-  description:String
-  contact:String
+  description:String,
+  contact:String,
   userId:Number
 }
 
 export interface SaveAttractionDTO {
-  description:String
+  description:String,
   contact:String
 }
 
@@ -62,6 +62,21 @@ export interface SaveAttractionUserDTO {
     cpf:String,
     birthDate:String,
     attraction:SaveAttractionDTO
+}
+
+export interface SaveCreditCardDTO {
+    cardNumber:String,
+    expiration:String,
+    cardHolderName:String,
+    participantId:Number
+}
+
+export interface CreditCardDTO {
+    id:Number
+    cardHolderName:String
+    cardNumber:String
+    expiration:String
+    participantId:Number
 }
 
 let config:object = {
@@ -215,4 +230,40 @@ export async function apiPromoterRegistration(participantRegistration:Participan
         }
     }
     return axiosAPI.post('/user/promoter', participantRegistration, config);
+}
+
+export async function apiSaveCreditCard(saveCreditCardDTO:SaveCreditCardDTO) {
+    const token = localStorage.getItem("token");
+    config = {
+        headers: {
+            'Accept': 'application/json;',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        }
+    }
+    return axiosAPI.post('/creditCard', saveCreditCardDTO, config);
+}
+
+export async function apiGetByParticipantId(participantId:Number) {
+    const token = localStorage.getItem("token");
+    config = {
+        headers: {
+            'Accept': 'application/json;',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        }
+    }
+    return axiosAPI.get('/creditCard/getByParticipantId/'+participantId, config);
+}
+
+export async function apiDeleteCreditCrad(creditCardId:Number) {
+    const token = localStorage.getItem("token");
+    config = {
+        headers: {
+            'Accept': 'application/json;',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        }
+    }
+    return axiosAPI.delete('/creditCard/'+creditCardId, config);
 }

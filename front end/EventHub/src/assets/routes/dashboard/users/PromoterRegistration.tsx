@@ -46,13 +46,11 @@ export default function PromoterRegistration() {
     const response = await apiPromoterRegistration(participant)
     .then((response)=>{
       const data = response?.data;
-      console.log(data)
       
       setAlert("Promotor cadastrado com sucesso!", "success", true);
       navigate("/admin/users");
     })
     .catch((e)=>{
-      console.log(e.response.data);
       if(e.response.data.detail == null){
         setAlert("Algo inesperado aconteceu", "alert", true);
       } else {

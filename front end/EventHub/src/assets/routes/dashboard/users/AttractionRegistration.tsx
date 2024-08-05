@@ -51,14 +51,11 @@ export default function AttractionRegistration() {
 
     const response = await apiAttractionRegistration(attraction)
     .then((response)=>{
-      const data = response?.data;
-      console.log(data)
-      
+      const data = response?.data;      
       setAlert("Atração cadastrada com sucesso!", "success", true);
       navigate("/admin/users");
     })
     .catch((e)=>{
-      console.log(e.response.data);
       if(e.response.data.detail == null){
         setAlert("Algo inesperado aconteceu", "alert", true);
       } else {

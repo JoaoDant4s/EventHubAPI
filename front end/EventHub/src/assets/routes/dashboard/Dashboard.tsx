@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import NavBar from "../../components/NavBar";
+import NavBar, { dynamicRoute } from "../../components/NavBar";
 import Container from "../../components/Container";
 import Main from "../../components/Main";
 import { ComponentProps, ReactNode, useEffect, useState } from "react";
@@ -40,21 +40,6 @@ export default function Dashboard({routes}:DashboardProps) {
     } else {
       return "Participante"
     }
-  }
-
-  const dynamicRoute=(itemPath:String, locationPath:String)=>{
-      let itemPathSplit = itemPath.split('/');
-      let locationPathSplit = locationPath.split('/');
-      itemPathSplit.pop();
-      locationPathSplit.pop();
-      let itemPathJoined = itemPathSplit.join('/') + "/";
-      let locationPathJoined = locationPathSplit.join('/') + "/";
-
-      if(itemPathJoined === locationPathJoined){
-          return true;
-      }
-
-      return false;
   }
 
   const setNavItemList=()=>{

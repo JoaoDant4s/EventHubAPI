@@ -70,7 +70,6 @@ export default function UpdateParticipant() {
   }, [])
 
   useEffect(()=>{
-    console.log(`/something/${id}`);
     setUserData();
   }, [id])
   

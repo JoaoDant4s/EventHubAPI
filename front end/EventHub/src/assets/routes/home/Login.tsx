@@ -59,7 +59,6 @@ export default function Login() {
       navigate("/dashboard");
     })
     .catch((e)=>{
-      console.log(e.response.data);
       setAlert(e.response.data.message, "alert", true);
       getAlert(setMessage, setStatus, setVisible, setTitle);
     });

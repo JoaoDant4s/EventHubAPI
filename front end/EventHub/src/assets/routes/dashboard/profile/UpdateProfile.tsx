@@ -44,7 +44,6 @@ export default function UpdateProfile() {
       const response = await apiAttractionUpdateInfo(attractionInfo)
       .then((response)=>{
         const data = response?.data;
-        console.log(data);
         setAlert("Informações atualizadas com sucesso!", "success", true);
         navigate("/dashboard/profile");
       })

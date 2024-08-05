@@ -41,13 +41,11 @@ export default function Register() {
     const response = await apiParticipantRegistration(participant)
     .then((response)=>{
       const data = response?.data;
-      console.log(data)
       
       setAlert("Participante cadastrado com sucesso!", "success", true);
       navigate("/");
     })
     .catch((e)=>{
-      console.log(e.response.data);
       if(e.response.data.detail == null){
         setAlert("Algo inesperado aconteceu", "alert", true);
       } else {

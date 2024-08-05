@@ -41,7 +41,6 @@ export default function Users() {
       getAlert(setMessage, setStatus, setVisible, setTitle);
     })
     .catch((e)=>{
-      console.log(e.response)
       if(e.response.data.detail == null){
         setAlert("Algo inesperado aconteceu", "alert", true);
       } else {

@@ -47,7 +47,6 @@ export default function UpdateParticipant() {
       const response = await apiAttractionUpdateInfo(attractionInfo)
       .then((response)=>{
         const data = response?.data;
-        console.log(data);
         setAlert("Informações do usuário atualizadas com sucesso!", "success", true);
         navigate("/admin/users");
       })
@@ -111,12 +110,11 @@ export default function UpdateParticipant() {
   }
   
   const setAttractionData = async () =>{
-    if(targetUser != null){
-      const attResponse = await apiGetAttractionById(targetUser?.attractionId)
+    if(targetUser !== undefined && targetUser?.attractionId !== null){
+      await apiGetAttractionById(targetUser?.attractionId)
       .then((response)=>{
         const data = response?.data;
         setAttraction(data);
-        localStorage.setItem("attraction",JSON.stringify(data));
       })
     }
   }
