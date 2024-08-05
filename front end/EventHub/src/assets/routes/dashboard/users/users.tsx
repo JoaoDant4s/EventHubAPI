@@ -52,6 +52,12 @@ export default function Users() {
     setDeleteControl(!deleteControl);
   }
 
+  const formatDate=(date:String)=>{
+    let dateObject = new Date(date.toString());
+
+    return dateObject.toLocaleDateString("pt-br")
+  }
+
   useEffect(()=>{
     setUserData();
     getAlert(setMessage, setStatus, setVisible, setTitle);
@@ -117,7 +123,7 @@ export default function Users() {
                 <tr className=" text-left bg-bg-white ">
                   <th className=" py-4 pl-8 w-2/4 text-font-subtitle ">Nome</th>
                   <th className=" py-4 text-font-subtitle ">CPF</th>
-                  <th colSpan={2} className=" py-4 text-font-subtitle ">Data de nascimento</th>
+                  <th colSpan={2} className=" py-4 w-1/4 text-font-subtitle ">Data de nascimento</th>
                 </tr>
               </thead>
               <tbody>
@@ -133,7 +139,7 @@ export default function Users() {
                         </div>
                       </td>
                       <td className=" py-2 text-font-text ">{participant.cpf}</td>
-                      <td className=" py-2 text-font-text ">{participant.birthDate}</td>
+                      <td className=" py-2 text-font-text ">{formatDate(participant.birthDate)}</td>
                       <td className=" py-2 ">
                         <div className=" flex justify-end mr-2 gap-2 ">
                           <div onClick={()=>navigate(`/admin/users/updateUser/${participant.id}`)} className=" bg-tertiary w-8 h-8 p-2 flex justify-center items-center rounded-md cursor-pointer ">
@@ -168,7 +174,7 @@ export default function Users() {
                 <tr className=" text-left bg-bg-white ">
                   <th className=" py-4 pl-8 w-2/4 text-font-subtitle ">Nome</th>
                   <th className=" py-4 text-font-subtitle ">CPF</th>
-                  <th colSpan={2} className=" py-4 text-font-subtitle ">Data de nascimento</th>
+                  <th colSpan={2} className=" py-4 w-1/4 text-font-subtitle ">Data de nascimento</th>
                 </tr>
               </thead>
               <tbody>
@@ -184,7 +190,7 @@ export default function Users() {
                         </div>
                       </td>
                       <td className=" py-2 text-font-text ">{attraction.cpf}</td>
-                      <td className=" py-2 text-font-text ">{attraction.birthDate}</td>
+                      <td className=" py-2 text-font-text ">{formatDate(attraction.birthDate)}</td>
                       <td className=" py-2 ">
                         <div className=" flex justify-end mr-2 gap-2 ">
                           <div className=" bg-tertiary w-8 h-8 p-2 flex justify-center items-center rounded-md cursor-pointer ">
@@ -219,7 +225,7 @@ export default function Users() {
                 <tr className=" text-left bg-bg-white ">
                   <th className=" py-4 pl-8 w-2/4 text-font-subtitle ">Nome</th>
                   <th className=" py-4 text-font-subtitle ">CNPJ</th>
-                  <th colSpan={2} className=" py-4 text-font-subtitle ">Data de fundação</th>
+                  <th colSpan={2} className=" py-4 w-1/4 text-font-subtitle ">Data de fundação</th>
                 </tr>
               </thead>
               <tbody>
@@ -235,7 +241,7 @@ export default function Users() {
                         </div>
                       </td>
                       <td className=" py-2 text-font-text ">{promoter.cpf}</td>
-                      <td className=" py-2 text-font-text ">{promoter.birthDate}</td>
+                      <td className=" py-2 text-font-text ">{formatDate(promoter.birthDate)}</td>
                       <td className=" py-2 ">
                         <div className=" flex justify-end mr-2 gap-2 ">
                           <div className=" bg-tertiary w-8 h-8 p-2 flex justify-center items-center rounded-md cursor-pointer ">

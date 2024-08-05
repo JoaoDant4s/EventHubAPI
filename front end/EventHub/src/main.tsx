@@ -17,6 +17,7 @@ import AttractionRegistration from './assets/routes/dashboard/users/AttractionRe
 import PromoterRegistration from './assets/routes/dashboard/users/PromoterRegistration.tsx'
 import Users from './assets/routes/dashboard/users/users.tsx'
 import UpdateUser from './assets/routes/dashboard/users/UpdateUser.tsx'
+import EventProfile from './assets/routes/dashboard/nextEvents/EventProfile.tsx'
 
 interface PrivateRouteProps {
   redirect: string;
@@ -58,6 +59,8 @@ const routes:Array<NavItem> = [
   {pathRoot:"/admin/users", path:"/admin/users/updateUser/:id", component: <UpdateUser/>, permission:["admin"], navbar:false},
   {pathRoot:"/admin/users", path:"/admin/users/attractionRegistration", component: <AttractionRegistration/>, permission:["admin"], navbar:false},
   {pathRoot:"/admin/users", path:"/admin/users/promoterRegistration", component: <PromoterRegistration/>, permission:["admin"], navbar:false},
+  {pathRoot:"/dashboard", path:"/dashboard/event/:id", component: <EventProfile/>, permission:["participant","admin","attraction"], navbar:false},
+  
 ]
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
