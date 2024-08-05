@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { apiGetEventList, EventDTO } from "../../../api/services/events";
 import { formatDate } from "../../../api/services/utils";
 
-export default function NextEvents() {
+export default function MyTickets() {
   const navigate = useNavigate();
   const [events, setEvents] = useState<Array<EventDTO>>();
   
@@ -26,7 +26,7 @@ export default function NextEvents() {
 
   return (
     <>
-        <Title>Proximos Eventos</Title>
+        <Title>Meus ingressos</Title>
         {events && events.map((event,index)=>(
           <div key={`event-${index}`} onClick={()=>navigate(`/dashboard/event/${event.id}`)} className=" h-[180px] my-5 cursor-pointer bg-bg-white rounded-md shadow-md relative z-0 ">
             <div className=" mix-blend-normal z-10">

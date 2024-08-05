@@ -2,16 +2,16 @@ import { ComponentProps } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 
-export type Status = "success" | "info" | "alert" | "danger" | String;
+export type Status = "success" | "info" | "alert" | "danger" | string;
 
 type AlertProps = ComponentProps<'div'> & {
     status?:Status;
-    title:String;
+    title:string;
     visible?:boolean;
     setVisible?:React.Dispatch<React.SetStateAction<boolean>>
 } 
 
-export const setAlert=(message:String, status:Status, visible:boolean)=>{
+export const setAlert=(message:string, status:Status, visible:boolean)=>{
     
     localStorage.setItem("alertMessage", message.toString());
     localStorage.setItem("alertStatus", status.toString());
@@ -20,10 +20,10 @@ export const setAlert=(message:String, status:Status, visible:boolean)=>{
 }
 
 export const getAlert=(
-    setMessage:React.Dispatch<React.SetStateAction<String>>,
+    setMessage:React.Dispatch<React.SetStateAction<string>>,
     setStatus:React.Dispatch<React.SetStateAction<Status>>,
     setVisible:React.Dispatch<React.SetStateAction<boolean>>,
-    setTitle:React.Dispatch<React.SetStateAction<String>>
+    setTitle:React.Dispatch<React.SetStateAction<string>>
 )=>{
     
     if(localStorage.getItem("alertMessage") !== null) {

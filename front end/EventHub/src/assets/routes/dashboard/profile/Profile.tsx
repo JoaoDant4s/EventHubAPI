@@ -15,10 +15,10 @@ export default function Profile() {
   const [role, setRole] = useState<Role>("participant");
 
   //ALERT STATES
-  const [message, setMessage] = useState<String>("");
+  const [message, setMessage] = useState<string>("");
   const [status, setStatus] = useState<Status>("success");
   const [visible, setVisible] = useState<boolean>(false);
-  const [title, setTitle] = useState<String>("Sucesso!");
+  const [title, setTitle] = useState<string>("Sucesso!");
 
   const setUserData = async () =>{
     const login = localStorage.getItem("login") || "";

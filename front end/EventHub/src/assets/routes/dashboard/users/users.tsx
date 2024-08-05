@@ -10,7 +10,7 @@ import { Role } from "../../../../main";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { formatDate } from "../../../api/services/utils";
 
-export default function Users() {
+export default function users() {
   const navigate = useNavigate();
   const [user, setUser] = useState<UserDTO>();
   const [attractionList, setAttractionList] = useState<Array<UserDTO>>();
@@ -20,10 +20,10 @@ export default function Users() {
   const [deleteControl, setDeleteControl] = useState<Boolean>(true);
 
   //ALERT STATES
-  const [message, setMessage] = useState<String>("");
+  const [message, setMessage] = useState<string>("");
   const [status, setStatus] = useState<Status>("success");
   const [visible, setVisible] = useState<boolean>(false);
-  const [title, setTitle] = useState<String>("Sucesso!");
+  const [title, setTitle] = useState<string>("Sucesso!");
 
   const setUserData = async () =>{
     const login = localStorage.getItem("login") || "";

@@ -65,7 +65,7 @@ export interface SaveAttractionUserDTO {
 }
 
 export interface SaveCreditCardDTO {
-    cardnumber:string,
+    cardNumber:string,
     expiration:string,
     cardHolderName:string,
     participantId:number
@@ -74,7 +74,7 @@ export interface SaveCreditCardDTO {
 export interface CreditCardDTO {
     id:number
     cardHolderName:string
-    cardnumber:string
+    cardNumber:string
     expiration:string
     participantId:number
 }

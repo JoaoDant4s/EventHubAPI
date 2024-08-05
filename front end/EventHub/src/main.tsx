@@ -18,6 +18,9 @@ import PromoterRegistration from './assets/routes/dashboard/users/PromoterRegist
 import Users from './assets/routes/dashboard/users/users.tsx'
 import UpdateUser from './assets/routes/dashboard/users/UpdateUser.tsx'
 import EventProfile from './assets/routes/dashboard/nextEvents/EventProfile.tsx'
+import Events from './assets/routes/dashboard/events/Events.tsx'
+import MyTickets from './assets/routes/dashboard/myTickets/MyTickets.tsx'
+import EventRegistration from './assets/routes/dashboard/events/EventRegistration.tsx'
 
 interface PrivateRouteProps {
   redirect: string;
@@ -45,11 +48,11 @@ const routes:Array<NavItem> = [
   {text:"Dashboard", icon:faList, pathRoot:"/dashboard", path:"/dashboard", component: <NextEvents />, permission:["participant","admin","attraction"], navbar:true},
   {text:"Meus eventos", icon:faList, pathRoot:"/dashboard", path:"/dashboard", component: <NextEvents/>, permission:["promoter"], navbar:true},
   {text:"Perfil", icon:faUser, pathRoot:"/dashboard/profile", path:"/dashboard/profile", component: <Profile/>, permission:["participant","admin","attraction","promoter"], navbar:true},
-  {text:"Meus ingressos", pathRoot:"/dashboard/myTickets", icon:faTicket, path:"/dashboard/myTickets", component: <NextEvents/>, permission:["participant","admin","attraction"], navbar:true},
+  {text:"Meus ingressos", pathRoot:"/dashboard/myTickets", icon:faTicket, path:"/dashboard/myTickets", component: <MyTickets/>, permission:["participant","admin","attraction"], navbar:true},
   {text:"Cartão de crédito", pathRoot:"/dashboard/creditCard", icon:faCreditCard, path:"/dashboard/creditCard", component: <CreditCard/>, permission:["participant","admin","attraction"], navbar:true},
   {text:"Eventos participados", icon:faList, pathRoot:"/dashboard/pastEvents", path:"/dashboard/pastEvents", component: <NextEvents/>, permission:["attraction"], navbar:true},  
   {text:"Usuário", icon:faList, pathRoot:"/admin/users", path:"/admin/users", component: <Users/>, permission:["admin"], navbar:true},
-  {text:"Eventos", icon:faList, pathRoot:"/admin/events", path:"/admin/events", component: <NextEvents/>, permission:["admin"], navbar:true},
+  {text:"Eventos", icon:faList, pathRoot:"/admin/events", path:"/admin/events", component: <Events/>, permission:["admin"], navbar:true},
   
   // AS NOVAS ROTAS SÃO COLOCADAS AQUI. DEFINA UM OBJETOS DO TIPO NAVITEM
 
@@ -60,6 +63,7 @@ const routes:Array<NavItem> = [
   {pathRoot:"/admin/users", path:"/admin/users/attractionRegistration", component: <AttractionRegistration/>, permission:["admin"], navbar:false},
   {pathRoot:"/admin/users", path:"/admin/users/promoterRegistration", component: <PromoterRegistration/>, permission:["admin"], navbar:false},
   {pathRoot:"/dashboard", path:"/dashboard/event/:id", component: <EventProfile/>, permission:["participant","admin","attraction"], navbar:false},
+  {pathRoot:"/admin/events", path:"/admin/events/eventRegistration", component: <EventRegistration/>, permission:["admin"], navbar:false},
   
 ]
 

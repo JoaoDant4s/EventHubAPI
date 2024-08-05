@@ -16,20 +16,20 @@ export default function PromoterRegistration() {
   const [attraction, setAttraction] = useState<AttractionDTO>();
   const [role, setRole] = useState<Role>("participant");
   
-  const [name, setName] = useState<String>("");
-  const [email, setEmail] = useState<String>("");
-  const [cpf, setCpf] = useState<String>("");
-  const [birthDate, setBirthDate] = useState<String>("");
-  const [description, setDescription] = useState<String>("");
-  const [contact, setContact] = useState<String>("");
-  const [password, setPassword] = useState<String>("");
-  const [confirmPassword, setConfirmPassword] = useState<String>("");
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [cpf, setCpf] = useState<string>("");
+  const [birthDate, setBirthDate] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [contact, setContact] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
 
   //ALERT STATES
-  const [message, setMessage] = useState<String>("");
+  const [message, setMessage] = useState<string>("");
   const [status, setStatus] = useState<Status>("success");
   const [visible, setVisible] = useState<boolean>(false);
-  const [title, setTitle] = useState<String>("Sucesso!");
+  const [title, setTitle] = useState<string>("Sucesso!");
   
   const saveUser=async (e: FormEvent<HTMLFormElement>)=> {
     e.preventDefault();

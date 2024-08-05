@@ -19,10 +19,10 @@ export default function EventProfile() {
   const [subEventList, setSubEventList] = useState<Array<SubEventDTO>>();
 
   //ALERT STATES
-  const [message, setMessage] = useState<String>("");
+  const [message, setMessage] = useState<string>("");
   const [status, setStatus] = useState<Status>("success");
   const [visible, setVisible] = useState<boolean>(false);
-  const [title, setTitle] = useState<String>("Sucesso!");
+  const [title, setTitle] = useState<string>("Sucesso!");
 
   const getEvent=async()=>{
     await apiGetEventById(Number(id))
@@ -61,10 +61,10 @@ export default function EventProfile() {
             </div>
             <Button type='submit' size="default" color='default' icon={faArrowRight} onClick={()=>navigate("/dashboard")}>Comprar ingresso</Button>
         </div>
-        <div onClick={()=>navigate(`/dashboard/event/${event?.id}`)} className=" h-[200px] my-5 bg-bg-white rounded-md shadow-md relative z-0 ">
+        <div onClick={()=>navigate(`/dashboard/event/${event?.id}`)} className=" h-[180px] my-5 bg-bg-white rounded-md shadow-md relative z-0 ">
           <div className=" mix-blend-normal z-10">
-            <img className="absolute h-[200px] w-1/2 object-cover object-right right-0 rounded-md " src={bgEvent} alt="banner do evento"  />
-            <div className=" absolute z-10 h-[200px] w-1/2 bg-gradient-to-r from-bg-white via-transparency right-0" />
+            <img className="absolute h-[180px] w-1/2 object-cover object-right right-0 rounded-md " src={bgEvent} alt="banner do evento"  />
+            <div className=" absolute z-10 h-[180px] w-1/2 bg-gradient-to-r from-bg-white via-transparency right-0" />
           </div>
           <div className=" h-full flex flex-col justify-center p-4 pl-20 absolute z-10 ">
               <h3 className="text-[2rem] font-bold text-font-title">{event?.name}</h3>

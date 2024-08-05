@@ -12,18 +12,18 @@ import { Role } from "../../../../main";
 export default function RegisterCreditCard() {
   const navigate = useNavigate();
 
-  const [name, setName] = useState<String>("");
-  const [cardNumber, setCardNumber] = useState<String>("");
-  const [expiration, setExpiration] = useState<String>("");
+  const [name, setName] = useState<string>("");
+  const [cardNumber, setCardNumber] = useState<string>("");
+  const [expiration, setExpiration] = useState<string>("");
   
   const [user, setUser] = useState<UserDTO>();
   const [role, setRole] = useState<Role>("participant");
 
   //ALERT STATES
-  const [message, setMessage] = useState<String>("");
+  const [message, setMessage] = useState<string>("");
   const [status, setStatus] = useState<Status>("success");
   const [visible, setVisible] = useState<boolean>(false);
-  const [title, setTitle] = useState<String>("Sucesso!");
+  const [title, setTitle] = useState<string>("Sucesso!");
   
   const registerCreditCard = async (e:FormEvent<HTMLFormElement>)=>{
     e.preventDefault();
@@ -95,7 +95,7 @@ export default function RegisterCreditCard() {
             <p className=" font-bold text-font-input ml-3 mb-2 ">Número do cartão</p>
             <label className=" flex items-center w-full mb-5 ">
               <FontAwesomeIcon icon={faCreditCard} className=' absolute pl-3 text-font-icon text-sm' />
-              <PatternFormat format="#### #### #### ####" mask={"_"} onChange={(e: { target: { value: SetStateAction<String>; }; })=>setCardNumber(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="cardNumber" id="Número do cartão" placeholder="cardNumber" />
+              <PatternFormat format="#### #### #### ####" mask={"_"} onChange={(e: { target: { value: SetStateAction<string>; }; })=>setCardNumber(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="cardNumber" id="Número do cartão" placeholder="cardNumber" />
             </label>
           </div>
           <div className=" grid grid-cols-2 w-full gap-4">
