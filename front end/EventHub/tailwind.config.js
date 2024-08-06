@@ -20,6 +20,7 @@ export default {
         input: '#E6E6E6',
         dashboard: '#E6E6E6',
         white: '#FFFFFF',
+        bar: '#F5F5F5',
       },
       'font': {
         title: '#333333',

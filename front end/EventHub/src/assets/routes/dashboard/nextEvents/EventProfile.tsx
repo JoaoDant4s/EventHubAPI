@@ -1,7 +1,7 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Title from "../../../components/Title";
 import Button from "../../../components/Button";
-import { faArrowRight, faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faChevronDown, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import Alert, { getAlert, Status } from "../../../components/Alert";
 import { apiGetAttractionById, apiGetByEmail } from "../../../api/services/user";
@@ -10,7 +10,7 @@ import { Role } from "../../../../main";
 import { apiGetEventById, apiGetSubEventByEventId, EventDTO, SubEventDTO } from "../../../api/services/events";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import bgEvent from "../../../imgs/bgEvents.png"
-import { formatDate } from "../../../api/services/utils";
+import { formatDate, formatDateHour } from "../../../api/services/utils";
 
 export default function EventProfile() {
   const navigate = useNavigate();
@@ -83,8 +83,20 @@ export default function EventProfile() {
           <Title>Subeventos</Title>
           <div className="mt-5">
               {subEventList && subEventList?.map((subEvent, index)=>(
-                <div key={`subEvent-${index}`} className=" mt-2 first:mt-0 w-full px-4 flex items-center justify-between box-border h-12 rounded-md shadow-md bg-gradient-to-r from-bg-white via-bg-white to-tertiary ">
-                  <p className=" font-bold text-font-subtitle ">{subEvent.name}</p>
+                <div key={`subEvent-${index}`} className=" mt-2 first:mt-0 rounded-md shadow-md bg-bg-bar ">
+                  <div className=" w-full px-4 flex items-center justify-between box-border h-12 rounded-md shadow-md bg-gradient-to-r from-bg-white via-bg-white to-tertiary cursor-pointer ">
+                    <p className=" font-bold text-font-subtitle ">{subEvent.name}</p>
+                    <FontAwesomeIcon icon={faChevronDown} className=' text-font-white drop-shadow-md text-[1.4rem] ' />
+                  </div>
+                  <div className="p-4 box-border w-1/2">
+                    <h4 className="text-[1.2rem] font-bold text-font-title mb-2">Descrição</h4>
+                    <div className=" border-l-4 pl-2 border-primary ">
+                      <p className="text-font-text"><span className=" font-bold ">Tipo: </span>{subEvent.type}</p>
+                      <p className="text-font-text"><span className=" font-bold ">Data e hora: </span>{formatDateHour(subEvent.hours)}</p>
+                      <p className="text-font-text"><span className=" font-bold ">Local: </span>{subEvent.location}</p>
+                      <p className="text-font-text mt-2 text-justify ">{subEvent.description}</p>
+                    </div>
+                  </div>
                 </div>
               ))}
           </div>

@@ -14,3 +14,10 @@ export const formatDate=(date:string)=>{
 
     return dateObject.toLocaleDateString("pt-br")
 }
+
+export const formatDateHour=(date:string)=>{
+    let dateObject = new Date(date.toString());
+    let dateString = dateObject.toLocaleDateString("pt-br");
+    dateString += ` ${dateObject.getHours()}h${dateObject.getMinutes()}`
+    return dateString;
+}

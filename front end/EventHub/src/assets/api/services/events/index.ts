@@ -25,10 +25,12 @@ export interface SaveEventDTO {
 
 export interface SubEventDTO {
     id:number,
+    description:string,
     hours:string,
     location:string,
     name:string,
-    type:eventType
+    type:eventType,
+    event:EventDTO
 }
 
 let config:object = {
