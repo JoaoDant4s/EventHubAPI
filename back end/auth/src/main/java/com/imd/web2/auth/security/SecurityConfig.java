@@ -49,14 +49,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()))
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/api/auth/**").permitAll() // Permitir todos os endpoints de autenticação
-                        .requestMatchers("/eureka/**").permitAll() // Permitir todos os endpoints do Eureka
-                        .requestMatchers("/event/api/event/**").permitAll() // Permitir todos os endpoints de eventos
-                        .requestMatchers("/user/api/user/**").permitAll() // Permitir todos os endpoints de user
-                        .requestMatchers("/pass/api/pass/**").permitAll() // Permitir todos os endpoints de pass
-
-                        .anyRequest().authenticated() // Requer autenticação para outros endpoints
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();

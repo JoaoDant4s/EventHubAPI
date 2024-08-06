@@ -31,7 +31,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                     authHeader = authHeader.substring(7);
                 }
                 try{
-                    template.getForObject("http://localhost:8763/auth/api/auth/validate?token="+ authHeader, String.class);
+                    template.getForObject("http://localhost:8763/auth/api/auth/validate?token"+ authHeader, String.class);
                 } catch(Exception e){
                     System.out.println("Invalid access");
                     throw new RuntimeException("Unauthorized access to application");
