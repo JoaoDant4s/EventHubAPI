@@ -62,7 +62,7 @@ export default function Profile() {
             <p className=" text-font-text "><span className=" font-bold">Nome:</span> {user?.name}</p>
             <p className=" text-font-text "><span className=" font-bold">Email:</span> {user?.email}</p>
             <p className=" text-font-text "><span className=" font-bold">{role == "promoter"?"CNPJ:":"CPF:"}</span> {user?.cpf}</p>
-            <p className=" text-font-text "><span className=" font-bold">Data de nascimento:</span> {user?.birthDate}</p>
+            <p className=" text-font-text "><span className=" font-bold">{role == "promoter"?"Data de fundação:":"Data de nascimento:"}</span> {user?.birthDate}</p>
             <p className=" text-font-text "><span className=" font-bold">Idade:</span> {user?.age.toString()}</p>
             {
               role == "attraction"

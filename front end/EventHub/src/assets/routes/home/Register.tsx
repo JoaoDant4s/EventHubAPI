@@ -5,7 +5,7 @@ import { faUser, faEnvelope, faAddressCard, faCalendarDays, faLock, faArrowRight
 
 import Button from '../../components/Button';
 import { FormEvent, SetStateAction, useState } from 'react';
-import { apiParticipantRegistration, participantRegistrationDTO } from '../../api/services/user';
+import { apiParticipantRegistration, ParticipantRegistrationDTO } from '../../api/services/user';
 import Alert, { getAlert, setAlert, Status } from '../../components/Alert';
 import { PatternFormat } from 'react-number-format';
 
@@ -29,7 +29,7 @@ export default function Register() {
   const register = async (e:FormEvent)=>{
     e.preventDefault();
     
-    const participant:participantRegistrationDTO = {
+    const participant:ParticipantRegistrationDTO = {
       email: email,
       password: password,
       confirmPassword: confirmPassword,
@@ -41,13 +41,11 @@ export default function Register() {
     const response = await apiParticipantRegistration(participant)
     .then((response)=>{
       const data = response?.data;
-      console.log(data)
       
       setAlert("Participante cadastrado com sucesso!", "success", true);
       navigate("/");
     })
     .catch((e)=>{
-      console.log(e.response.data);
       if(e.response.data.detail == null){
         setAlert("Algo inesperado aconteceu", "alert", true);
       } else {

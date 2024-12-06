@@ -44,7 +44,6 @@ export default function UpdateProfile() {
       const response = await apiAttractionUpdateInfo(attractionInfo)
       .then((response)=>{
         const data = response?.data;
-        console.log(data);
         setAlert("Informações atualizadas com sucesso!", "success", true);
         navigate("/dashboard/profile");
       })
@@ -133,7 +132,7 @@ export default function UpdateProfile() {
                   <p className=" font-bold text-font-input ml-3 mb-2 ">CNPJ</p>
                   <label className=" flex items-center w-full mb-5 ">
                     <FontAwesomeIcon icon={faAddressCard} className=' absolute pl-3 text-font-icon text-sm' />
-                    <PatternFormat format="##.###.###/####-##" mask={"_"} allowEmptyFormatting onChange={(e) => setCpf(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="cpf" id="cpf" value={user?.cpf.toString()} placeholder="CPF" />
+                    <PatternFormat format="##.###.###/####-##" mask={"_"} onChange={(e) => setCpf(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="cpf" id="cpf" value={user?.cpf.toString()} placeholder="CNPJ" />
                   </label>
                 </>
               )
@@ -142,12 +141,20 @@ export default function UpdateProfile() {
                   <p className=" font-bold text-font-input ml-3 mb-2 ">CPF</p>
                   <label className=" flex items-center w-full mb-5 ">
                     <FontAwesomeIcon icon={faAddressCard} className=' absolute pl-3 text-font-icon text-sm' />
-                    <PatternFormat format="###.###.###-##" mask={"_"} allowEmptyFormatting onChange={(e) => setCpf(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="cpf" id="cpf" value={user?.cpf.toString()} placeholder="CPF" />
+                    <PatternFormat format="###.###.###-##" mask={"_"} onChange={(e) => setCpf(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="cpf" id="cpf" value={user?.cpf.toString()} placeholder="CPF" />
                   </label>
                 </>
               )
             }
-            <p className=" font-bold text-font-input ml-3 mb-2 ">Data de nascimento</p>
+            {
+              role == "promoter"
+              ? (
+                <p className=" font-bold text-font-input ml-3 mb-2 ">Data de fundação</p>
+              )
+              : (
+                <p className=" font-bold text-font-input ml-3 mb-2 ">Data de nascimento</p>
+              )
+            }
             <label className=" flex items-center w-full mb-5 last:mb-0 ">
               <FontAwesomeIcon icon={faCalendarDays} className=' absolute pl-3 text-font-icon text-sm' />
               <input onChange={(e)=>setBirthDate(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-placeholder text-sm shadow-sm " type="date" name="birthDate" id="birthDate" defaultValue={user?.birthDate.toString()} placeholder="Data de nascimento" />
@@ -159,7 +166,7 @@ export default function UpdateProfile() {
                   <p className=" font-bold text-font-input ml-3 mb-2 ">Contato</p>
                   <label className=" flex items-center w-full mb-5 last:mb-0 ">
                     <FontAwesomeIcon icon={faPhone} className=' absolute pl-3 text-font-icon text-sm' />
-                    <PatternFormat format="(##) #####-####" mask={"_"} allowEmptyFormatting onChange={(e) => setContact(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="contact" id="contact" value={attraction?.contact.toString()} placeholder="Contato" />
+                    <PatternFormat format="(##) #####-####" mask={"_"} onChange={(e) => setContact(e.target.value)} className=" bg-bg-white w-[350px] p-2 pl-10 rounded-md placeholder-font-placeholder text-font-input text-sm shadow-sm " type="text" name="contact" id="contact" value={attraction?.contact.toString()} placeholder="Contato" />
                   </label>
                   <p className=" font-bold text-font-input ml-3 mb-2 ">Descrição</p>
                   <label className=" flex items-center w-full mb-5 last:mb-0 ">
@@ -173,7 +180,7 @@ export default function UpdateProfile() {
 
           </div>
           <div className=" grid grid-cols-2 w-full gap-4">
-            <Button size="default" color='default' icon={faArrowRight} >Salvar</Button>
+            <Button type="submit" size="default" color='default' icon={faArrowRight} >Salvar</Button>
           </div>
         </form>
         <Alert status={status} visible={visible} setVisible={setVisible} title={title.toString()}>
